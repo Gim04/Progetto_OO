@@ -5,21 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85c958b3-6a79-4cf3-a30d-085629a8ad59" name="Changes" comment="Aggiunta classi">
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Classifica.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Documento.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Giudice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Organizzatore.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Sede.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Team.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Utente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Giudice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Giudice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Organizzatore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Organizzatore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Giudice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Giudice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Hackathon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Hackathon.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Organizzatore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Organizzatore.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Partecipante.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Partecipante.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Team.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Team.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Utente.class" afterDir="false" />
     </list>
     <list id="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" name="Changes by ciron" comment="Aggiunta classi">
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Team.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Utente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Utente.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +65,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Run",
+    "Application.Main.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "dart.analysis.tool.window.visible": "false",
@@ -106,7 +108,8 @@
       <option name="presentableId" value="Default" />
       <updated>1744378202579</updated>
       <workItem from="1744378203418" duration="4928000" />
-      <workItem from="1744489066504" duration="10686000" />
+      <workItem from="1744489066504" duration="11249000" />
+      <workItem from="1744500476853" duration="1819000" />
     </task>
     <task id="LOCAL-00001" summary="initialize repo">
       <option name="closed" value="true" />
@@ -156,16 +159,54 @@
       <option name="project" value="LOCAL" />
       <updated>1744384407098</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Aggiunta classi">
+      <option name="closed" value="true" />
+      <created>1744499936982</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1744499936982</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Aggiunta classi">
+      <option name="closed" value="true" />
+      <created>1744500252193</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1744500252193</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initialize repo" />
     <MESSAGE value="modifica .pom" />
     <MESSAGE value="Aggiunta classi" />
     <option name="LAST_COMMIT_MESSAGE" value="Aggiunta classi" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

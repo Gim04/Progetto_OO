@@ -9,19 +9,19 @@ public class Partecipante extends Utente
 
     public void iscrizioneTeam(String nome, String hackathon)
     {
-        Main.iscriviPartecipanteAlTeam(this, hackathon, nome);
+        Test.iscriviPartecipanteAlTeam(this, hackathon, nome);
     }
 
     public void iscrizioneHackathon(String hackathon)
     {
-        final Hackathon h = Main.findHackathonByName(hackathon);
+        final Hackathon h = Test.findHackathonByName(hackathon);
         if(h != null)
             h.iscriviPartecipante(this);
     }
 
     public void creaTeam(String nome, String hackathon)
     {
-        final Hackathon h = Main.findHackathonByName(hackathon);
+        final Hackathon h = Test.findHackathonByName(hackathon);
         if(h == null)
         {
             return;
@@ -37,7 +37,5 @@ public class Partecipante extends Utente
 
         h.addTeam(new Team(nome));
     }
-
-
 
 }

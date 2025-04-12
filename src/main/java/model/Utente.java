@@ -40,6 +40,10 @@ public class Utente
         // TODO: Prendo i dati dal DB
         if(tipo == 1)
             return new Partecipante("John", "Lemon", email, password);
+        else if(tipo == 2)
+            return new Organizzatore("John", "Lemon", email, password);
+        else if(tipo == 3)
+            return new Giudice("John", "Lemon", email, password);
 
         return new Utente(email, password, email, password);
     }

@@ -31,6 +31,10 @@ public class Team
     {
         this.voto = voto;
     }
+    public int getVoto()
+    {
+         return voto;
+    }
 
     public String getNome()
     {

@@ -59,11 +59,20 @@ public class Hackathon
 
     public void addPartecipante(Partecipante partecipante, Team team)
     {
-        team.addPartecipante(partecipante);
+        if(isSubscribed(partecipante))
+            team.addPartecipante(partecipante);
+        else
+            System.out.println("Impossibile aggiungere '" + partecipante.getNome() + "', non iscritto all'hackathon '"+titolo+"'!");
     }
 
     public void iscriviPartecipante(Partecipante partecipante)
     {
+        if(!registrazioniAperte)
+        {
+            System.out.println("Impossibile aggiungere '" + partecipante.getNome() + "', registrazione chiuse!");
+            return;
+        }
+
         if(partecipanti.size() <= maxIscritti)
             partecipanti.add(partecipante);
         else
@@ -80,12 +89,31 @@ public class Hackathon
         return titolo;
     }
 
-    public void setRegistrazioniAperte(boolean registrazioniAperte) {
+    public void setRegistrazioniAperte(boolean registrazioniAperte)
+    {
         this.registrazioniAperte = registrazioniAperte;
+    }
+
+    public boolean getRegistrazioniAperte()
+    {
+        return registrazioniAperte;
     }
 
     public int getDimensioneTeam()
     {
         return dimensioneTeam;
+    }
+
+    public boolean isSubscribed(Partecipante partecipante)
+    {
+        for(Partecipante p : partecipanti)
+        {
+            if(p.getEmail().equals(partecipante.getEmail()))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
