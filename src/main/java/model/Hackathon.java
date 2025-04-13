@@ -16,6 +16,7 @@ public class Hackathon
 
     private ArrayList<Team> teams;
     private ArrayList<Partecipante> partecipanti;
+    private Classifica classifica;
 
     public Hackathon(String titolo, Sede sede, int dimensioneTeam, int maxIscritti, Date dataInizio, Date dataFine)
     {
@@ -27,6 +28,7 @@ public class Hackathon
         this.dataFine = dataFine;
 
         teams = new ArrayList<>();
+        this.classifica = new Classifica();
         partecipanti = new ArrayList<>();
     }
 
@@ -92,6 +94,11 @@ public class Hackathon
     public void setRegistrazioniAperte(boolean registrazioniAperte)
     {
         this.registrazioniAperte = registrazioniAperte;
+
+        if(registrazioniAperte == false)
+        {
+            classifica.updateClassifica(teams);
+        }
     }
 
     public boolean getRegistrazioniAperte()
@@ -115,5 +122,11 @@ public class Hackathon
         }
 
         return false;
+    }
+
+    public Classifica creaClassifica()
+    {
+        classifica.calcolaClassifica();
+        return classifica;
     }
 }

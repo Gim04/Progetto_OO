@@ -12,30 +12,41 @@ public class Partecipante extends Utente
         Test.iscriviPartecipanteAlTeam(this, hackathon, nome);
     }
 
-    public void iscrizioneHackathon(String hackathon)
+    public void iscrizioneTeam(Team team, Hackathon hackathon)
     {
-        final Hackathon h = Test.findHackathonByName(hackathon);
+        if(team == null) return;
+        if(team.getDimensioneTeam() <= hackathon.getDimensioneTeam() && hackathon.getRegistrazioniAperte())
+        {
+            hackathon.addPartecipante(this, team);
+            System.out.println("Partecipante '" + this.getNome() + "' aggiunto al team '" + team.getNome() + "'!");
+        }
+    }
+
+    public void iscrizioneHackathon(Hackathon h)
+    {
         if(h != null)
             h.iscriviPartecipante(this);
     }
 
-    public void creaTeam(String nome, String hackathon)
+    public Team creaTeam(String nome, Hackathon h)
     {
-        final Hackathon h = Test.findHackathonByName(hackathon);
         if(h == null)
         {
-            return;
+            return null;
         }
 
         for(Team t : h.getTeams())
         {
             if(t.getNome().equals(nome))
             {
-                return;
+                return null;
             }
         }
 
-        h.addTeam(new Team(nome));
+        Team t = new Team(nome);
+        h.addTeam(t);
+
+        return t;
     }
 
 }

@@ -10,13 +10,13 @@ public class Main {
     {
         Test.hackathons = new ArrayList<>();
 
-        Partecipante alice              = (Partecipante) Utente.login("alice.rossi@example.com", "Passw0rd!",1);
-        Partecipante marco              = (Partecipante) Utente.login("marco.bianchi@example.com", "Sicura123!", 1);
-        Partecipante luca               = (Partecipante) Utente.login("luca.verdi@example.com", "P@ssword2024", 1);
-        Partecipante giulia             = (Partecipante) Utente.login("giulia.neri@example.com", "Login!2025", 1);
+        Partecipante alice          = (Partecipante) Utente.login("alice.rossi@example.com", "Passw0rd!",1);
+        Partecipante marco          = (Partecipante) Utente.login("marco.bianchi@example.com", "Sicura123!", 1);
+        Partecipante luca           = (Partecipante) Utente.login("luca.verdi@example.com", "P@ssword2024", 1);
+        Partecipante giulia         = (Partecipante) Utente.login("giulia.neri@example.com", "Login!2025", 1);
 
-        Organizzatore dardano           = (Organizzatore) Utente.login("giulio.dardano@example.com", "1somorfismo!", 2);
-        Giudice antonio                 = (Giudice) Utente.login("antonio.pocomento@example.com", "ioHoFortun4!", 3);
+        Organizzatore dardano       = (Organizzatore) Utente.login("giulio.dardano@example.com", "1somorfismo!", 2);
+        Giudice antonio             = (Giudice) Utente.login("antonio.pocomento@example.com", "ioHoFortun4!", 3);
 
         // Creazione della sede
         Sede sede = new Sede("Politecnico di Milano", "Piazza Leonardo da Vinci, 32", 80001);
@@ -44,29 +44,31 @@ public class Main {
 
         dardano.apreRegistrazioni(Test.hackathons.get(0), true);
 
-        alice.iscrizioneHackathon("HackTheFuture 2025");
-        marco.iscrizioneHackathon("HackTheFuture 2025");
-        luca.iscrizioneHackathon("HackTheFuture 2025");
-        giulia.iscrizioneHackathon("HackTheFuture 2025");
-        
-        alice.creaTeam("Unina", "HackTheFuture 2025");
-        luca.creaTeam("Eureka", "HackTheFuture 2025");
+        alice.iscrizioneHackathon(hackathon);
+        marco.iscrizioneHackathon(hackathon);
+        luca.iscrizioneHackathon(hackathon);
+        giulia.iscrizioneHackathon(hackathon);
 
-        alice.iscrizioneTeam("Unina", "HackTheFuture 2025");
-        marco.iscrizioneTeam("Unina", "HackTheFuture 2025");
-        luca.iscrizioneTeam("Eureka", "HackTheFuture 2025");
-        giulia.iscrizioneTeam("Eureka", "HackTheFuture 2025");
+        Team unina = alice.creaTeam("Unina", hackathon);
+        Team eureka = luca.creaTeam("Eureka", hackathon);
+
+        alice.iscrizioneTeam(unina, hackathon);
+        marco.iscrizioneTeam(unina, hackathon);
+        luca.iscrizioneTeam(eureka, hackathon);
+        giulia.iscrizioneTeam(eureka, hackathon);
 
         dardano.apreRegistrazioni(Test.hackathons.get(0), false);
 
         antonio.pubblicaProblema(hackathon, "LOLLOL");
 
-        Team unina = Test.hackathons.get(0).getTeam("Unina");
         unina.caricaDocumento(new Documento("BLA BLA BLA BLI BLI BLI BLU BLUI BLU SALAMALEKUM MALEKUM SALAAAAM, LINGA GULIGULIGULI WATAAAA LINGA GUUUU LINGA GUUU"));
 
         antonio.commentaDocumento(unina.getDocumenti().get(0), "fa schifo");
 
         antonio.assegnaVoto(0, unina);
+        antonio.assegnaVoto(300, eureka);
+
+        Classifica classifica = hackathon.creaClassifica();
 
         Test.printAll();
     }

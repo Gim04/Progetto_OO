@@ -4,24 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85c958b3-6a79-4cf3-a30d-085629a8ad59" name="Changes" comment="Aggiunta classi">
+    <list default="true" id="85c958b3-6a79-4cf3-a30d-085629a8ad59" name="Changes" comment="test main">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Giudice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Giudice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Organizzatore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Organizzatore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Giudice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Giudice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/model/Hackathon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Hackathon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Organizzatore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Organizzatore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Partecipante.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Partecipante.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Team.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Team.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Utente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Utente.class" afterDir="false" />
     </list>
     <list id="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" name="Changes by ciron" comment="Aggiunta classi">
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Classifica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Classifica.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Team.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Utente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Utente.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +46,18 @@
     &quot;accountId&quot;: &quot;cfa41325-37ab-4859-97ff-0c8c2a414d84&quot;
   }
 }</component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/Main.java">
+      <ranges>
+        <range start1="12" end1="16" start2="12" end2="16" changelist="85c958b3-6a79-4cf3-a30d-085629a8ad59" />
+        <range start1="17" end1="19" start2="17" end2="19" changelist="85c958b3-6a79-4cf3-a30d-085629a8ad59" />
+        <range start1="46" end1="53" start2="46" end2="53" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
+        <range start1="54" end1="58" start2="54" end2="58" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
+        <range start1="62" end1="64" start2="62" end2="63" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
+        <range start1="69" end1="69" start2="68" end2="71" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
+      </ranges>
+    </file>
+  </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -63,26 +68,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "copyright",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\gianm\IdeaProjects\Progetto_OO" />
@@ -109,7 +114,8 @@
       <updated>1744378202579</updated>
       <workItem from="1744378203418" duration="4928000" />
       <workItem from="1744489066504" duration="11249000" />
-      <workItem from="1744500476853" duration="1819000" />
+      <workItem from="1744500476853" duration="2198000" />
+      <workItem from="1744575360382" duration="3396000" />
     </task>
     <task id="LOCAL-00001" summary="initialize repo">
       <option name="closed" value="true" />
@@ -175,7 +181,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744500252193</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Aggiunta classi e test main">
+      <option name="closed" value="true" />
+      <created>1744502391736</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1744502391736</updated>
+    </task>
+    <task id="LOCAL-00010" summary="test main">
+      <option name="closed" value="true" />
+      <created>1744502518147</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1744502518147</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,17 +218,8 @@
     <MESSAGE value="initialize repo" />
     <MESSAGE value="modifica .pom" />
     <MESSAGE value="Aggiunta classi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aggiunta classi" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Main.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Aggiunta classi e test main" />
+    <MESSAGE value="test main" />
+    <option name="LAST_COMMIT_MESSAGE" value="test main" />
   </component>
 </project>
