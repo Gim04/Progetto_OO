@@ -1,13 +1,19 @@
 import model.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args)
     {
+        ///
+        Finestra f = new Finestra();
+        ///
+
         Test.hackathons = new ArrayList<>();
 
         Partecipante alice          = (Partecipante) Utente.login("alice.rossi@example.com", "Passw0rd!",1);
