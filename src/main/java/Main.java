@@ -59,11 +59,11 @@ public class Main {
 
         dardano.apreRegistrazioni(Test.hackathons.get(0), false);
 
-        antonio.pubblicaProblema(hackathon, "LOLLOL");
+        antonio.pubblicaProblema(hackathon, "Bug Bounty");
 
-        unina.caricaDocumento(new Documento("BLA BLA BLA BLI BLI BLI BLU BLUI BLU SALAMALEKUM MALEKUM SALAAAAM, LINGA GULIGULIGULI WATAAAA LINGA GUUUU LINGA GUUU"));
+        unina.caricaDocumento(new Documento("Documento"));
 
-        antonio.commentaDocumento(unina.getDocumenti().get(0), "fa schifo");
+        antonio.commentaDocumento(unina.getDocumenti().get(0), "Insufficiente");
 
         antonio.assegnaVoto(0, unina);
         antonio.assegnaVoto(300, eureka);
