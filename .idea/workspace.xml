@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85c958b3-6a79-4cf3-a30d-085629a8ad59" name="Changes" comment="test main">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Hackathon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Hackathon.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Classifica.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Classifica.class" afterDir="false" />
     </list>
-    <list id="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" name="Changes by ciron" comment="Aggiunta classi">
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Classifica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Classifica.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Hackathon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Partecipante.java" afterDir="false" />
-    </list>
+    <list id="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" name="Changes by ciron" comment="Aggiunta classi" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,18 +40,6 @@
     &quot;accountId&quot;: &quot;cfa41325-37ab-4859-97ff-0c8c2a414d84&quot;
   }
 }</component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/Main.java">
-      <ranges>
-        <range start1="12" end1="16" start2="12" end2="16" changelist="85c958b3-6a79-4cf3-a30d-085629a8ad59" />
-        <range start1="17" end1="19" start2="17" end2="19" changelist="85c958b3-6a79-4cf3-a30d-085629a8ad59" />
-        <range start1="46" end1="53" start2="46" end2="53" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
-        <range start1="54" end1="58" start2="54" end2="58" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
-        <range start1="62" end1="64" start2="62" end2="63" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
-        <range start1="69" end1="69" start2="68" end2="71" changelist="b3105e07-c6ed-48aa-abf5-46d44e12a4a5" />
-      </ranges>
-    </file>
-  </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -68,26 +50,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ciron/Desktop/Progetto_OO",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "copyright",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\gianm\IdeaProjects\Progetto_OO" />
@@ -95,14 +79,6 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
     </key>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
