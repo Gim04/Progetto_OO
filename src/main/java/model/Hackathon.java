@@ -16,6 +16,7 @@ public class Hackathon
 
     private ArrayList<Team> teams;
     private ArrayList<Partecipante> partecipanti;
+    private ArrayList<Giudice> giudici;
     private Classifica classifica;
 
     public Hackathon(String titolo, Sede sede, int dimensioneTeam, int maxIscritti, Date dataInizio, Date dataFine)
@@ -30,6 +31,7 @@ public class Hackathon
         teams = new ArrayList<>();
         this.classifica = new Classifica();
         partecipanti = new ArrayList<>();
+        giudici = new ArrayList<>();
     }
 
     public ArrayList<Team> getTeams()
@@ -128,5 +130,10 @@ public class Hackathon
     {
         classifica.calcolaClassifica();
         return classifica;
+    }
+
+    public void iscriviGiudice(Giudice g)
+    {
+        giudici.add(g);
     }
 }

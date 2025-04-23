@@ -10,13 +10,13 @@ public class Main {
     {
         Test.hackathons = new ArrayList<>();
 
-        Partecipante alice          = (Partecipante) Utente.login("alice.rossi@example.com", "Passw0rd!",1);
-        Partecipante marco          = (Partecipante) Utente.login("marco.bianchi@example.com", "Sicura123!", 1);
-        Partecipante luca           = (Partecipante) Utente.login("luca.verdi@example.com", "P@ssword2024", 1);
-        Partecipante giulia         = (Partecipante) Utente.login("giulia.neri@example.com", "Login!2025", 1);
+        Partecipante alice          = (Partecipante) Utente.login("Alice","Rossi", "alice.rossi@example.com", "1234", 1);
+        Partecipante marco          = (Partecipante) Utente.login("Marco","Bianchi", "marco.bianchi@example.com", "Sicura123!", 1);
+        Partecipante luca           = (Partecipante) Utente.login("Luca","Verdi","luca.verdi@example.com", "P@ssword2024", 1);
+        Partecipante giulia         = (Partecipante) Utente.login("Giulia","Neri", "giulia.neri@example.com", "Login!2025", 1);
 
-        Organizzatore dardano       = (Organizzatore) Utente.login("giulio.dardano@example.com", "1somorfismo!", 2);
-        Giudice antonio             = (Giudice) Utente.login("antonio.pocomento@example.com", "ioHoFortun4!", 3);
+        Organizzatore dardano       = (Organizzatore) Utente.login("Giulio","Dardano","giulio.dardano@example.com", "1somorfismo!", 2);
+        Giudice antonio             = (Giudice) Utente.login("Antonio","Poco","antonio.pocomento@example.com", "ioHoFortun4!", 3);
 
         // Creazione della sede
         Sede sede = new Sede("Politecnico di Milano", "Piazza Leonardo da Vinci, 32", 80001);
@@ -43,6 +43,7 @@ public class Main {
         Test.hackathons.add(hackathon);
 
         dardano.apreRegistrazioni(Test.hackathons.get(0), true);
+        dardano.invitaGiudice(hackathon, antonio);
 
         alice.iscrizioneHackathon(hackathon);
         marco.iscrizioneHackathon(hackathon);

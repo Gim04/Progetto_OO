@@ -12,4 +12,9 @@ public class Organizzatore extends Utente
     {
         hackathon.setRegistrazioniAperte(apri);
     }
+
+    public void invitaGiudice(Hackathon hackathon, Giudice g)
+    {
+        hackathon.iscriviGiudice(g);
+    }
 }
