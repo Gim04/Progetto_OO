@@ -1,5 +1,7 @@
+import controller.Controller;
 import gui.GiudiciGui;
 import gui.HackathonList;
+import gui.Login;
 import model.*;
 
 import javax.swing.*;
@@ -11,15 +13,19 @@ public class Main {
 
     public static void main(String[] args)
     {
+        Controller controller = new Controller();
+
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setTitle("Login");
 
-        Test.hackathons = new ArrayList<>();
+        /*Test.hackathons = new ArrayList<>();
 
         Partecipante alice          = (Partecipante) Utente.login("Alice","Rossi", "alice.rossi@example.com", "1234", 1);
         Partecipante marco          = (Partecipante) Utente.login("Marco","Bianchi", "marco.bianchi@example.com", "Sicura123!", 1);
         Partecipante luca           = (Partecipante) Utente.login("Luca","Verdi","luca.verdi@example.com", "P@ssword2024", 1);
-        Partecipante giulia         = (Partecipante) Utente.login("Giulia","Neri", "giulia.neri@example.com", "Login!2025", 1);
+            Partecipante giulia         = (Partecipante) Utente.login("Giulia","Neri", "giulia.neri@example.com", "Login!2025", 1);
 
         Organizzatore dardano       = (Organizzatore) Utente.login("Giulio","Dardano","giulio.dardano@example.com", "1somorfismo!", 2);
         Giudice antonio             = (Giudice) Utente.login("Antonio","Poco ","antonio.pocomento@example.com", "ioHoFortun4!", 3);
@@ -66,6 +72,7 @@ public class Main {
 
         dardano.apreRegistrazioni(Test.hackathons.get(0), false);
 
+        // ---- //
         antonio.pubblicaProblema(hackathon, "Bug Bounty");
 
         unina.caricaDocumento(new Documento("Documento"));
@@ -77,9 +84,32 @@ public class Main {
 
         Classifica classifica = hackathon.creaClassifica();
 
-        Test.printAll();
+        Test.printAll();*/
+        frame.setContentPane(new Login(controller, frame).$$$getRootComponent$$$());
 
-        frame.setContentPane(new HackathonList(Test.hackathons).$$$getRootComponent$$$());
+        for(Hackathon h : controller.getAllHackathons())
+        {
+            System.out.println(h.getTitolo());
+            for(Team t : h.getTeams())
+            {
+                System.out.println("\t" + t.getNome()+":");
+                for(Partecipante p : t.getPartecipanti())
+                {
+                    System.out.println("\t\t" + p.getNome() + " " + p.getEmail());
+                }
+            }
+        }
+
+        for(Organizzatore o : controller.getAllOrganizzatoriUsers())
+        {
+            System.out.println(o.getNome()+" "+o.getEmail());
+        }
+
+        for(Giudice g : controller.getAllGiudiciUsers())
+        {
+            System.out.println(g.getNome()+" "+g.getEmail());
+        }
+
         frame.setVisible(true);
     }
 }

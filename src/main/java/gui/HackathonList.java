@@ -1,5 +1,6 @@
 package gui;
 
+import controller.Controller;
 import model.Hackathon;
 
 import javax.swing.*;
@@ -7,24 +8,23 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HackathonList {
+    private Controller controller;
+    private JFrame frame;
+
     private JList hackathonList;
     private JPanel btnPanel;
     private JPanel root;
 
     private JScrollPane scrollPaneBar1;
 
-    public HackathonList(ArrayList<Hackathon> hackathons) {
+    public HackathonList(ArrayList<Hackathon> hackathons, Controller c, JFrame f) {
+        controller = c;
+        frame = f;
 
         hackathonList.setModel(new DefaultListModel<String>());
 
-        for (int i = 0; i < 10000; i++)
-            ((DefaultListModel<String>) hackathonList.getModel()).addElement("Hackathon " + i);
-
-        //scrollPaneBar1 = new JScrollPane();
-
-        //scrollPaneBar1.setViewportView(hackathonList);
-
-        //root.add(scrollPaneBar1);
+        for (Hackathon h : hackathons)
+            ((DefaultListModel<String>) hackathonList.getModel()).addElement(h.getTitolo());
     }
 
     {
