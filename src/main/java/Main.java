@@ -1,3 +1,4 @@
+import Database.ConnessioneDatabase;
 import controller.Controller;
 import gui.GiudiciGui;
 import gui.HackathonList;
@@ -13,12 +14,15 @@ public class Main {
 
     public static void main(String[] args)
     {
+        ConnessioneDatabase c = new ConnessioneDatabase();
+
         Controller controller = new Controller();
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setTitle("Login");
+
 
         /*Test.hackathons = new ArrayList<>();
 
@@ -87,7 +91,7 @@ public class Main {
         Test.printAll();*/
         frame.setContentPane(new Login(controller, frame).$$$getRootComponent$$$());
 
-        for(Hackathon h : controller.getAllHackathons())
+        /*for(Hackathon h : controller.getAllHackathons())
         {
             System.out.println(h.getTitolo());
             for(Team t : h.getTeams())
@@ -108,7 +112,7 @@ public class Main {
         for(Giudice g : controller.getAllGiudiciUsers())
         {
             System.out.println(g.getNome()+" "+g.getEmail());
-        }
+        }*/
 
         frame.setVisible(true);
     }
