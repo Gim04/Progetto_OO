@@ -1,69 +1,66 @@
 CREATE TABLE Classifica
 (
-    ID int,
-    PRIMARY KEY (ID)
+    ID SERIAL PRIMARY KEY
 );
 
 CREATE TABLE Sede
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     citta varchar(30),
     via varchar(50),
-    codicePostale int,
-    PRIMARY KEY (ID)
+    codicePostale int
 );
 
 CREATE TABLE Organizzatore
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     nome varchar(30),
     cognome varchar(30),
     email varchar(150),
     password varchar(16),
-    PRIMARY KEY (ID)
+    CONSTRAINT unique_EMAIL_ORGANIZZATORE UNIQUE(email)
 );
 
 CREATE TABLE Partecipante
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     nome varchar(30),
     cognome varchar(30),
     email varchar(150),
     password varchar(16),
-    PRIMARY KEY (ID)
+    CONSTRAINT unique_EMAIL_PARTECIPANTE UNIQUE(email)
 );
 
 CREATE TABLE Giudice
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     nome varchar(30),
     cognome varchar(30),
     email varchar(150),
     password varchar(16),
-    PRIMARY KEY (ID)
+    CONSTRAINT unique_EMAIL_GIUDICE UNIQUE(email)
 );
 
 CREATE TABLE Team
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     nome varchar(30),
     voto smallint,
-    PRIMARY KEY (ID)
+
 );
 
 CREATE TABLE Documento
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     team int,
     commento text,
     contenuto text,
-    PRIMARY KEY (ID),
     FOREIGN KEY (team) REFERENCES Team(ID)
 );
 
 CREATE TABLE Hackathon
 (
-    ID int,
+    ID SERIAL PRIMARY KEY,
     sede int,
     dataInizio date,
     maxIscritti int,
@@ -74,7 +71,6 @@ CREATE TABLE Hackathon
     descrizioneProblema varchar(500),
     classifica int,
     organizzatore int,
-    PRIMARY KEY (ID),
     FOREIGN KEY (classifica) REFERENCES Classifica(ID),
     FOREIGN KEY (sede) REFERENCES Sede(ID),
     FOREIGN KEY (organizzatore) REFERENCES Organizzatore(ID)
@@ -138,22 +134,22 @@ CREATE TABLE GIUDICE_TEAM
 
 -----
 -- Partecipanti
-INSERT INTO Partecipante (ID, nome, cognome, email, password) VALUES
-                                                                  (1, 'Alice', 'Rossi', 'alice.rossi@example.com', '1234'),
-                                                                  (2, 'Marco', 'Bianchi', 'marco.bianchi@example.com', 'Sicura123!'),
-                                                                  (3, 'Luca', 'Verdi', 'luca.verdi@example.com', 'P@ssword2024'),
-                                                                  (4, 'Giulia', 'Neri', 'giulia.neri@example.com', 'Login!2025');
+INSERT INTO Partecipante (nome, cognome, email, password) VALUES
+                                                                  ('Alice', 'Rossi', 'alice.rossi@example.com', '1234'),
+                                                                  ('Marco', 'Bianchi', 'marco.bianchi@example.com', 'Sicura123!'),
+                                                                  ('Luca', 'Verdi', 'luca.verdi@example.com', 'P@ssword2024'),
+                                                                  ('Giulia', 'Neri', 'giulia.neri@example.com', 'Login!2025');
 -- Organizzatore
-INSERT INTO Organizzatore (ID, nome, cognome, email, password) VALUES
-    (5, 'Giulio', 'Dardano', 'giulio.dardano@example.com', '1somorfismo!');
+INSERT INTO Organizzatore (nome, cognome, email, password) VALUES
+    ('Giulio', 'Dardano', 'giulio.dardano@example.com', '1somorfismo!');
 
 -- Giudice
-INSERT INTO Giudice (ID, nome, cognome, email, password) VALUES
-    (6, 'Antonio', 'Poco', 'antonio.pocomento@example.com', 'ioHoFortun4!');
+INSERT INTO Giudice (nome, cognome, email, password) VALUES
+    ('Antonio', 'Poco', 'antonio.pocomento@example.com', 'ioHoFortun4!');
 
 -- Sede
-INSERT INTO Sede (ID, citta, via, codicePostale) VALUES
-    (1, 'Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
+INSERT INTO Sede (citta, via, codicePostale) VALUES
+    ('Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
 
 -- Classifica
 INSERT INTO Classifica (ID) VALUES
@@ -161,10 +157,10 @@ INSERT INTO Classifica (ID) VALUES
 
 -- Hackathon
 INSERT INTO Hackathon (
-    ID, sede, dataInizio, maxIscritti, registrazioniAperte, dataFine,
+    sede, dataInizio, maxIscritti, registrazioniAperte, dataFine,
     dimensioneTeam, titolo, descrizioneProblema, classifica, organizzatore
 ) VALUES
-    (1, 1, '2025-06-15', 100, 0, '2025-06-17', 4, 'HackTheFuture 2025', 'Bug Bounty', 1, 5);
+    (1, '2025-06-15', 100, 0, '2025-06-17', 4, 'HackTheFuture 2025', 'Bug Bounty', 1, 1);
 
 -- Partecipanti iscritti all'Hackathon
 INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante) VALUES
@@ -172,16 +168,16 @@ INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante) VALUES
 
 -- Giudice assegnato all'Hackathon
 INSERT INTO HACKATHON_GIUDICE (hackathon, giudice) VALUES
-    (1, 6);
+    (1,1);
 
 -- Organizzatore dell'Hackathon
 INSERT INTO HACKATHON_ORGANIZZATORE (hackathon, organizzatore) VALUES
-    (1, 5);
+    (1,1);
 
 -- Team
-INSERT INTO Team (ID, nome, voto) VALUES
-                                      (1, 'Unina', 0),
-                                      (2, 'Eureka', 0);
+INSERT INTO Team (nome, voto) VALUES
+                                      ('Unina', 0),
+                                      ('Eureka', 0);
 
 -- Team iscritti all'Hackathon
 INSERT INTO TEAM_HACKATHON (team, hackathon) VALUES
@@ -196,10 +192,10 @@ INSERT INTO TEAM_PARTECIPANTE (team, partecipante) VALUES
                                                        (2, 4); -- Giulia
 
 -- Documento caricato dal team Unina
-INSERT INTO Documento (ID, team, commento, contenuto) VALUES
-    (1, 1, 'Insufficiente', 'Documento');
+INSERT INTO Documento (team, commento, contenuto) VALUES
+    (1, 'Insufficiente', 'Documento');
 
 -- Voti dei giudici ai team
 INSERT INTO GIUDICE_TEAM (giudice, team, voto) VALUES
-                                                   (6, 1, 0),
-                                                   (6, 2, 300);
+                                                   (1, 1, 0),
+                                                   (1, 2, 300);

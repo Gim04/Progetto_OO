@@ -3,6 +3,7 @@ import controller.Controller;
 import gui.GiudiciGui;
 import gui.HackathonList;
 import gui.Login;
+import gui.Register;
 import model.*;
 
 import javax.swing.*;
@@ -89,7 +90,7 @@ public class Main {
         Classifica classifica = hackathon.creaClassifica();
 
         Test.printAll();*/
-        frame.setContentPane(new Login(controller, frame).$$$getRootComponent$$$());
+        frame.setContentPane(new Register(controller, frame).$$$getRootComponent$$$());
 
         /*for(Hackathon h : controller.getAllHackathons())
         {
