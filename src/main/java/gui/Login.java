@@ -38,6 +38,9 @@ public class Login {
                     return;
                 }
 
+                controller.setCurrentUser(utente);
+                controller.refreshHackathonList();
+
                 if (utente instanceof Partecipante) {
                     JOptionPane.showMessageDialog(panel1, "PARTECIPANTE!", "Info", JOptionPane.INFORMATION_MESSAGE);
                     controller.setCurrentUser(utente);

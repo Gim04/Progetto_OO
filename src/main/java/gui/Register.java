@@ -18,11 +18,14 @@ public class Register {
     private JPasswordField passwordField1;
     private JButton button1;
     private JComboBox Ruolo;
+    private JButton login;
 
 
     public Register(Controller c, JFrame frame) {
         controller = c;
         this.frame = frame;
+
+        frame.setTitle("Register");
 
         button1.addActionListener(new ActionListener() {
             @Override
@@ -50,6 +53,16 @@ public class Register {
                 }
             }
         });
+
+        login.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(new Login(controller, frame).$$$getRootComponent$$$());
+                frame.invalidate();
+                frame.repaint();
+            }
+        });
     }
 
 
@@ -69,7 +82,7 @@ public class Register {
      */
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(50, 50, 50, 50), -1, -1));
+        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(50, 50, 50, 50), -1, -1));
         panel1.setBackground(new Color(-1562));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
@@ -107,6 +120,9 @@ public class Register {
         button1 = new JButton();
         button1.setText("Button");
         panel1.add(button1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        login = new JButton();
+        login.setText("Gia registrato? Login.");
+        panel1.add(login, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
