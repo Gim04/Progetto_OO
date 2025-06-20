@@ -39,23 +39,23 @@ public class Login {
                 }
 
                 controller.setCurrentUser(utente);
-                controller.refreshHackathonList();
+                frame.setTitle("Hackathon List");
 
                 if (utente instanceof Partecipante) {
-                    JOptionPane.showMessageDialog(panel1, "PARTECIPANTE!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    controller.setCurrentUser(utente);
+                    controller.refreshHackathonList();
                     frame.setContentPane(new HackathonList(controller.getAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                    frame.setTitle("Hackathon List");
+                    frame.revalidate();
+                    frame.repaint();
+                    return;
+                } else if (utente instanceof Giudice) {
+                    controller.refreshHackathonListForGiudice();
+                    frame.setContentPane(new HackathonList(controller.getAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     frame.revalidate();
                     frame.repaint();
                     return;
                 } else if (utente instanceof Organizzatore) {
-                    JOptionPane.showMessageDialog(panel1, "Organizzatore!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    controller.setCurrentUser(utente);
-                    return;
-                } else if (utente instanceof Giudice) {
-                    JOptionPane.showMessageDialog(panel1, "Giudice!", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    controller.setCurrentUser(utente);
+                    frame.revalidate();
+                    frame.repaint();
                     return;
                 }
 

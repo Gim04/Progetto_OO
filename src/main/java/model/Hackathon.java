@@ -12,14 +12,14 @@ public class Hackathon
     private Date dataInizio;
     private Date dataFine;
     private String descrizioneProblema;
-    private boolean registrazioniAperte;
+    private boolean registrazioniAperte = false;
 
     private ArrayList<Team> teams;
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Giudice> giudici;
     private Classifica classifica;
 
-    public Hackathon(String titolo, Sede sede, int dimensioneTeam, int maxIscritti, Date dataInizio, Date dataFine)
+    public Hackathon(String titolo, Sede sede, int dimensioneTeam, int maxIscritti, Date dataInizio, Date dataFine, boolean registrazioniAperte)
     {
         this.titolo = titolo;
         this.sede = sede;
@@ -27,6 +27,7 @@ public class Hackathon
         this.maxIscritti = maxIscritti;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
+        this.registrazioniAperte = registrazioniAperte;
 
         teams = new ArrayList<>();
         this.classifica = new Classifica();

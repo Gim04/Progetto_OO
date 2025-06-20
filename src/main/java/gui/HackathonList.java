@@ -1,7 +1,9 @@
 package gui;
 
 import controller.Controller;
+import model.Giudice;
 import model.Hackathon;
+import model.Team;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +17,10 @@ public class HackathonList {
     private JPanel btnPanel;
     private JPanel root;
 
+    // Pulsanti giudici
+    private JButton visualizzaTeam;
+    //
+
     private JScrollPane scrollPaneBar1;
 
     public HackathonList(ArrayList<Hackathon> hackathons, Controller c, JFrame f) {
@@ -25,6 +31,25 @@ public class HackathonList {
 
         for (Hackathon h : hackathons)
             ((DefaultListModel<String>) hackathonList.getModel()).addElement(h.getTitolo());
+
+        if (controller.getCurrentUser() instanceof Giudice) {
+            visualizzaTeam = new JButton("Visualizza Teams");
+            visualizzaTeam.addActionListener(e -> {
+                String s = "";
+
+                if (hackathonList.getSelectedValue() != null) {
+                    ArrayList<Team> teams = controller.getLocalTeamsInHackathon(hackathonList.getSelectedValue().toString());
+                    for (Team t : teams) {
+                        s += t.getNome() + "\n";
+                    }
+                    JOptionPane.showMessageDialog(frame, s);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+            btnPanel.add(visualizzaTeam, new com.intellij.uiDesigner.core.GridConstraints());
+        }
     }
 
     {
