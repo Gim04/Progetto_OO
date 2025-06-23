@@ -1,0 +1,185 @@
+package ImplementazionePostgresDAO;
+
+import Database.ConnessioneDatabase;
+import model.*;
+import org.postgresql.jdbc2.ArrayAssistant;
+import util.ERuolo;
+
+import javax.swing.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class HackathonImplementazioneDAO {
+
+    Connection connection;
+
+    public HackathonImplementazioneDAO() {
+        try {
+            connection = ConnessioneDatabase.Instance.getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Hackathon> getHackathonList() {
+        ArrayList<Hackathon> r = new ArrayList<>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.id = sede");
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                return r;
+            }
+
+            r = new ArrayList<>();
+
+            while (rs.next()) {
+                r.add(
+                        new Hackathon(
+                                rs.getString("titolo"),
+                                new Sede(rs.getString("via"),
+                                        rs.getString("citta"),
+                                        rs.getInt("codicePostale")),
+                                rs.getInt("dimensioneTeam"),
+                                rs.getInt("maxIscritti"),
+                                rs.getDate("dataInizio"),
+                                rs.getDate("dataFine"),
+                                rs.getBoolean("registrazioneAperte")
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return r;
+    }
+
+    public ArrayList<Hackathon> getHackathonListForJudge(String emailGiudice) {
+        ArrayList<Hackathon> r = new ArrayList<>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.id = sede " +
+                                                                     "JOIN HACKATHON_GIUDICE ON hackathon.id = HACKATHON_GIUDICE.hackathon "+
+                                                                     "JOIN giudice ON HACKATHON_GIUDICE.giudice = giudice.id " +
+                                                                     "WHERE giudice.email = '"+ emailGiudice + "'");
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                return r;
+            }
+
+            r = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Hackathon h = new Hackathon(
+                        rs.getString("titolo"),
+                        new Sede(rs.getString("via"),
+                                rs.getString("citta"),
+                                rs.getInt("codicePostale")),
+                        rs.getInt("dimensioneTeam"),
+                        rs.getInt("maxIscritti"),
+                        rs.getDate("dataInizio"),
+                        rs.getDate("dataFine"),
+                        rs.getBoolean("registrazioniAperte")
+                );
+
+                ArrayList<Team> teams = getTeamForHackathon(h);
+                for(Team t : teams) {
+                    h.addTeam(t);
+                }
+
+                teams.clear();
+
+                r.add(h);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return r;
+    }
+
+    public ArrayList<Team> getTeamForHackathon(Hackathon hackathon)
+    {
+        ArrayList<Team> r = new ArrayList<>();
+
+        /*
+        "SELECT team.nome FROM hackathon JOIN sede ON hackathon.id = sede " +
+                                                                      "JOIN TEAM_HACKATHON ON TEAM_HACKATHON.hackathon = hackathon.id" +
+                                                                      "JOIN team ON team.id = TEAM_HACKATHON.team "
+         */
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT nome FROM TEAM_HACKATHON " +
+                    "JOIN hackathon ON hackathon.id = TEAM_HACKATHON.hackathon " +
+                    "JOIN team ON team.id = TEAM_HACKATHON.team WHERE hackathon.titolo = '" + hackathon.getTitolo() + "'");
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                return r;
+            }
+
+            while (rs.next()) {
+                r.add(new Team(rs.getString("nome")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return r;
+    }
+
+    public ArrayList<Hackathon> getHackathonListForOrganizzatore(String email)
+    {
+        ArrayList<Hackathon> r = new ArrayList<>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.id = sede " +
+                    "JOIN HACKATHON_ORGANIZZATORE ON hackathon.id = HACKATHON_ORGANIZZATORE.hackathon "+
+                    "JOIN organizzatore ON HACKATHON_ORGANIZZATORE.organizzatore = organizzatore.id " +
+                    "WHERE organizzatore.email = '"+ email + "'");
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                return r;
+            }
+
+            r = new ArrayList<>();
+
+            while (rs.next()) {
+
+                Hackathon h = new Hackathon(
+                        rs.getString("titolo"),
+                        new Sede(rs.getString("via"),
+                                rs.getString("citta"),
+                                rs.getInt("codicePostale")),
+                        rs.getInt("dimensioneTeam"),
+                        rs.getInt("maxIscritti"),
+                        rs.getDate("dataInizio"),
+                        rs.getDate("dataFine"),
+                        rs.getBoolean("registrazioniAperte")
+                );
+
+                ArrayList<Team> teams = getTeamForHackathon(h);
+                for(Team t : teams) {
+                    h.addTeam(t);
+                }
+
+                teams.clear();
+
+                r.add(h);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return r;
+    }
+}
