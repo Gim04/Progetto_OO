@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 import model.Giudice;
 import model.Hackathon;
+import model.Organizzatore;
 import model.Team;
 
 import javax.swing.*;
@@ -20,6 +21,12 @@ public class HackathonList {
     // Pulsanti giudici
     private JButton visualizzaTeam;
     //
+
+    // Pulsanti organizzatore
+    private JButton invitaGiudice;
+    private JButton creaHackathon;
+    //
+
 
     private JScrollPane scrollPaneBar1;
 
@@ -49,6 +56,48 @@ public class HackathonList {
             });
 
             btnPanel.add(visualizzaTeam, new com.intellij.uiDesigner.core.GridConstraints());
+        } else if (controller.getCurrentUser() instanceof Organizzatore) {
+            invitaGiudice = new JButton("Invita Giudice");
+            creaHackathon = new JButton("Crea Hackathon");
+
+            invitaGiudice.addActionListener(e -> {
+                if (hackathonList.getSelectedValue() != null) {
+                    if (controller.inviteJudgeToHackathon("johnlemon@example.com", hackathonList.getSelectedValue().toString()))
+                        JOptionPane.showMessageDialog(frame, "Invita giudice pressed!");
+                    else
+                        JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+            creaHackathon.addActionListener(e -> {
+                JOptionPane.showMessageDialog(frame, "Crea Hackathon pressed!");
+            });
+
+            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
+
+            btnPanel.add(creaHackathon,
+                    new com.intellij.uiDesigner.core.GridConstraints(
+                            0, 0, 1, 1,
+                            com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                            com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                            null, null, null
+                    )
+            );
+
+            btnPanel.add(invitaGiudice,
+                    new com.intellij.uiDesigner.core.GridConstraints(
+                            0, 1, 1, 1,
+                            com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                            com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                            null, null, null
+                    )
+            );
         }
     }
 

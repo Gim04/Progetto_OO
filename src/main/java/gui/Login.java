@@ -54,6 +54,8 @@ public class Login {
                     frame.repaint();
                     return;
                 } else if (utente instanceof Organizzatore) {
+                    controller.refreshHackathonListForOrganizzatore();
+                    frame.setContentPane(new HackathonList(controller.getAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     frame.revalidate();
                     frame.repaint();
                     return;
