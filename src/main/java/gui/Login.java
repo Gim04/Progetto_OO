@@ -43,19 +43,19 @@ public class Login {
 
                 if (utente instanceof Partecipante) {
                     controller.refreshHackathonList();
-                    frame.setContentPane(new HackathonList(controller.getAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                    frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     frame.revalidate();
                     frame.repaint();
                     return;
                 } else if (utente instanceof Giudice) {
                     controller.refreshHackathonListForGiudice();
-                    frame.setContentPane(new HackathonList(controller.getAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                    frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     frame.revalidate();
                     frame.repaint();
                     return;
                 } else if (utente instanceof Organizzatore) {
                     controller.refreshHackathonListForOrganizzatore();
-                    frame.setContentPane(new HackathonList(controller.getAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                    frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     frame.revalidate();
                     frame.repaint();
                     return;

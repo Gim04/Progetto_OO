@@ -94,15 +94,6 @@ CREATE TABLE HACKATHON_GIUDICE
     FOREIGN KEY (giudice) REFERENCES Giudice(ID)
 );
 
-CREATE TABLE HACKATHON_ORGANIZZATORE
-(
-    hackathon INT,
-    organizzatore INT,
-    PRIMARY KEY (hackathon, organizzatore),
-    FOREIGN KEY (hackathon) REFERENCES Hackathon(ID),
-    FOREIGN KEY (organizzatore) REFERENCES Organizzatore(ID)
-);
-
 CREATE TABLE TEAM_PARTECIPANTE
 (
     team INT,
@@ -168,10 +159,6 @@ INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante) VALUES
 
 -- Giudice assegnato all'Hackathon
 INSERT INTO HACKATHON_GIUDICE (hackathon, giudice) VALUES
-    (1,1);
-
--- Organizzatore dell'Hackathon
-INSERT INTO HACKATHON_ORGANIZZATORE (hackathon, organizzatore) VALUES
     (1,1);
 
 -- Team

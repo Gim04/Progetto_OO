@@ -7,6 +7,7 @@ import util.ERuolo;
 
 import javax.swing.*;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -113,7 +114,7 @@ public class Controller
         return organizzatori;
     }
 
-    public ArrayList<Hackathon> getAllHackathons()
+    public ArrayList<Hackathon> getLocalAllHackathons()
     {
         return hackathons;
     }
@@ -288,5 +289,10 @@ public class Controller
     public boolean inviteJudgeToHackathon(String email, String titolo)
     {
         return utenteImplementazioneDAO.inviteJudgeToHackathon(email, titolo);
+    }
+
+    public boolean aggiungiHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email)
+    {
+        return hackathonutenteImplementazioneDAO.inserisciHackathon(nome, dimensioneTeam, maxIscritti, dataI, dataF, registrazioni, email);
     }
 }

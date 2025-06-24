@@ -27,7 +27,6 @@ public class HackathonList {
     private JButton creaHackathon;
     //
 
-
     private JScrollPane scrollPaneBar1;
 
     public HackathonList(ArrayList<Hackathon> hackathons, Controller c, JFrame f) {
@@ -36,8 +35,7 @@ public class HackathonList {
 
         hackathonList.setModel(new DefaultListModel<String>());
 
-        for (Hackathon h : hackathons)
-            ((DefaultListModel<String>) hackathonList.getModel()).addElement(h.getTitolo());
+        refreshLocalUIHackathonList();
 
         if (controller.getCurrentUser() instanceof Giudice) {
             visualizzaTeam = new JButton("Visualizza Teams");
@@ -63,7 +61,7 @@ public class HackathonList {
             invitaGiudice.addActionListener(e -> {
                 if (hackathonList.getSelectedValue() != null) {
                     if (controller.inviteJudgeToHackathon("johnlemon@example.com", hackathonList.getSelectedValue().toString()))
-                        JOptionPane.showMessageDialog(frame, "Invita giudice pressed!");
+                        JOptionPane.showMessageDialog(frame, "Giudice invitato!");
                     else
                         JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!");
                 } else {
@@ -72,7 +70,13 @@ public class HackathonList {
             });
 
             creaHackathon.addActionListener(e -> {
-                JOptionPane.showMessageDialog(frame, "Crea Hackathon pressed!");
+                JDialog frame = new JDialog(f, "Crea Hackathon");
+                frame.setType(Frame.Type.UTILITY);
+                frame.setSize(360, 240);
+                frame.setContentPane(new CreaHackathon(f, controller, this).$$$getRootComponent$$$());
+
+                frame.setVisible(true);
+
             });
 
             btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
@@ -99,6 +103,12 @@ public class HackathonList {
                     )
             );
         }
+    }
+
+    public void refreshLocalUIHackathonList()
+    {
+        for (Hackathon h : controller.getLocalAllHackathons())
+            ((DefaultListModel<String>) hackathonList.getModel()).addElement(h.getTitolo());
     }
 
     {

@@ -10,7 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class HackathonImplementazioneDAO {
 
@@ -27,7 +29,7 @@ public class HackathonImplementazioneDAO {
     public ArrayList<Hackathon> getHackathonList() {
         ArrayList<Hackathon> r = new ArrayList<>();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.id = sede");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id");
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.isBeforeFirst()) {
@@ -47,7 +49,7 @@ public class HackathonImplementazioneDAO {
                                 rs.getInt("maxIscritti"),
                                 rs.getDate("dataInizio"),
                                 rs.getDate("dataFine"),
-                                rs.getBoolean("registrazioneAperte")
+                                rs.getBoolean("registrazioniAperte")
                         )
                 );
             }
@@ -62,7 +64,7 @@ public class HackathonImplementazioneDAO {
     public ArrayList<Hackathon> getHackathonListForJudge(String emailGiudice) {
         ArrayList<Hackathon> r = new ArrayList<>();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.id = sede " +
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id " +
                                                                      "JOIN HACKATHON_GIUDICE ON hackathon.id = HACKATHON_GIUDICE.hackathon "+
                                                                      "JOIN giudice ON HACKATHON_GIUDICE.giudice = giudice.id " +
                                                                      "WHERE giudice.email = '"+ emailGiudice + "'");
@@ -140,9 +142,8 @@ public class HackathonImplementazioneDAO {
     {
         ArrayList<Hackathon> r = new ArrayList<>();
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.id = sede " +
-                    "JOIN HACKATHON_ORGANIZZATORE ON hackathon.id = HACKATHON_ORGANIZZATORE.hackathon "+
-                    "JOIN organizzatore ON HACKATHON_ORGANIZZATORE.organizzatore = organizzatore.id " +
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.ID " +
+                    "JOIN organizzatore ON hackathon.organizzatore = organizzatore.id " +
                     "WHERE organizzatore.email = '"+ email + "'");
             ResultSet rs = stmt.executeQuery();
 
@@ -181,5 +182,38 @@ public class HackathonImplementazioneDAO {
         }
 
         return r;
+    }
+
+
+    public boolean inserisciHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email)
+    {
+
+        boolean result = false;
+
+        try
+        {
+            ResultSet set = null;
+            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM organizzatore WHERE email = '"+ email + "'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int id = set.getInt("ID");
+
+            int val = 0;
+            if(!registrazioni) val = 1;
+            stmt = connection.prepareStatement("INSERT INTO hackathon(titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
+                                                                      "VALUES (" + "'" + nome + "', '" + dimensioneTeam + "', '" + dataI + "', '" + dataF + "', " + val + ",'" + maxIscritti + "', "+ id +")");
+            stmt.execute();
+
+            result = true;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
