@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import gui.util.FrameManager;
 import model.Giudice;
 import model.Organizzatore;
 import model.Partecipante;
@@ -41,23 +42,39 @@ public class Login {
                 controller.setCurrentUser(utente);
                 frame.setTitle("Hackathon List");
 
+                /*
+                    if (utente instanceof Partecipante) {
+                        controller.refreshHackathonList();
+                        frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                        frame.revalidate();
+                        frame.repaint();
+                        return;
+                    } else if (utente instanceof Giudice) {
+                        controller.refreshHackathonListForGiudice();
+                        frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                        frame.revalidate();
+                        frame.repaint();
+                        return;
+                    } else if (utente instanceof Organizzatore) {
+                        controller.refreshHackathonListForOrganizzatore();
+                        frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                        frame.revalidate();
+                        frame.repaint();
+                        return;
+                    }
+                */
+
                 if (utente instanceof Partecipante) {
                     controller.refreshHackathonList();
-                    frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                    frame.revalidate();
-                    frame.repaint();
+                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     return;
                 } else if (utente instanceof Giudice) {
                     controller.refreshHackathonListForGiudice();
-                    frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                    frame.revalidate();
-                    frame.repaint();
+                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     return;
                 } else if (utente instanceof Organizzatore) {
                     controller.refreshHackathonListForOrganizzatore();
-                    frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                    frame.revalidate();
-                    frame.repaint();
+                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
                     return;
                 }
 

@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import gui.util.FrameManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,9 +59,7 @@ public class Register {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setContentPane(new Login(controller, frame).$$$getRootComponent$$$());
-                frame.invalidate();
-                frame.repaint();
+                FrameManager.Instance.switchFrame(new Login(controller, frame).$$$getRootComponent$$$());
             }
         });
     }

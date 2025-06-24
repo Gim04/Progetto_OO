@@ -182,6 +182,9 @@ INSERT INTO TEAM_PARTECIPANTE (team, partecipante) VALUES
 INSERT INTO Documento (team, commento, contenuto) VALUES
     (1, 'Insufficiente', 'Documento');
 
+INSERT INTO Documento (team, contenuto) VALUES
+    (1, 'Documento 2');
+
 -- Voti dei giudici ai team
 INSERT INTO GIUDICE_TEAM (giudice, team, voto) VALUES
                                                    (1, 1, 0),

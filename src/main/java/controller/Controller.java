@@ -295,4 +295,9 @@ public class Controller
     {
         return hackathonutenteImplementazioneDAO.inserisciHackathon(nome, dimensioneTeam, maxIscritti, dataI, dataF, registrazioni, email);
     }
+
+    public boolean votaTeam(String team, int voto)
+    {
+        return hackathonutenteImplementazioneDAO.insertVoto(team, voto);
+    }
 }

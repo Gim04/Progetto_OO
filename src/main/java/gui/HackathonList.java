@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import gui.util.FrameManager;
 import model.Giudice;
 import model.Hackathon;
 import model.Organizzatore;
@@ -20,6 +21,7 @@ public class HackathonList {
 
     // Pulsanti giudici
     private JButton visualizzaTeam;
+    private JButton pubblicaProblema;
     //
 
     // Pulsanti organizzatore
@@ -39,21 +41,34 @@ public class HackathonList {
 
         if (controller.getCurrentUser() instanceof Giudice) {
             visualizzaTeam = new JButton("Visualizza Teams");
-            visualizzaTeam.addActionListener(e -> {
-                String s = "";
+            pubblicaProblema = new JButton("Pubblica Problema");
 
+            visualizzaTeam.addActionListener(e ->
+            {
                 if (hackathonList.getSelectedValue() != null) {
-                    ArrayList<Team> teams = controller.getLocalTeamsInHackathon(hackathonList.getSelectedValue().toString());
-                    for (Team t : teams) {
-                        s += t.getNome() + "\n";
-                    }
-                    JOptionPane.showMessageDialog(frame, s);
+                    FrameManager.Instance.switchFrame(new GiudiceTeamGui(f, controller, hackathonList.getSelectedValue().toString()).$$$getRootComponent$$$());
                 } else {
                     JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
 
-            btnPanel.add(visualizzaTeam, new com.intellij.uiDesigner.core.GridConstraints());
+            pubblicaProblema.addActionListener(e -> {
+
+            });
+
+            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
+
+            btnPanel.add(visualizzaTeam, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                    com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                    null, null, null));
+            btnPanel.add(pubblicaProblema, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                    com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                    null, null, null));
+
         } else if (controller.getCurrentUser() instanceof Organizzatore) {
             invitaGiudice = new JButton("Invita Giudice");
             creaHackathon = new JButton("Crea Hackathon");
@@ -73,7 +88,7 @@ public class HackathonList {
                 JDialog frame = new JDialog(f, "Crea Hackathon");
                 frame.setType(Frame.Type.UTILITY);
                 frame.setSize(360, 240);
-                frame.setContentPane(new CreaHackathon(f, controller, this).$$$getRootComponent$$$());
+                FrameManager.Instance.switchFrame(new CreaHackathon(f, controller, this).$$$getRootComponent$$$());
 
                 frame.setVisible(true);
 
@@ -105,8 +120,7 @@ public class HackathonList {
         }
     }
 
-    public void refreshLocalUIHackathonList()
-    {
+    public void refreshLocalUIHackathonList() {
         for (Hackathon h : controller.getLocalAllHackathons())
             ((DefaultListModel<String>) hackathonList.getModel()).addElement(h.getTitolo());
     }

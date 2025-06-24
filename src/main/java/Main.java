@@ -4,6 +4,7 @@ import gui.GiudiciGui;
 import gui.HackathonList;
 import gui.Login;
 import gui.Register;
+import gui.util.FrameManager;
 import model.*;
 
 import javax.swing.*;
@@ -15,15 +16,13 @@ public class Main {
 
     public static void main(String[] args)
     {
-        ConnessioneDatabase c = new ConnessioneDatabase();
-
-        Controller controller = new Controller();
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setTitle("Login");
 
+        FrameManager frameManager = new FrameManager(frame);
 
         /*Test.hackathons = new ArrayList<>();
 
@@ -90,7 +89,7 @@ public class Main {
         Classifica classifica = hackathon.creaClassifica();
 
         Test.printAll();*/
-        frame.setContentPane(new Register(controller, frame).$$$getRootComponent$$$());
+        //frame.setContentPane(new Register(controller, frame).$$$getRootComponent$$$()); [OLD--------------------------]
 
         /*for(Hackathon h : controller.getAllHackathons())
         {
@@ -115,6 +114,7 @@ public class Main {
             System.out.println(g.getNome()+" "+g.getEmail());
         }*/
 
+        frameManager.switchFrame(new Register(frameManager.getController(), frame).$$$getRootComponent$$$());
         frame.setVisible(true);
     }
 }

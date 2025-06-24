@@ -118,7 +118,7 @@ public class HackathonImplementazioneDAO {
          */
 
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT nome FROM TEAM_HACKATHON " +
+            PreparedStatement stmt = connection.prepareStatement("SELECT nome, voto FROM TEAM_HACKATHON " +
                     "JOIN hackathon ON hackathon.id = TEAM_HACKATHON.hackathon " +
                     "JOIN team ON team.id = TEAM_HACKATHON.team WHERE hackathon.titolo = '" + hackathon.getTitolo() + "'");
             ResultSet rs = stmt.executeQuery();
@@ -128,7 +128,9 @@ public class HackathonImplementazioneDAO {
             }
 
             while (rs.next()) {
-                r.add(new Team(rs.getString("nome")));
+                Team m = new Team(rs.getString("nome"));
+                m.setVoto(rs.getInt("voto"));
+                r.add(m);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -216,4 +218,31 @@ public class HackathonImplementazioneDAO {
 
         return result;
     }
+
+    public boolean insertVoto(String nome, int voto)
+    {
+        try
+        {
+            ResultSet set = null;
+            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM team WHERE nome = '"+ nome + "'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int id = set.getInt("ID");
+
+            stmt = connection.prepareStatement("UPDATE team set voto = '"+ voto + "' WHERE id = " + id);
+            stmt.execute();
+
+            return true;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
