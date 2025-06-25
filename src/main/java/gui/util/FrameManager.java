@@ -34,7 +34,9 @@ public class FrameManager
     {
         rootPanel = next;
 
+        rootPanel.setVisible(true);
         frame.setContentPane(rootPanel);
+        frame.getGlassPane().setVisible(false);
         frame.revalidate();
         frame.repaint();
 

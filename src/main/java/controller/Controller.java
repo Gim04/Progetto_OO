@@ -119,6 +119,30 @@ public class Controller
         return hackathons;
     }
 
+    public boolean getLocalRegistrazioniAperteOfHackathon(String hackathon)
+    {
+        for(Hackathon h : hackathons)
+        {
+            if(h.getTitolo().equals(hackathon))
+            {
+                return h.getRegistrazioniAperte();
+            }
+        }
+
+        return false;
+    }
+
+    public void setLocalRegistrazioniAperteOfHackathon(String hackathon, boolean registrazione)
+    {
+        for(Hackathon h : hackathons)
+        {
+            if(h.getTitolo().equals(hackathon))
+            {
+                h.setRegistrazioniAperte(registrazione);
+            }
+        }
+    }
+
     public void iscriviPartecipante(Partecipante partecipante, String titolo)
     {
         for(Hackathon h : hackathons)
@@ -299,5 +323,25 @@ public class Controller
     public boolean votaTeam(String team, int voto)
     {
         return hackathonutenteImplementazioneDAO.insertVoto(team, voto);
+    }
+
+    public ArrayList<Documento> getDocumensOfTeam(String team, String hackathon)
+    {
+        return hackathonutenteImplementazioneDAO.getDocumenti(team, hackathon);
+    }
+
+    public boolean setCommentoOfDocument(String team, String hackathon, String commento, String contenuto)
+    {
+        return hackathonutenteImplementazioneDAO.updateCommentOfDocument(team, hackathon, commento, contenuto);
+    }
+
+    public boolean setDescrizioneProblema(String hackathon, String descrizione)
+    {
+        return hackathonutenteImplementazioneDAO.insertProblema(descrizione, hackathon);
+    }
+
+    public boolean updateRegistrazioniHackathon(boolean registrazione, String hackathon)
+    {
+        return hackathonutenteImplementazioneDAO.updateRegistrazioni(registrazione, hackathon);
     }
 }

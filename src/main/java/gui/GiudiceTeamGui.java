@@ -1,12 +1,11 @@
 package gui;
 
 import controller.Controller;
-import model.Hackathon;
+import gui.util.FrameManager;
 import model.Team;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,18 +53,28 @@ public class GiudiceTeamGui {
                 }
             }
         });
+
+        commentaDocumentoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (table1.getSelectedRow() < 0) {
+                    JOptionPane.showMessageDialog(frame, "Devi selezionare un team", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                FrameManager.Instance.switchFrame(new GiudiceOperaDocumenti(controller, frame, table1.getValueAt(table1.getSelectedRow(), 0).toString(), hackathon));
+            }
+        });
     }
 
-    public void refreshUILocalTable(String hackathon)
-    {
+    public void refreshUILocalTable(String hackathon) {
         controller.refreshHackathonListForGiudice();
         final ArrayList<Team> teams = controller.getLocalTeamsInHackathon(hackathon);
 
         String[] columns = {"Team", "Voto"};
         String[][] data = new String[teams.size()][columns.length];
         int i = 0;
-        for (Team m : teams)
-        {
+        for (Team m : teams) {
             data[i][0] = m.getNome();
             data[i][1] = String.valueOf(m.getVoto());
             i++;
@@ -100,8 +109,10 @@ public class GiudiceTeamGui {
         commentaDocumentoButton = new JButton();
         commentaDocumentoButton.setText("Commenta Documento");
         panel1.add(commentaDocumentoButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JScrollPane scrollPane1 = new JScrollPane();
+        teamList.add(scrollPane1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         table1 = new JTable();
-        teamList.add(table1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        scrollPane1.setViewportView(table1);
     }
 
     /**

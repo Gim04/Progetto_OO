@@ -1,16 +1,13 @@
-import Database.ConnessioneDatabase;
 import controller.Controller;
-import gui.GiudiciGui;
-import gui.HackathonList;
-import gui.Login;
-import gui.Register;
+import gui.GiudiceOperaDocumenti;
+import gui.base.TableForm;
 import gui.util.FrameManager;
 import model.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.awt.*;
+
+import gui.Register;
 
 public class Main {
 
@@ -23,7 +20,6 @@ public class Main {
         frame.setTitle("Login");
 
         FrameManager frameManager = new FrameManager(frame);
-
         /*Test.hackathons = new ArrayList<>();
 
         Partecipante alice          = (Partecipante) Utente.login("Alice","Rossi", "alice.rossi@example.com", "1234", 1);

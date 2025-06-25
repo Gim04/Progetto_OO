@@ -9,6 +9,8 @@ import model.Team;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class HackathonList {
@@ -27,6 +29,7 @@ public class HackathonList {
     // Pulsanti organizzatore
     private JButton invitaGiudice;
     private JButton creaHackathon;
+    private JButton chiudiRegistrazioni;
     //
 
     private JScrollPane scrollPaneBar1;
@@ -53,7 +56,19 @@ public class HackathonList {
             });
 
             pubblicaProblema.addActionListener(e -> {
-
+                if (hackathonList.getSelectedValue() != null) {
+                    final String input = JOptionPane.showInputDialog("Problema:");
+                    if (input != null) {
+                        if (controller.setDescrizioneProblema(hackathonList.getSelectedValue().toString(), input))
+                            JOptionPane.showMessageDialog(null, "Descrizione problema assegnata!");
+                        else
+                            JOptionPane.showMessageDialog(frame, "Non e' stato possibile impostare la descrizione del problema!", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             });
 
             btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
@@ -72,29 +87,84 @@ public class HackathonList {
         } else if (controller.getCurrentUser() instanceof Organizzatore) {
             invitaGiudice = new JButton("Invita Giudice");
             creaHackathon = new JButton("Crea Hackathon");
+            chiudiRegistrazioni = new JButton("Chiudi Registrazioni");
+            chiudiRegistrazioni.setEnabled(false);
 
             invitaGiudice.addActionListener(e -> {
                 if (hackathonList.getSelectedValue() != null) {
-                    if (controller.inviteJudgeToHackathon("johnlemon@example.com", hackathonList.getSelectedValue().toString()))
-                        JOptionPane.showMessageDialog(frame, "Giudice invitato!");
-                    else
-                        JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!");
+                    final String input = JOptionPane.showInputDialog("Email:");
+                    if (input != null) {
+
+                        if (!input.contains("@") || !input.contains(".")) {
+                            JOptionPane.showMessageDialog(frame, "Mail non valida!");
+                            return;
+                        }
+
+                        if (controller.inviteJudgeToHackathon(input, hackathonList.getSelectedValue().toString()))
+                            JOptionPane.showMessageDialog(frame, "Giudice invitato!");
+                        else
+                            JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!");
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
 
             creaHackathon.addActionListener(e -> {
-                JDialog frame = new JDialog(f, "Crea Hackathon");
-                frame.setType(Frame.Type.UTILITY);
-                frame.setSize(360, 240);
                 FrameManager.Instance.switchFrame(new CreaHackathon(f, controller, this).$$$getRootComponent$$$());
-
                 frame.setVisible(true);
-
             });
 
-            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
+            hackathonList.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (hackathonList.getSelectedValue() != null) {
+                        if (controller.getLocalRegistrazioniAperteOfHackathon(hackathonList.getSelectedValue().toString()) == true) {
+                            chiudiRegistrazioni.setEnabled(true);
+                        } else {
+                            chiudiRegistrazioni.setEnabled(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+
+            chiudiRegistrazioni.addActionListener(e -> {
+                if (hackathonList.getSelectedValue() != null) {
+                    if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler chiudere le registrazioni per '" + hackathonList.getSelectedValue().toString() + "'?") == 0) {
+                        controller.updateRegistrazioniHackathon(false, hackathonList.getSelectedValue().toString());
+                        controller.setLocalRegistrazioniAperteOfHackathon(hackathonList.getSelectedValue().toString(), false);
+                        chiudiRegistrazioni.setEnabled(false);
+                        JOptionPane.showMessageDialog(frame, "Registrazioni chiude per '" + hackathonList.getSelectedValue().toString() + "'");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 3));
 
             btnPanel.add(creaHackathon,
                     new com.intellij.uiDesigner.core.GridConstraints(
@@ -110,6 +180,17 @@ public class HackathonList {
             btnPanel.add(invitaGiudice,
                     new com.intellij.uiDesigner.core.GridConstraints(
                             0, 1, 1, 1,
+                            com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                            com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                            com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                            null, null, null
+                    )
+            );
+
+            btnPanel.add(chiudiRegistrazioni,
+                    new com.intellij.uiDesigner.core.GridConstraints(
+                            0, 2, 1, 1,
                             com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                             com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
                             com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,

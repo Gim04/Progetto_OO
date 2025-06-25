@@ -10,17 +10,17 @@ public class Documento
         this.contenuto = contenuto;
     }
 
-    void setCommento(String commento)
+    public void setCommento(String commento)
     {
         this.commento = commento;
     }
 
-    String getContenuto()
+    public String getContenuto()
     {
         return contenuto;
     }
 
-    String getCommento()
+    public String getCommento()
     {
         return commento;
     }
