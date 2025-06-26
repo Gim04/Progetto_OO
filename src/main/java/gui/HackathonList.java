@@ -2,10 +2,7 @@ package gui;
 
 import controller.Controller;
 import gui.util.FrameManager;
-import model.Giudice;
-import model.Hackathon;
-import model.Organizzatore;
-import model.Team;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +18,12 @@ public class HackathonList {
     private JPanel btnPanel;
     private JPanel root;
 
-    // Pulsanti giudici
+    // Pulsanti partecipante
+    private JButton creaTeam;
+    private JButton invitaPartecipanteAlTeam;
+    //
+
+    // Pulsanti giudice
     private JButton visualizzaTeam;
     private JButton pubblicaProblema;
     //
@@ -42,7 +44,43 @@ public class HackathonList {
 
         refreshLocalUIHackathonList();
 
-        if (controller.getCurrentUser() instanceof Giudice) {
+        if (controller.getCurrentUser() instanceof Partecipante) {
+            creaTeam = new JButton("Crea Team");
+            invitaPartecipanteAlTeam = new JButton("Invita Partecipante");
+
+            creaTeam.addActionListener(e -> {
+                if (hackathonList.getSelectedValue() != null) {
+                    final String input = JOptionPane.showInputDialog("Nome team:");
+                    if (input != null) {
+                        if (controller.createTeam(input, hackathonList.getSelectedValue().toString(), controller.getCurrentUser().getEmail()))
+                            JOptionPane.showMessageDialog(null, "Team creato!");
+                        else
+                            JOptionPane.showMessageDialog(frame, "Non e' stato possibile creare il team!", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+            invitaPartecipanteAlTeam.addActionListener(e -> {
+                JOptionPane.showMessageDialog(frame, "TODO", "Error", JOptionPane.ERROR_MESSAGE);
+            });
+
+            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
+
+            btnPanel.add(creaTeam, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                    com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                    null, null, null));
+            btnPanel.add(invitaPartecipanteAlTeam, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                    com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                    null, null, null));
+        } else if (controller.getCurrentUser() instanceof Giudice) {
             visualizzaTeam = new JButton("Visualizza Teams");
             pubblicaProblema = new JButton("Pubblica Problema");
 
@@ -84,7 +122,7 @@ public class HackathonList {
                     com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
                     null, null, null));
 
-        } else if (controller.getCurrentUser() instanceof Organizzatore) {
+        } else {
             invitaGiudice = new JButton("Invita Giudice");
             creaHackathon = new JButton("Crea Hackathon");
             chiudiRegistrazioni = new JButton("Chiudi Registrazioni");

@@ -385,4 +385,51 @@ public class HackathonImplementazioneDAO {
         return false;
     }
 
+    public boolean creaTeam(String nome, String hackathon, String email)
+    {
+        try
+        {
+            ResultSet set = null;
+            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = '"+ hackathon + "'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int id = set.getInt("ID");
+
+            stmt = connection.prepareStatement("SELECT ID FROM partecipante WHERE email = '"+ email + "'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int idP = set.getInt("ID");
+
+            stmt = connection.prepareStatement("INSERT INTO team(nome) VALUES('"+nome+ "')" ) ;
+            stmt.execute();
+
+            stmt = connection.prepareStatement("SELECT id FROM team WHERE nome = '"+nome+"'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int idTeam = set.getInt("ID");
+            stmt = connection.prepareStatement("INSERT INTO TEAM_PARTECIPANTE VALUES('" +idTeam+ "','" + idP +"')");
+            stmt.execute();
+
+            stmt = connection.prepareStatement("INSERT INTO TEAM_HACKATHON VALUES('" +idTeam+ "','" + id +"')");
+            stmt.execute();
+
+            return true;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

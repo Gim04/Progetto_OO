@@ -344,4 +344,9 @@ public class Controller
     {
         return hackathonutenteImplementazioneDAO.updateRegistrazioni(registrazione, hackathon);
     }
+
+    public boolean createTeam(String nome, String hackathon, String email)
+    {
+        return hackathonutenteImplementazioneDAO.creaTeam(nome, hackathon, email);
+    }
 }
