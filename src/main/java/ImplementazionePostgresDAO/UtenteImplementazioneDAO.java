@@ -134,4 +134,37 @@ public class UtenteImplementazioneDAO
 
         return result;
     }
+
+    public boolean invitePartecipanteToTeam(String email, String team)
+    {
+        boolean result = false;
+        ResultSet rs = null;
+        int partecipanteID = -1;
+        int teamID = -1;
+        try
+        {
+            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM partecipante WHERE email='" + email + "'");
+            rs = stmt.executeQuery();
+
+            if(!rs.next()) throw new SQLException("Partecipante non trovato!");
+            partecipanteID = rs.getInt("ID");
+
+            stmt = connection.prepareStatement("SELECT ID FROM team WHERE nome='" + team + "'");
+            rs = stmt.executeQuery();
+
+            if(!rs.next()) throw new SQLException("Team non trovato!");
+            teamID = rs.getInt("ID");
+
+            stmt = connection.prepareStatement("INSERT INTO TEAM_PARTECIPANTE VALUES (" + "'" + teamID + "', '" + partecipanteID + "')");
+            stmt.execute();
+
+            result = true;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

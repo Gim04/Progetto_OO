@@ -55,4 +55,8 @@ public class Team
     {
         return partecipanti;
     }
+
+    public void setPartecipanti(ArrayList<Partecipante> partecipantiOfTeam) {
+        this.partecipanti = partecipantiOfTeam;
+    }
 }

@@ -84,6 +84,11 @@ public class Hackathon
             System.out.println("Impossibile aggiungere '" + partecipante.getNome() + "', hackathon pieno!");
     }
 
+    public void setTeams(ArrayList<Team> teams)
+    {
+        this.teams = teams;
+    }
+
     public void setDescrizioneProblema(String descrizioneProblema)
     {
         this.descrizioneProblema = descrizioneProblema;

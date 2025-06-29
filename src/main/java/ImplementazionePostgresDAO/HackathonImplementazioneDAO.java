@@ -39,19 +39,23 @@ public class HackathonImplementazioneDAO {
             r = new ArrayList<>();
 
             while (rs.next()) {
-                r.add(
-                        new Hackathon(
-                                rs.getString("titolo"),
-                                new Sede(rs.getString("via"),
-                                        rs.getString("citta"),
-                                        rs.getInt("codicePostale")),
-                                rs.getInt("dimensioneTeam"),
-                                rs.getInt("maxIscritti"),
-                                rs.getDate("dataInizio"),
-                                rs.getDate("dataFine"),
-                                rs.getBoolean("registrazioniAperte")
-                        )
+                Hackathon h = new Hackathon(
+                        rs.getString("titolo"),
+                        new Sede(rs.getString("via"),
+                                rs.getString("citta"),
+                                rs.getInt("codicePostale")),
+                        rs.getInt("dimensioneTeam"),
+                        rs.getInt("maxIscritti"),
+                        rs.getDate("dataInizio"),
+                        rs.getDate("dataFine"),
+                        rs.getBoolean("registrazioniAperte")
                 );
+
+                ArrayList<Team> hteams = getTeamForHackathon(h);
+                if(hteams == null) hteams = new ArrayList<>();
+
+                h.setTeams(hteams);
+                r.add(h);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,14 +115,8 @@ public class HackathonImplementazioneDAO {
     {
         ArrayList<Team> r = new ArrayList<>();
 
-        /*
-        "SELECT team.nome FROM hackathon JOIN sede ON hackathon.id = sede " +
-                                                                      "JOIN TEAM_HACKATHON ON TEAM_HACKATHON.hackathon = hackathon.id" +
-                                                                      "JOIN team ON team.id = TEAM_HACKATHON.team "
-         */
-
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT nome, voto FROM TEAM_HACKATHON " +
+            PreparedStatement stmt = connection.prepareStatement("SELECT team.id, nome, voto FROM TEAM_HACKATHON " +
                     "JOIN hackathon ON hackathon.id = TEAM_HACKATHON.hackathon " +
                     "JOIN team ON team.id = TEAM_HACKATHON.team WHERE hackathon.titolo = '" + hackathon.getTitolo() + "'");
             ResultSet rs = stmt.executeQuery();
@@ -128,9 +126,36 @@ public class HackathonImplementazioneDAO {
             }
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 Team m = new Team(rs.getString("nome"));
                 m.setVoto(rs.getInt("voto"));
+                m.setPartecipanti(getPartecipantiOfTeam(id));
                 r.add(m);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return r;
+    }
+
+    public ArrayList<Partecipante> getPartecipantiOfTeam(int team)
+    {
+        ArrayList<Partecipante> r = new ArrayList<>();
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT nome, email, password, cognome FROM partecipante " +
+                    "JOIN TEAM_PARTECIPANTE ON TEAM_PARTECIPANTE.partecipante = partecipante.id " +
+                    "WHERE TEAM_PARTECIPANTE.team = " + team);
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                return r;
+            }
+
+            while (rs.next()) {
+                r.add(new Partecipante(rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

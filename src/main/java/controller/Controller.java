@@ -33,6 +33,11 @@ public class Controller
 
         hackathons = new ArrayList<>();
 
+        partecipanti = new ArrayList<>();
+        giudici = new ArrayList<>();
+        organizzatori = new ArrayList<>();
+        hackathons = new ArrayList<>();
+
         /*
         // DEBUG ONLY
         utente = null;
@@ -117,6 +122,72 @@ public class Controller
     public ArrayList<Hackathon> getLocalAllHackathons()
     {
         return hackathons;
+    }
+
+    public Team getLocalUserTeam()
+    {
+        for(Hackathon hackathon : hackathons)
+        {
+            for(Team m : hackathon.getTeams())
+            {
+                for(Partecipante p : m.getPartecipanti()) {
+                    if(p.getEmail().equals(utente.getEmail()))
+                        return m;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public boolean isLocalTeamInHackathon(String hackathon, String team)
+    {
+        for(Hackathon h : hackathons)
+        {
+            if(h.getTitolo().equals(hackathon)) {
+                for (Team t : h.getTeams()) {
+                    if (t.getNome().equals(team))
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isLocalUserInTeam()
+    {
+        for(Hackathon hackathon : hackathons)
+        {
+            for(Team m : hackathon.getTeams())
+            {
+                for(Partecipante p: m.getPartecipanti()) {
+                    if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isLocalUserInTeam(String team)
+    {
+        for(Hackathon hackathon : hackathons)
+        {
+            for(Team m : hackathon.getTeams())
+            {
+                if(m.getNome().equals(team))
+                {
+                    for(Partecipante p: m.getPartecipanti()) {
+                        if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
+                            return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean getLocalRegistrazioniAperteOfHackathon(String hackathon)
@@ -347,6 +418,42 @@ public class Controller
 
     public boolean createTeam(String nome, String hackathon, String email)
     {
-        return hackathonutenteImplementazioneDAO.creaTeam(nome, hackathon, email);
+        boolean r = hackathonutenteImplementazioneDAO.creaTeam(nome, hackathon, email);
+        if(r)
+        {
+            Team t = new Team(nome);
+            for(Hackathon h : hackathons)
+            {
+                if(h.getTitolo().equals(hackathon))
+                {
+                    t.addPartecipante((Partecipante) getCurrentUser());
+                    h.addTeam(t);
+                    break;
+                }
+            }
+        }
+        return r;
+    }
+
+    public Partecipante getLocalPartecipanteFromEmail(String email)
+    {
+        for(Partecipante p : partecipanti)
+        {
+            if(p.getEmail().equals(email))
+                return p;
+        }
+
+        return null;
+    }
+
+    public boolean invitePartecipanteToTeam(String email, Team team)
+    {
+        boolean r = utenteImplementazioneDAO.invitePartecipanteToTeam(email, team.getNome());
+        if(r)
+        {
+            Partecipante p = getLocalPartecipanteFromEmail(email);
+            team.addPartecipante(p);
+        }
+        return r;
     }
 }

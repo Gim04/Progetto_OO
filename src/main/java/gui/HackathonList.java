@@ -65,7 +65,36 @@ public class HackathonList {
             });
 
             invitaPartecipanteAlTeam.addActionListener(e -> {
-                JOptionPane.showMessageDialog(frame, "TODO", "Error", JOptionPane.ERROR_MESSAGE);
+                if (hackathonList.getSelectedValue() != null) {
+                    if (!controller.isLocalUserInTeam()) {
+                        JOptionPane.showMessageDialog(frame, "Devi stare in un team!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    Team t = controller.getLocalUserTeam();
+                    if (t == null || !controller.isLocalTeamInHackathon(hackathonList.getSelectedValue().toString(), t.getNome())) {
+                        JOptionPane.showMessageDialog(frame, "Hackathon errato!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    final String input = JOptionPane.showInputDialog("Email:");
+                    if (input != null) {
+
+                        if (!input.contains("@") || !input.contains(".")) {
+                            JOptionPane.showMessageDialog(frame, "Mail non valida!");
+                            return;
+                        }
+
+                        if (controller.invitePartecipanteToTeam(input, t))
+                            JOptionPane.showMessageDialog(frame, "Partecipante aggiunto al team '" + t.getNome() + "'");
+                        else
+                            JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             });
 
             btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
