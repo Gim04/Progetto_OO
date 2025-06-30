@@ -32,6 +32,7 @@ public class HackathonList {
     private JButton invitaGiudice;
     private JButton creaHackathon;
     private JButton chiudiRegistrazioni;
+    private JButton documenti;
     //
 
     private JScrollPane scrollPaneBar1;
@@ -47,6 +48,7 @@ public class HackathonList {
         if (controller.getCurrentUser() instanceof Partecipante) {
             creaTeam = new JButton("Crea Team");
             invitaPartecipanteAlTeam = new JButton("Invita Partecipante");
+            documenti = new JButton("Documenti");
 
             creaTeam.addActionListener(e -> {
                 if (hackathonList.getSelectedValue() != null) {
@@ -97,7 +99,20 @@ public class HackathonList {
                 }
             });
 
-            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2));
+            documenti.addActionListener(e -> {
+                if (hackathonList.getSelectedValue() != null) {
+                    if (controller.isLocalUserInTeam(hackathonList.getSelectedValue().toString())) {
+                        Team t = controller.getLocalCurrentUserTeam();
+                        FrameManager.Instance.switchFrame(new DocumentUi(controller, frame, t.getNome(), hackathonList.getSelectedValue().toString()));
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Devi far parte di un team!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Nessun hackathon selezionato!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+            btnPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 3));
 
             btnPanel.add(creaTeam, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                     com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
@@ -105,6 +120,11 @@ public class HackathonList {
                     com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
                     null, null, null));
             btnPanel.add(invitaPartecipanteAlTeam, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
+                    com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
+                    com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
+                    null, null, null));
+            btnPanel.add(documenti, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
                     com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL,
                     com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
                     com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,

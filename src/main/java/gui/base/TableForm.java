@@ -13,6 +13,7 @@ public class TableForm extends JPanel {
     protected JTable table;
     protected DefaultTableModel tableModel;
     protected JPanel btnPanel;
+    protected JScrollPane scrollPane;
 
     public TableForm(Controller c, JFrame jf) {
         this.frame = jf;
@@ -28,7 +29,7 @@ public class TableForm extends JPanel {
         };
 
         table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane = new JScrollPane(table);
 
         add(scrollPane, BorderLayout.CENTER);
 

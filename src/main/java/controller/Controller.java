@@ -171,13 +171,12 @@ public class Controller
         return false;
     }
 
-    public boolean isLocalUserInTeam(String team)
+    public boolean isLocalUserInTeam(String h)
     {
         for(Hackathon hackathon : hackathons)
         {
-            for(Team m : hackathon.getTeams())
-            {
-                if(m.getNome().equals(team))
+            if(hackathon.getTitolo().equals(h)) {
+                for(Team m : hackathon.getTeams())
                 {
                     for(Partecipante p: m.getPartecipanti()) {
                         if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
@@ -188,6 +187,23 @@ public class Controller
         }
 
         return false;
+    }
+
+    public Team getLocalCurrentUserTeam()
+    {
+        for(Hackathon hackathon : hackathons)
+        {
+            for(Team m : hackathon.getTeams())
+            {
+                for(Partecipante p: m.getPartecipanti())
+                {
+                    if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
+                        return m;
+                }
+            }
+        }
+
+        return null;
     }
 
     public boolean getLocalRegistrazioniAperteOfHackathon(String hackathon)
@@ -453,6 +469,24 @@ public class Controller
         {
             Partecipante p = getLocalPartecipanteFromEmail(email);
             team.addPartecipante(p);
+        }
+        return r;
+    }
+
+    public boolean addDocument(String team, String hackathon, String contenuto)
+    {
+        boolean r = hackathonutenteImplementazioneDAO.addDocument(team, hackathon, contenuto);
+        if(r)
+        {
+            for(Hackathon h : hackathons)
+            {
+                if(!h.getTitolo().equals(hackathon)) continue;
+                for(Team t : h.getTeams())
+                {
+                    if(!t.getNome().equals(team)) continue;
+                    t.addDocument(new Documento(contenuto));
+                }
+            }
         }
         return r;
     }

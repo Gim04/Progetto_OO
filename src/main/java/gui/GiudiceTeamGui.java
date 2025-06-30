@@ -62,7 +62,7 @@ public class GiudiceTeamGui {
                     return;
                 }
 
-                FrameManager.Instance.switchFrame(new GiudiceOperaDocumenti(controller, frame, table1.getValueAt(table1.getSelectedRow(), 0).toString(), hackathon));
+                FrameManager.Instance.switchFrame(new DocumentUi(controller, frame, table1.getValueAt(table1.getSelectedRow(), 0).toString(), hackathon));
             }
         });
     }

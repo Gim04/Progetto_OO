@@ -59,4 +59,9 @@ public class Team
     public void setPartecipanti(ArrayList<Partecipante> partecipantiOfTeam) {
         this.partecipanti = partecipantiOfTeam;
     }
+
+    public void addDocument(Documento documento)
+    {
+        documenti.add(documento);
+    }
 }

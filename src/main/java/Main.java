@@ -1,5 +1,5 @@
 import controller.Controller;
-import gui.GiudiceOperaDocumenti;
+import gui.DocumentUi;
 import gui.base.TableForm;
 import gui.util.FrameManager;
 import model.*;

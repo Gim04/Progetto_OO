@@ -457,4 +457,39 @@ public class HackathonImplementazioneDAO {
         return false;
     }
 
+    public boolean addDocument(String team, String hackathon, String contenuto)
+    {
+        try
+        {
+            ResultSet set = null;
+
+            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = '"+ hackathon + "'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int idH = set.getInt("ID");
+
+            stmt = connection.prepareStatement("SELECT ID FROM team JOIN TEAM_HACKATHON ON TEAM_HACKATHON.hackathon = "+idH+" WHERE nome = '"+ team + "'");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return false;
+
+            int id = set.getInt("ID");
+
+            stmt = connection.prepareStatement("INSERT INTO documento(team, contenuto) VALUES("+id+",'"+contenuto+"')");
+            stmt.execute();
+
+            return true;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
