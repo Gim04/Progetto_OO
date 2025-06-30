@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import gui.Register;
+import util.EDatabaseType;
 
 public class Main {
 
@@ -19,7 +20,7 @@ public class Main {
         frame.setSize(800, 600);
         frame.setTitle("Login");
 
-        FrameManager frameManager = new FrameManager(frame);
+        FrameManager frameManager = new FrameManager(frame, EDatabaseType.POSTGRESQL);
         /*Test.hackathons = new ArrayList<>();
 
         Partecipante alice          = (Partecipante) Utente.login("Alice","Rossi", "alice.rossi@example.com", "1234", 1);

@@ -2,6 +2,7 @@ package gui.util;
 
 import Database.ConnessioneDatabase;
 import controller.Controller;
+import util.EDatabaseType;
 
 import javax.swing.*;
 
@@ -16,7 +17,7 @@ public class FrameManager
     Controller controller = null;
     ConnessioneDatabase connessioneDatabase = null;
 
-    public FrameManager(JFrame frame)
+    public FrameManager(JFrame frame, EDatabaseType type)
     {
         if(Instance != null)
         {
@@ -27,7 +28,7 @@ public class FrameManager
         this.frame = frame;
 
         connessioneDatabase = new ConnessioneDatabase();
-        controller = new Controller();
+        controller = new Controller(type);
     }
 
     public void switchFrame(JComponent next)

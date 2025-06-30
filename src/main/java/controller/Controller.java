@@ -1,17 +1,17 @@
 package controller;
 
-import ImplementazionePostgresDAO.HackathonImplementazioneDAO;
-import ImplementazionePostgresDAO.UtenteImplementazioneDAO;
+import DAO.UtenteDAO;
+import DAO.HackathonDAO;
+import ImplementazionePostgresDAO.HackathonImplementazionePostgresDAO;
+import ImplementazionePostgresDAO.UtenteImplementazionePostgresDAO;
 import model.*;
+import util.EDatabaseType;
 import util.ERuolo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Controller
 {
@@ -24,13 +24,23 @@ public class Controller
     Utente utente;
     // --
 
-    UtenteImplementazioneDAO utenteImplementazioneDAO;
-    HackathonImplementazioneDAO hackathonutenteImplementazioneDAO;
+    UtenteDAO utenteImplementazioneDAO;
+    HackathonDAO hackathonutenteImplementazioneDAO;
 
-    public Controller()
+    public Controller(EDatabaseType databaseType)
     {
-        utenteImplementazioneDAO = new UtenteImplementazioneDAO();
-        hackathonutenteImplementazioneDAO = new HackathonImplementazioneDAO();
+        switch (databaseType)
+        {
+            case POSTGRESQL:
+                utenteImplementazioneDAO = new UtenteImplementazionePostgresDAO();
+                hackathonutenteImplementazioneDAO = new HackathonImplementazionePostgresDAO();
+                break;
+            case NONE:
+            default:
+                JOptionPane.showMessageDialog(null, "Errore database non valido", "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+                break;
+        }
 
         hackathons = new ArrayList<>();
 
@@ -410,7 +420,7 @@ public class Controller
 
     public boolean votaTeam(String team, int voto)
     {
-        return hackathonutenteImplementazioneDAO.insertVoto(team, voto);
+        return utenteImplementazioneDAO.insertVoto(team, voto);
     }
 
     public ArrayList<Documento> getDocumensOfTeam(String team, String hackathon)
@@ -420,22 +430,22 @@ public class Controller
 
     public boolean setCommentoOfDocument(String team, String hackathon, String commento, String contenuto)
     {
-        return hackathonutenteImplementazioneDAO.updateCommentOfDocument(team, hackathon, commento, contenuto);
+        return utenteImplementazioneDAO.updateCommentOfDocument(team, hackathon, commento, contenuto);
     }
 
     public boolean setDescrizioneProblema(String hackathon, String descrizione)
     {
-        return hackathonutenteImplementazioneDAO.insertProblema(descrizione, hackathon);
+        return utenteImplementazioneDAO.insertProblema(descrizione, hackathon);
     }
 
     public boolean updateRegistrazioniHackathon(boolean registrazione, String hackathon)
     {
-        return hackathonutenteImplementazioneDAO.updateRegistrazioni(registrazione, hackathon);
+        return utenteImplementazioneDAO.updateRegistrazioni(registrazione, hackathon);
     }
 
     public boolean createTeam(String nome, String hackathon, String email)
     {
-        boolean r = hackathonutenteImplementazioneDAO.creaTeam(nome, hackathon, email);
+        boolean r = utenteImplementazioneDAO.creaTeam(nome, hackathon, email);
         if(r)
         {
             Team t = new Team(nome);
@@ -476,7 +486,7 @@ public class Controller
 
     public boolean addDocument(String team, String hackathon, String contenuto)
     {
-        boolean r = hackathonutenteImplementazioneDAO.addDocument(team, hackathon, contenuto);
+        boolean r = utenteImplementazioneDAO.addDocument(team, hackathon, contenuto);
         if(r)
         {
             for(Hackathon h : hackathons)
