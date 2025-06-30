@@ -6,6 +6,7 @@ import model.*;
 import util.ERuolo;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -489,5 +490,15 @@ public class Controller
             }
         }
         return r;
+    }
+
+    public boolean checkRegistrazioniChiuse(String hackathon)
+    {
+        return hackathonutenteImplementazioneDAO.checkRegistrazioniChiuse(hackathon);
+    }
+
+    public DefaultTableModel calculateClassifica(String hackathon)
+    {
+        return hackathonutenteImplementazioneDAO.calculateClassifica(hackathon);
     }
 }

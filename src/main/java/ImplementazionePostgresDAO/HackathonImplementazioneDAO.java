@@ -6,6 +6,7 @@ import org.postgresql.jdbc2.ArrayAssistant;
 import util.ERuolo;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -492,4 +493,75 @@ public class HackathonImplementazioneDAO {
         return false;
     }
 
+    public boolean checkRegistrazioniChiuse(String hackathon)
+    {
+        try
+        {
+            ResultSet set = null;
+
+            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = '"+ hackathon + "' AND registrazioniAperte=1");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return true;
+
+            return false;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    public DefaultTableModel calculateClassifica(String hackathon)
+    {
+        DefaultTableModel model = null;
+        String[] columns = {"Team", "Voto"};
+
+        try
+        {
+            ResultSet set = null;
+            PreparedStatement stmt = connection.prepareStatement("SELECT team.nome as TN, team.voto as TV FROM hackathon JOIN team_hackathon ON hackathon.id = team_hackathon.hackathon " +
+                                                                                                       "JOIN team on team_hackathon.team = team.id " +
+                                                                                                        "WHERE titolo = '"+ hackathon + "'" +
+                                                                                                         "ORDER BY team.voto DESC");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return new DefaultTableModel(null, columns);
+
+            ArrayList<String> c0 = new ArrayList<>();
+            ArrayList<String> c1 = new ArrayList<>();
+
+            do
+            {
+                c0.add(set.getString("TN"));
+                c1.add(set.getString("TV"));
+
+            }while(set.next());
+
+
+            String[][] data = new String[c0.size()][2];
+
+            int i = 0;
+            while(i < c0.size())
+            {
+                data[i][0] = c0.get(i);
+                data[i][1] = c1.get(i);
+                i++;
+            }
+
+            model = new DefaultTableModel(data, columns);
+
+            return model;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
