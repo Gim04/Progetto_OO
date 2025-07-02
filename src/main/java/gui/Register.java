@@ -59,7 +59,7 @@ public class Register {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                FrameManager.Instance.switchFrame(new Login(controller, frame).$$$getRootComponent$$$());
+                FrameManager.Instance.switchFrame(new Login(controller, frame));
             }
         });
     }

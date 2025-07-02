@@ -8,61 +8,115 @@ import model.Partecipante;
 import model.Utente;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Login {
+public class Login extends JPanel
+{
     private JFrame frame;
 
     private Controller controller;
 
-    private JPanel panel1;
+    private JPanel form;
+
+    private JLabel formLabel;
+    private JLabel emailLabel;
+    private JLabel passwordLabel;
+
     private JTextField emailTextField;
     private JPasswordField passwordField;
     private JButton loginButton;
 
     public Login(Controller c, JFrame frame) {
         controller = c;
+        this.frame = frame;
+
+        setLayout(new GridBagLayout());
+        setBackground(new Color(230, 230, 230));
+        setBorder(new CompoundBorder(
+                new LineBorder(new Color(200,200,200), 1, true),
+                new EmptyBorder(20,20,20,20)
+        ));
+
+        form = new JPanel();
+        form.setLayout(new GridBagLayout());
+        form.setBackground(Color.WHITE);
+
+        emailTextField = new JTextField();
+        passwordField = new JPasswordField();
+        loginButton = new JButton("Login");
+        formLabel = new JLabel("Login");
+
+        emailLabel = new JLabel("Email:");
+        passwordLabel = new JLabel("Password:");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // FORM LABEL
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        formLabel.setFont(new Font("SandSerif", Font.BOLD, 24));
+        formLabel.setForeground(Color.DARK_GRAY);
+        form.add(formLabel, gbc);
+
+        // EMAIL LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        emailLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(emailLabel, gbc);
+
+        // EMAIL FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        emailTextField = createFlatTextField();
+        form.add(emailTextField, gbc);
+
+        // PASSWORD LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        passwordLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(passwordLabel, gbc);
+
+        // PASSWORD FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        passwordField = createFlatPasswordField();
+        form.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        loginButton = createFlatButton("Login");
+        form.add(loginButton, gbc);
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (emailTextField.getText().isEmpty() || passwordField.getPassword().length == 0) {
-                    JOptionPane.showMessageDialog(panel1, "Email o password non validi!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(form, "Email o password non validi!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 Utente utente = controller.logUser(emailTextField.getText(), new String(passwordField.getPassword()));
 
                 if (utente == null) {
-                    JOptionPane.showMessageDialog(panel1, "Email o password errati!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(form, "Email o password errati!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 controller.setCurrentUser(utente);
                 frame.setTitle("Hackathon List");
-
-                /*
-                    if (utente instanceof Partecipante) {
-                        controller.refreshHackathonList();
-                        frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                        frame.revalidate();
-                        frame.repaint();
-                        return;
-                    } else if (utente instanceof Giudice) {
-                        controller.refreshHackathonListForGiudice();
-                        frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                        frame.revalidate();
-                        frame.repaint();
-                        return;
-                    } else if (utente instanceof Organizzatore) {
-                        controller.refreshHackathonListForOrganizzatore();
-                        frame.setContentPane(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
-                        frame.revalidate();
-                        frame.repaint();
-                        return;
-                    }
-                */
 
                 if (utente instanceof Partecipante) {
                     controller.refreshHackathonList();
@@ -78,56 +132,49 @@ public class Login {
                     return;
                 }
 
-                JOptionPane.showMessageDialog(panel1, "ERRORE INASPETTATO!", "ERR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(form, "ERRORE INASPETTATO!", "ERR", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        add(form);
     }
 
+    private JTextField createFlatTextField()
     {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-        $$$setupUI$$$();
+        JTextField field = new JTextField(15);
+        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200,200,200),1),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        field.setBackground(Color.WHITE);
+        field.setForeground(Color.DARK_GRAY);
+        field.setCaretColor(Color.DARK_GRAY);
+        return field;
     }
 
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
-        panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(50, 50, 50, 50), -1, -1));
-        panel1.setBackground(new Color(-1562));
-        final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        emailTextField = new JTextField();
-        emailTextField.setText("");
-        panel2.add(emailTextField, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        passwordField = new JPasswordField();
-        passwordField.setText("");
-        panel2.add(passwordField, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setText("Email");
-        panel2.add(label1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Password");
-        panel2.add(label2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        panel2.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        loginButton = new JButton();
-        loginButton.setText("Login");
-        panel1.add(loginButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    private JPasswordField createFlatPasswordField()
+    {
+        JPasswordField field = new JPasswordField(15);
+        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200,200,200),1),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        field.setBackground(Color.WHITE);
+        field.setForeground(Color.DARK_GRAY);
+        field.setCaretColor(Color.DARK_GRAY);
+        return field;
     }
 
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return panel1;
+    private JButton createFlatButton(String text)
+    {
+        JButton button = new JButton(text);
+        button.setFocusPainted(false);
+        button.setBackground(new Color(70,130,180));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("SansSerif", Font.BOLD, 14));
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        return button;
     }
-
 }
