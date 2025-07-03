@@ -35,6 +35,8 @@ public class Login extends JPanel
         controller = c;
         this.frame = frame;
 
+        frame.setTitle("Login");
+
         setLayout(new GridBagLayout());
         setBackground(new Color(230, 230, 230));
         setBorder(new CompoundBorder(
@@ -55,7 +57,7 @@ public class Login extends JPanel
         passwordLabel = new JLabel("Password:");
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(15, 25, 15, 25);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // FORM LABEL
@@ -94,6 +96,7 @@ public class Login extends JPanel
         passwordField = createFlatPasswordField();
         form.add(passwordField, gbc);
 
+        // BUTTON
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
@@ -114,7 +117,7 @@ public class Login extends JPanel
         registerLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                FrameManager.Instance.switchFrame(new Register(controller, frame).$$$getRootComponent$$$());
+                FrameManager.Instance.switchFrame(new Register(controller, frame));
             }
         });
 

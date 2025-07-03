@@ -127,7 +127,7 @@ public class HackathonList {
                 if (hackathonList.getSelectedValue() != null) {
                     if (controller.isLocalUserInTeam(hackathonList.getSelectedValue().toString())) {
                         Team t = controller.getLocalCurrentUserTeam();
-                        FrameManager.Instance.switchFrame(new DocumentUi(controller, frame, t.getNome(), hackathonList.getSelectedValue().toString()));
+                        FrameManager.Instance.switchFrame(new DocumentUI(controller, frame, t.getNome(), hackathonList.getSelectedValue().toString()));
                     } else {
                         JOptionPane.showMessageDialog(frame, "Devi far parte di un team!", "Error", JOptionPane.ERROR_MESSAGE);
                     }

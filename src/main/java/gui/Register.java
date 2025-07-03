@@ -4,23 +4,41 @@ import controller.Controller;
 import gui.util.FrameManager;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.plaf.ComboBoxUI;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class Register {
+public class Register extends JPanel
+{
     private Controller controller;
     private JFrame frame;
 
-    private JPanel panel1;
-    private JTextField name;
-    private JTextField surname;
-    private JTextField email;
-    private JPasswordField passwordField1;
-    private JButton button1;
-    private JComboBox Ruolo;
-    private JButton login;
+    private JLabel formLabel;
+    private JPanel form;
 
+    private JLabel nameLabel;
+    private JTextField nameField;
+
+    private JLabel surnameLabel;
+    private JTextField surnameField;
+
+    private JLabel emailLabel;
+    private JTextField emailField;
+
+    private JLabel passwordLabel;
+    private JPasswordField passwordField;
+
+    private JLabel ruoloLabel;
+    private JComboBox<String> ruoloComboBox;
+
+    private JButton registerButton;
 
     public Register(Controller c, JFrame frame) {
         controller = c;
@@ -28,25 +46,154 @@ public class Register {
 
         frame.setTitle("Register");
 
-        button1.addActionListener(new ActionListener() {
+        setLayout(new GridBagLayout());
+        setBackground(new Color(230, 230, 230));
+        setBorder(new CompoundBorder(
+                new LineBorder(new Color(200,200,200), 1, true),
+                new EmptyBorder(20,20,20,20)
+        ));
+
+        form = new JPanel();
+        form.setLayout(new GridBagLayout());
+
+        formLabel = new JLabel("Register");
+        nameLabel = new JLabel("Nome:");
+        surnameLabel = new JLabel("Cognome:");
+        emailLabel = new JLabel("Email:");
+        passwordLabel = new JLabel("Password:");
+        ruoloLabel = new JLabel("Ruolo:");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 25, 15, 25);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // FORM LABEL
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formLabel.setFont(new Font("SandSerif", Font.BOLD, 24));
+        formLabel.setForeground(Color.DARK_GRAY);
+        form.add(formLabel, gbc);
+
+        // NAME LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(nameLabel, gbc);
+
+        // NAME FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        nameField = createFlatTextField();
+        form.add(nameField, gbc);
+
+        // SURNAME LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        surnameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(surnameLabel, gbc);
+
+        // SURNAME FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        surnameField = createFlatTextField();
+        surnameField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(surnameField, gbc);
+
+        // EMAIL LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        emailLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(emailLabel, gbc);
+
+        // EMAIL FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        emailField = createFlatTextField();
+        emailField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(emailField, gbc);
+
+        // PASSWORD LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        passwordLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(passwordLabel, gbc);
+
+        // PASSWORD FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        passwordField = createFlatPasswordField();
+        passwordField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(passwordField, gbc);
+
+        // COMBOBOX LABEL
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        ruoloLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        form.add(ruoloLabel, gbc);
+
+        // COMBOBOX FIELD
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        ruoloComboBox = createFlatJComboxBox(new String[]{"Partecipante", "Giudice", "Organizzatore"});
+        form.add(ruoloComboBox, gbc);
+
+        // BUTTON
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        registerButton = createFlatButton("Register");
+        form.add(registerButton, gbc);
+
+        // REGISTER LINK
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel loginLabel = new JLabel("<html>Hai un account? <a href='#'>Accedi Ora!</a></html>");
+        loginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        loginLabel.setForeground(Color.GRAY);
+
+        loginLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                FrameManager.Instance.switchFrame(new Login(controller, frame));
+            }
+        });
+
+        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linkPanel.setBackground(Color.WHITE);
+        linkPanel.add(loginLabel);
+
+        registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (name.getText().isEmpty() || surname.getText().isEmpty() || email.getText().isEmpty() || passwordField1.getPassword().length == 0 || Ruolo.getSelectedIndex() == -1) {
+                if (nameField.getText().isEmpty() || surnameField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getPassword().length == 0 || ruoloComboBox.getSelectedIndex() == -1) {
                     JOptionPane.showMessageDialog(frame, "Tutti i campi sono obbligatori", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                if (passwordField1.getPassword().length < 8) {
+                if (passwordField.getPassword().length < 8) {
                     JOptionPane.showMessageDialog(frame, "La password deve essere almeno di 8 caratteri", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                if (!email.getText().contains("@") || !email.getText().contains(".")) {
+                if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
                     JOptionPane.showMessageDialog(frame, "La mail deve essere in un formato: example@domain.com", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                String result = controller.registerUser(name.getText(), surname.getText(), email.getText(), passwordField1.getText(), Ruolo.getItemAt(Ruolo.getSelectedIndex()).toString());
+                String result = controller.registerUser(nameField.getText(), surnameField.getText(), emailField.getText(), passwordField.getText(), ruoloComboBox.getItemAt(ruoloComboBox.getSelectedIndex()).toString());
                 if (result != null) {
                     JOptionPane.showMessageDialog(frame, result, "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -55,80 +202,60 @@ public class Register {
             }
         });
 
-        login.addActionListener(new ActionListener() {
+        form.add(linkPanel, gbc);
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FrameManager.Instance.switchFrame(new Login(controller, frame));
-            }
-        });
+        gbc.insets = new Insets(0, 0, 0, 0);
+        add(form, gbc);
     }
 
-
+    private JTextField createFlatTextField()
     {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-        $$$setupUI$$$();
+        JTextField field = new JTextField(25);
+        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200,200,200),1),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        field.setBackground(Color.WHITE);
+        field.setForeground(Color.DARK_GRAY);
+        field.setCaretColor(Color.DARK_GRAY);
+        return field;
     }
 
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
-        panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(50, 50, 50, 50), -1, -1));
-        panel1.setBackground(new Color(-1562));
-        final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        name = new JTextField();
-        panel2.add(name, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        surname = new JTextField();
-        panel2.add(surname, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        email = new JTextField();
-        panel2.add(email, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        passwordField1 = new JPasswordField();
-        panel2.add(passwordField1, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setText("Nome");
-        panel2.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Cognome");
-        panel2.add(label2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Email");
-        panel2.add(label3, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setText("Password");
-        panel2.add(label4, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        Ruolo = new JComboBox();
-        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
-        defaultComboBoxModel1.addElement("Partecipante");
-        defaultComboBoxModel1.addElement("Giudice");
-        defaultComboBoxModel1.addElement("Organizzatore");
-        Ruolo.setModel(defaultComboBoxModel1);
-        panel2.add(Ruolo, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label5 = new JLabel();
-        label5.setText("Ruolo");
-        panel2.add(label5, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        button1 = new JButton();
-        button1.setText("Button");
-        panel1.add(button1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        login = new JButton();
-        login.setText("Gia registrato? Login.");
-        panel1.add(login, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    private JPasswordField createFlatPasswordField()
+    {
+        JPasswordField field = new JPasswordField(25);
+        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200,200,200),1),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        field.setBackground(Color.WHITE);
+        field.setForeground(Color.DARK_GRAY);
+        field.setCaretColor(Color.DARK_GRAY);
+        return field;
     }
 
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return panel1;
+    private JButton createFlatButton(String text)
+    {
+        JButton button = new JButton(text);
+        button.setFocusPainted(false);
+        button.setBackground(new Color(70,130,180));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("SansSerif", Font.BOLD, 14));
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        return button;
     }
 
+    private JComboBox<String> createFlatJComboxBox(String[] items)
+    {
+        JComboBox<String> comboBox = new JComboBox<>(items);
+        comboBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setForeground(Color.DARK_GRAY);
+        comboBox.setFocusable(false);
+
+        return comboBox;
+
+    }
 }

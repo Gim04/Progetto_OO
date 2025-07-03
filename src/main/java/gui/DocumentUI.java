@@ -6,21 +6,19 @@ import model.Documento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import gui.base.TableForm;
 import model.Giudice;
 import model.Partecipante;
 
-public class DocumentUi extends TableForm
+public class DocumentUI extends TableForm
 {
     JButton btnAddComment;
     JButton btnAddDocument;
 
-    public DocumentUi(Controller ctrl, JFrame jframe, String team, String hackathon)
+    public DocumentUI(Controller ctrl, JFrame jframe, String team, String hackathon)
     {
         super(ctrl, jframe);
 

@@ -1,13 +1,10 @@
-import controller.Controller;
-import gui.DocumentUi;
-import gui.base.TableForm;
 import gui.util.FrameManager;
 import model.*;
 
 import javax.swing.*;
 import java.awt.*;
 
-import gui.Register;
+import gui.Login;
 import util.EDatabaseType;
 
 public class Main {
@@ -17,7 +14,7 @@ public class Main {
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(980, 740);
         frame.setTitle("Login");
 
         FrameManager frameManager = new FrameManager(frame, EDatabaseType.POSTGRESQL);
@@ -111,7 +108,7 @@ public class Main {
             System.out.println(g.getNome()+" "+g.getEmail());
         }*/
 
-        frameManager.switchFrame(new Register(frameManager.getController(), frame).$$$getRootComponent$$$());
+        frameManager.switchFrame(new Login(frameManager.getController(), frame));
         frame.setVisible(true);
     }
 }
