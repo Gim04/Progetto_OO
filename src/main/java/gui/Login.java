@@ -13,8 +13,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class Login extends JPanel
 {
@@ -62,7 +61,8 @@ public class Login extends JPanel
         // FORM LABEL
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         formLabel.setFont(new Font("SandSerif", Font.BOLD, 24));
         formLabel.setForeground(Color.DARK_GRAY);
         form.add(formLabel, gbc);
@@ -70,6 +70,7 @@ public class Login extends JPanel
         // EMAIL LABEL
         gbc.gridx = 0;
         gbc.gridy++;
+        gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
         emailLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         form.add(emailLabel, gbc);
@@ -99,6 +100,27 @@ public class Login extends JPanel
         gbc.anchor = GridBagConstraints.CENTER;
         loginButton = createFlatButton("Login");
         form.add(loginButton, gbc);
+
+        // REGISTER LINK
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel registerLabel = new JLabel("<html>Non hai un account? <a href='#'>Registrati Ora!</a></html>");
+        registerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        registerLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        registerLabel.setForeground(Color.GRAY);
+
+        registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                FrameManager.Instance.switchFrame(new Register(controller, frame).$$$getRootComponent$$$());
+            }
+        });
+
+        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        linkPanel.setBackground(Color.WHITE);
+        linkPanel.add(registerLabel);
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -136,6 +158,7 @@ public class Login extends JPanel
             }
         });
 
+        form.add(linkPanel, gbc);
         add(form);
     }
 
