@@ -7,11 +7,6 @@ public class Partecipante extends Utente
         super(nome, cognome, email, password);
     }
 
-    public void iscrizioneTeam(String nome, String hackathon)
-    {
-        Test.iscriviPartecipanteAlTeam(this, hackathon, nome);
-    }
-
     public void iscrizioneTeam(Team team, Hackathon hackathon)
     {
         if(team == null) return;

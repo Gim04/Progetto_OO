@@ -17,7 +17,6 @@ public class Hackathon
     private ArrayList<Team> teams;
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Giudice> giudici;
-    private Classifica classifica;
 
     public Hackathon(String titolo, Sede sede, int dimensioneTeam, int maxIscritti, Date dataInizio, Date dataFine, boolean registrazioniAperte)
     {
@@ -30,7 +29,6 @@ public class Hackathon
         this.registrazioniAperte = registrazioniAperte;
 
         teams = new ArrayList<>();
-        this.classifica = new Classifica();
         partecipanti = new ArrayList<>();
         giudici = new ArrayList<>();
     }
@@ -105,7 +103,7 @@ public class Hackathon
 
         if(registrazioniAperte == false)
         {
-            classifica.updateClassifica(teams);
+            //classifica.updateClassifica(teams);
         }
     }
 
@@ -132,11 +130,8 @@ public class Hackathon
         return false;
     }
 
-    public Classifica creaClassifica()
-    {
-        classifica.calcolaClassifica();
-        return classifica;
-    }
+    public Date getDataInizio(){return dataInizio;}
+    public Date getDataFine(){return dataFine;}
 
     public void iscriviGiudice(Giudice g)
     {

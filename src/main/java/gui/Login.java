@@ -145,15 +145,15 @@ public class Login extends JPanel
 
                 if (utente instanceof Partecipante) {
                     controller.refreshHackathonList();
-                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
                     return;
                 } else if (utente instanceof Giudice) {
                     controller.refreshHackathonListForGiudice();
-                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
                     return;
                 } else if (utente instanceof Organizzatore) {
                     controller.refreshHackathonListForOrganizzatore();
-                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame).$$$getRootComponent$$$());
+                    FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
                     return;
                 }
 

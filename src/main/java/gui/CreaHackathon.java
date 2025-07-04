@@ -59,7 +59,7 @@ public class CreaHackathon {
 
                 controller.aggiungiHackathon(nome.getText(), dimensioneValue, maxIscrittiValue, dateI, dateF, registrazioni.isSelected(), controller.getCurrentUser().getEmail());
                 controller.refreshHackathonListForOrganizzatore();
-                list.refreshLocalUIHackathonList();
+                list.refreshLocalUIHackathonList(null);
             }
         });
     }
