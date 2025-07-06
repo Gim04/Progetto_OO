@@ -2,6 +2,7 @@ package DAO;
 
 import model.Documento;
 import model.Hackathon;
+import model.Partecipante;
 
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;

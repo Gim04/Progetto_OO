@@ -1,7 +1,10 @@
 package DAO;
 
+import model.Partecipante;
 import model.Utente;
 import util.ERuolo;
+
+import java.util.ArrayList;
 
 public interface UtenteDAO
 {
@@ -26,6 +29,8 @@ public interface UtenteDAO
     boolean creaTeam(String nome, String hackathon, String email);
 
     boolean addDocument(String team, String hackathon, String contenuto);
+
+    ArrayList<Partecipante> getAllPartecipanti();
 
     /*
         +-+-+-+-+-+-+-+

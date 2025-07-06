@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UtenteImplementazionePostgresDAO implements UtenteDAO
 {
@@ -203,6 +204,33 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         }
 
         return false;
+    }
+
+    public ArrayList<Partecipante> getAllPartecipanti()
+    {
+        ArrayList<Partecipante> r = new ArrayList<>();
+
+        try
+        {
+            ResultSet set = null;
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM partecipante");
+            set = stmt.executeQuery();
+
+            if(!set.next())
+                return r;
+
+            do
+            {
+                r.add(new Partecipante(set.getString("nome"), set.getString("cognome"), set.getString("email"), set.getString("password")));
+
+            }while(set.next());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return r;
     }
 
 

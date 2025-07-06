@@ -403,8 +403,17 @@ public class HackathonList extends JPanel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setOpaque(false);
         // BOTTONI DI TEST -- TODO REMOVE
-        buttonPanel.add(new RoundedFlatButton(Color.GRAY, Color.DARK_GRAY));
-        buttonPanel.add(new RoundedFlatButton(Color.RED, Color.PINK));
+        JButton b = new RoundedFlatButton(Color.RED, Color.PINK);
+        b.addActionListener(e -> {
+            Team t = controller.getLocalCurrentUserTeam();
+            if(t == null)
+            {
+                JOptionPane.showMessageDialog(frame, "Non stai in nessun team!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            FrameManager.Instance.switchFrame(new TeamUI(controller, frame, t.getNome(), title));
+        });
+        buttonPanel.add(b);
         // ---
         row.add(buttonPanel, BorderLayout.EAST);
 

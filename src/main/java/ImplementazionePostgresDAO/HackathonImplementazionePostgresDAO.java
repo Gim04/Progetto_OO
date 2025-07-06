@@ -2,6 +2,7 @@ package ImplementazionePostgresDAO;
 
 import DAO.HackathonDAO;
 import Database.ConnessioneDatabase;
+import controller.Controller;
 import model.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
@@ -56,7 +57,6 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
                 ArrayList<Team> hteams = getTeamForHackathon(h);
                 if(hteams == null) hteams = new ArrayList<>();
-
                 h.setTeams(hteams);
                 r.add(h);
             }

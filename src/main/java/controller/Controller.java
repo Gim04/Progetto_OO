@@ -151,6 +151,11 @@ public class Controller
         return null;
     }
 
+    public void addPartecipante(Partecipante partecipante)
+    {
+        partecipanti.add(partecipante);
+    }
+
     public boolean isLocalTeamInHackathon(String hackathon, String team)
     {
         for(Hackathon h : hackathons)
@@ -376,6 +381,12 @@ public class Controller
         return utente;
     }
 
+    public void getAllPartecipanti()
+    {
+        partecipanti.clear();
+        partecipanti = utenteImplementazioneDAO.getAllPartecipanti();
+    }
+
     public void refreshHackathonList()
     {
         hackathons.clear();
@@ -510,5 +521,10 @@ public class Controller
     public DefaultTableModel calculateClassifica(String hackathon)
     {
         return hackathonutenteImplementazioneDAO.calculateClassifica(hackathon);
+    }
+
+    public void updateLocalPartecipanti()
+    {
+        partecipanti = utenteImplementazioneDAO.getAllPartecipanti();
     }
 }

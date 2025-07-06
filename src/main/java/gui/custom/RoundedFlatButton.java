@@ -27,6 +27,16 @@ public class RoundedFlatButton extends JButton
         initButton();
     }
 
+    public RoundedFlatButton(Color baseColor, Color hoverColor, ImageIcon icon)
+    {
+        super(icon);
+
+        this.baseColor = baseColor;
+        this.hoverColor = hoverColor;
+
+        initButton();
+    }
+
     public void initButton()
     {
         this.setPreferredSize(new Dimension(32, 32));

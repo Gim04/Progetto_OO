@@ -8,7 +8,6 @@ import model.Partecipante;
 import model.Utente;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -144,14 +143,17 @@ public class Login extends JPanel
                 frame.setTitle("Hackathon List");
 
                 if (utente instanceof Partecipante) {
+                    controller.updateLocalPartecipanti();
                     controller.refreshHackathonList();
                     FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
                     return;
                 } else if (utente instanceof Giudice) {
+                    controller.updateLocalPartecipanti();
                     controller.refreshHackathonListForGiudice();
                     FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
                     return;
                 } else if (utente instanceof Organizzatore) {
+                    controller.updateLocalPartecipanti();
                     controller.refreshHackathonListForOrganizzatore();
                     FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
                     return;
