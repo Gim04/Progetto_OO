@@ -1,7 +1,4 @@
-CREATE TABLE Classifica
-(
-    ID SERIAL PRIMARY KEY
-);
+--- DEFINIZIONE TABELLE ---
 
 CREATE TABLE Sede
 (
@@ -13,38 +10,32 @@ CREATE TABLE Sede
 
 CREATE TABLE Organizzatore
 (
-    ID SERIAL PRIMARY KEY,
-    nome varchar(30),
-    cognome varchar(30),
-    email varchar(150),
-    password varchar(16),
-    CONSTRAINT unique_EMAIL_ORGANIZZATORE UNIQUE(email)
+    nome varchar(30) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    email varchar(150) PRIMARY KEY,
+    password varchar(16) NOT NULL
 );
 
 CREATE TABLE Partecipante
 (
-    ID SERIAL PRIMARY KEY,
-    nome varchar(30),
-    cognome varchar(30),
-    email varchar(150),
-    password varchar(16),
-    CONSTRAINT unique_EMAIL_PARTECIPANTE UNIQUE(email)
+    nome varchar(30) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    email varchar(150) PRIMARY KEY,
+    password varchar(16) NOT NULL
 );
 
 CREATE TABLE Giudice
 (
-    ID SERIAL PRIMARY KEY,
-    nome varchar(30),
-    cognome varchar(30),
-    email varchar(150),
-    password varchar(16),
-    CONSTRAINT unique_EMAIL_GIUDICE UNIQUE(email)
+    nome varchar(30) NOT NULL,
+    cognome varchar(30) NOT NULL,
+    email varchar(150) PRIMARY KEY,
+    password varchar(16) NOT NULL
 );
 
 CREATE TABLE Team
 (
     ID SERIAL PRIMARY KEY,
-    nome varchar(30),
+    nome varchar(30) NOT NULL,
     voto smallint,
 
 );
@@ -69,58 +60,47 @@ CREATE TABLE Hackathon
     dimensioneTeam int,
     titolo varchar(50),
     descrizioneProblema varchar(500),
-    classifica int,
-    organizzatore int,
-    FOREIGN KEY (classifica) REFERENCES Classifica(ID),
+    organizzatore varchar(150),
     FOREIGN KEY (sede) REFERENCES Sede(ID),
-    FOREIGN KEY (organizzatore) REFERENCES Organizzatore(ID)
+    FOREIGN KEY (organizzatore) REFERENCES Organizzatore(email)
 );
+
+--- TABELLE INTERMEDIE ---
 
 CREATE TABLE HACKATHON_PARTECIPANTE
 (
     hackathon INT,
-    partecipante INT,
-    PRIMARY KEY (hackathon, partecipante),
+    partecipante varchar(150),
     FOREIGN KEY (hackathon) REFERENCES Hackathon(ID),
-    FOREIGN KEY (partecipante) REFERENCES Partecipante(ID)
+    FOREIGN KEY (partecipante) REFERENCES Partecipante(email),
+    CONSTRAINT unique_HACKATHON_PARTECIPANTE UNIQUE(hackathon, partecipante)
 );
 
 CREATE TABLE HACKATHON_GIUDICE
 (
     hackathon INT,
-    giudice INT,
-    PRIMARY KEY (hackathon, giudice),
+    giudice varchar(150),
     FOREIGN KEY (hackathon) REFERENCES Hackathon(ID),
-    FOREIGN KEY (giudice) REFERENCES Giudice(ID)
+    FOREIGN KEY (giudice) REFERENCES Giudice(email),
+    CONSTRAINT unique_HACKATHON_GIUDICE UNIQUE(hackathon, giudice)
 );
 
 CREATE TABLE TEAM_PARTECIPANTE
 (
     team INT,
-    partecipante INT,
-    PRIMARY KEY (team, partecipante),
+    partecipante varchar(150),
     FOREIGN KEY (team) REFERENCES Team(ID),
-    FOREIGN KEY (partecipante) REFERENCES Partecipante(ID)
+    FOREIGN KEY (partecipante) REFERENCES Partecipante(email),
+    CONSTRAINT unique_TEAM_PARTECIPANTE UNIQUE(team, partecipante)
 );
 
 CREATE TABLE TEAM_HACKATHON
 (
     team INT,
     hackathon INT,
-    PRIMARY KEY (team, hackathon),
     FOREIGN KEY (team) REFERENCES Team(ID),
-    FOREIGN KEY (hackathon) REFERENCES Hackathon(ID)
-);
-
-
-CREATE TABLE GIUDICE_TEAM
-(
-    giudice INT,
-    team INT,
-    voto INT,
-    PRIMARY KEY (giudice, team),
-    FOREIGN KEY (giudice) REFERENCES Giudice(ID),
-    FOREIGN KEY (team) REFERENCES Team(ID)
+    FOREIGN KEY (hackathon) REFERENCES Hackathon(ID),
+    CONSTRAINT unique_TEAM_HACKATHON UNIQUE(team, hackathon)
 );
 
 -----
@@ -141,10 +121,6 @@ INSERT INTO Giudice (nome, cognome, email, password) VALUES
 -- Sede
 INSERT INTO Sede (citta, via, codicePostale) VALUES
     ('Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
-
--- Classifica
-INSERT INTO Classifica (ID) VALUES
-    (1);
 
 -- Hackathon
 INSERT INTO Hackathon (
@@ -185,7 +161,3 @@ INSERT INTO Documento (team, commento, contenuto) VALUES
 INSERT INTO Documento (team, contenuto) VALUES
     (1, 'Documento 2');
 
--- Voti dei giudici ai team
-INSERT INTO GIUDICE_TEAM (giudice, team, voto) VALUES
-                                                   (1, 1, 0),
-                                                   (1, 2, 300);

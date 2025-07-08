@@ -178,7 +178,7 @@ public class Controller
             for(Team m : hackathon.getTeams())
             {
                 for(Partecipante p: m.getPartecipanti()) {
-                    if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
+                    if(p.getEmail().equals(( getCurrentUser()).getEmail()))
                         return true;
                 }
             }
@@ -195,7 +195,7 @@ public class Controller
                 for(Team m : hackathon.getTeams())
                 {
                     for(Partecipante p: m.getPartecipanti()) {
-                        if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
+                        if(p.getEmail().equals((getCurrentUser()).getEmail()))
                             return true;
                     }
                 }
@@ -213,7 +213,7 @@ public class Controller
             {
                 for(Partecipante p: m.getPartecipanti())
                 {
-                    if(p.getEmail().equals(((Partecipante) getCurrentUser()).getEmail()))
+                    if(p.getEmail().equals(( getCurrentUser()).getEmail()))
                         return m;
                 }
             }
@@ -410,7 +410,7 @@ public class Controller
             }
         }
 
-        return new ArrayList<Team>();
+        return new ArrayList<>();
     }
 
     public void refreshHackathonListForOrganizzatore()

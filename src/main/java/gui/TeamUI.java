@@ -4,14 +4,11 @@ package gui;
 import controller.Controller;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import gui.custom.RoundedFlatButton;
 import gui.util.FrameManager;
-import model.Documento;
 import model.Partecipante;
 
 

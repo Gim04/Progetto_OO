@@ -213,7 +213,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
             set = stmt.executeQuery();
 
             if(!set.next())
-                return new ArrayList<Documento>();
+                return new ArrayList<>();
 
             int idH = set.getInt("ID");
 
@@ -223,7 +223,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
             set = stmt.executeQuery();
 
             if(!set.next())
-                return new ArrayList<Documento>();
+                return new ArrayList<>();
 
             do
             {

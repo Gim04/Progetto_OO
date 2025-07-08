@@ -1,8 +1,6 @@
 import gui.util.FrameManager;
-import model.*;
 
 import javax.swing.*;
-import java.awt.*;
 
 import gui.Login;
 import util.EDatabaseType;
