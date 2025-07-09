@@ -93,6 +93,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
     */
     public boolean invitePartecipanteToTeam(String email, String team)
     {
+        // PASSA IL NOME DELL'HACKATHON COGLIOOOOOOONEEEEEEEEEEEEE
         boolean result = false;
         ResultSet rs = null;
         int partecipanteID = -1;

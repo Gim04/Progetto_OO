@@ -1,11 +1,10 @@
 --- DOMINI ---
-
 CREATE DOMAIN Voto AS SMALLINT
-CHECK (VALUE BETWEEN 0 AND 10)
+CHECK (VALUE BETWEEN 0 AND 10);
 
 
 CREATE DOMAIN Email AS VARCHAR(150)
-CHECK (VALUE ~ '^[A-Za-z0-9._%&+-]+@[A-Za-z0-9.-]+.[A-Za-z]$')
+CHECK (VALUE ~ '^[A-Za-z0-9._%&+-]+@[A-Za-z0-9.-]+.[A-Za-z]$');
 
 
 --- DEFINIZIONE TABELLE ---
@@ -46,8 +45,7 @@ CREATE TABLE Team
 (
     ID SERIAL PRIMARY KEY,
     nome varchar(30) NOT NULL,
-    voto Voto,
-
+    voto Voto
 );
 
 CREATE TABLE Documento
@@ -142,7 +140,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER unicoNomeTeamHackathon
 BEFORE INSERT ON TEAM_HACKATHON
 FOR EACH ROW
-EXECUTE FUNCTION unicoNomeTeamHackathonF()
+EXECUTE FUNCTION unicoNomeTeamHackathonF();
 
 
 -- 2. L’organizzatore non può aprire le registrazione dopo la fine dell’hackathon ##########
@@ -160,7 +158,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER organizzatoreRegistrazioni
 BEFORE INSERT OR UPDATE ON Hackathon
 FOR EACH ROW
-EXECUTE FUNCTION organizzatoreRegistrazioniF()
+EXECUTE FUNCTION organizzatoreRegistrazioniF();
 
 -- 3. Partecipante si può iscrivere solo con registrazioni aperte dall’organizzatore ##########
 CREATE OR REPLACE FUNCTION iscrizionePartecipanteF()
@@ -184,7 +182,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER iscrizionePartecipante
 BEFORE INSERT OR UPDATE ON HACKATHON_PARTECIPANTE
 FOR EACH ROW
-EXECUTE FUNCTION iscrizionePartecipanteF()
+EXECUTE FUNCTION iscrizionePartecipanteF();
 
 -- 4. Non possono esserci più iscritti del maxIscritti ##########
 CREATE OR REPLACE FUNCTION maxPartecipanteF()
@@ -209,7 +207,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER maxPartecipante
 BEFORE INSERT ON HACKATHON_PARTECIPANTE
 FOR EACH ROW
-EXECUTE FUNCTION maxPartecipanteF()
+EXECUTE FUNCTION maxPartecipanteF();
 
 -- 5. Non possono esserci più partecipanti allo stesso team che supera dimensioneTeam
 CREATE OR REPLACE FUNCTION maxPartecipanteTeamF()
@@ -236,7 +234,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER maxPartecipanteTeam
 BEFORE INSERT ON TEAM_PARTECIPANTE
 FOR EACH ROW
-EXECUTE FUNCTION maxPartecipanteTeamF()
+EXECUTE FUNCTION maxPartecipanteTeamF();
 
 -- 6. Un utente non può avere piu ruoli. (Controllare che la mail sia unica nelle tabelle: Giudice, Partecipante, Organizzatore)
 -- Partecipante -> Giudice, Organizzatore
@@ -260,7 +258,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER ruoloPartecipante
 BEFORE INSERT OR UPDATE ON Partecipante
 FOR EACH ROW
-EXECUTE FUNCTION ruoloPartecipanteF()
+EXECUTE FUNCTION ruoloPartecipanteF();
 
 -- Giudice -> Organizzatore, Partecipante
 CREATE OR REPLACE FUNCTION ruoloGiudiceF()
@@ -308,66 +306,71 @@ BEFORE INSERT OR UPDATE ON Organizzatore
 FOR EACH ROW
 EXECUTE FUNCTION ruoloOrganizzatoreF();
 
-INSERT INTO Organizzatore (nome, cognome, email, password) VALUES
-    ('Antonio', 'Poco', 'antonio.pocomento@example.com', 'ioHoFortun4!');
+-- UtenteDAO
+CREATE OR REPLACE FUNCTION authenticate_user(email_in Email, password_in VARCHAR(16))
+RETURNS TABLE(nome varchar,
+              cognome varchar,
+              email varchar,
+              password varchar,
+              ruolo TEXT) AS $$
+BEGIN
 
-INSERT INTO Organizzatore (nome, cognome, email, password) VALUES
-    ('Antonio', 'Poco', 'alice.rossi@example.com', 'ioHoFortun4!');
+    RETURN QUERY SELECT Partecipante.nome, Partecipante.cognome, Partecipante.email, Partecipante.password, 'partecipante' FROM Partecipante WHERE Partecipante.email = email_in AND Partecipante.password = password_in
+    UNION
+    SELECT  Giudice.nome, Giudice.cognome, Giudice.email, Giudice.password, 'giudice' FROM Giudice WHERE Giudice.email = email_in AND Giudice.password = password_in
+    UNION
+    SELECT  Organizzatore.nome, Organizzatore.cognome, Organizzatore.email, Organizzatore.password, 'organizzatore' FROM Organizzatore WHERE Organizzatore.email = email_in AND Organizzatore.password = password_in;
 
------
--- Partecipanti
-INSERT INTO Partecipante (nome, cognome, email, password) VALUES
-                                                                  ('Alice', 'Rossi', 'alice.rossi@example.com', '1234'),
-                                                                  ('Marco', 'Bianchi', 'marco.bianchi@example.com', 'Sicura123!'),
-                                                                  ('Luca', 'Verdi', 'luca.verdi@example.com', 'P@ssword2024'),
-                                                                  ('Giulia', 'Neri', 'giulia.neri@example.com', 'Login!2025');
--- Organizzatore
-INSERT INTO Organizzatore (nome, cognome, email, password) VALUES
-    ('Giulio', 'Dardano', 'giulio.dardano@example.com', '1somorfismo!');
+END;
+$$ LANGUAGE plpgsql;
 
--- Giudice
-INSERT INTO Giudice (nome, cognome, email, password) VALUES
-    ('Antonio', 'Poco', 'antonio.pocomento@example.com', 'ioHoFortun4!');
+CREATE OR REPLACE FUNCTION register_user(
+    nome_in VARCHAR,
+    cognome_in VARCHAR,
+    email_in VARCHAR,
+    password_in VARCHAR,
+    ruolo_in TEXT
+)
+RETURNS TEXT AS $$
+BEGIN
+    IF ruolo_in = 'partecipante' THEN
+        INSERT INTO Partecipante(nome, cognome, email, password)
+        VALUES (nome_in, cognome_in, email_in, password_in);
+    ELSIF ruolo_in = 'giudice' THEN
+        INSERT INTO Giudice(nome, cognome, email, password)
+        VALUES (nome_in, cognome_in, email_in, password_in);
+    ELSIF ruolo_in = 'organizzatore' THEN
+        INSERT INTO Organizzatore(nome, cognome, email, password)
+        VALUES (nome_in, cognome_in, email_in, password_in);
+    ELSE
+        RAISE EXCEPTION 'Ruolo non valido!';
+    END IF;
+    RETURN 'OK';
+END;
+$$ LANGUAGE plpgsql;
 
--- Sede
-INSERT INTO Sede (citta, via, codicePostale) VALUES
-    ('Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
+/*
+CREATE OR REPLACE FUNCTION invite_partecipante_to_team(email_in VARCHAR, team_in VARCHAR, hackathon_in VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    idPartecipante INT;
+    idTeam INT;
+BEGIN
 
--- Hackathon
-INSERT INTO Hackathon (
-    sede, dataInizio, maxIscritti, registrazioniAperte, dataFine,
-    dimensioneTeam, titolo, descrizioneProblema, classifica, organizzatore
-) VALUES
-    (1, '2025-06-15', 100, 0, '2025-06-17', 4, 'HackTheFuture 2025', 'Bug Bounty', 1, 1);
+    SELECT ID INTO idPartecipante FROM Partecipante WHERE email=email_in;
+    IF idPartecipante IS NULL THEN
+        RAISE EXCEPTION 'Partecipante non trovato!';
+    END IF;
 
--- Partecipanti iscritti all'Hackathon
-INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante) VALUES
-                                                                 (1, 1), (1, 2), (1, 3), (1, 4);
+    SELECT team.ID INTO idTeam FROM team
+    JOIN TEAM_HACKATHON ON TEAM_HACKATHON.team = team.id
+    JOIN Hackathon ON Hackathon.id = TEAM_HACKATHON.hackathon
+    WHERE nome=team_in AND titolo=hackathon_in;
+    IF idTeam IS NULL THEN
+        RAISE EXCEPTION 'Team non trovato!';
+    END IF;
 
--- Giudice assegnato all'Hackathon
-INSERT INTO HACKATHON_GIUDICE (hackathon, giudice) VALUES
-    (1,1);
-
--- Team
-INSERT INTO Team (nome, voto) VALUES
-                                      ('Unina', 0),
-                                      ('Eureka', 0);
-
--- Team iscritti all'Hackathon
-INSERT INTO TEAM_HACKATHON (team, hackathon) VALUES
-                                                 (1, 1),
-                                                 (2, 1);
-
--- Partecipanti nei Team
-INSERT INTO TEAM_PARTECIPANTE (team, partecipante) VALUES
-                                                       (1, 1), -- Alice
-                                                       (1, 2), -- Marco
-                                                       (2, 3), -- Luca
-                                                       (2, 4); -- Giulia
-
--- Documento caricato dal team Unina
-INSERT INTO Documento (team, commento, contenuto) VALUES
-    (1, 'Insufficiente', 'Documento');
-
-INSERT INTO Documento (team, contenuto) VALUES
-    (1, 'Documentackathon
+    INSERT INTO TEAM_PARTECIPANTE(team, partecipante) VALUES (idTeam, idPartecipante);
+    RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;*/
