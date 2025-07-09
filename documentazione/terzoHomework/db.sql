@@ -1,3 +1,13 @@
+--- DOMINI ---
+
+CREATE DOMAIN Voto AS SMALLINT
+CHECK (VALUE BETWEEN 0 AND 10)
+
+
+CREATE DOMAIN Email AS VARCHAR(150)
+CHECK (VALUE ~ '^[A-Za-z0-9._%&+-]+@[A-Za-z0-9.-]+.[A-Za-z]$')
+
+
 --- DEFINIZIONE TABELLE ---
 
 CREATE TABLE Sede
@@ -12,7 +22,7 @@ CREATE TABLE Organizzatore
 (
     nome varchar(30) NOT NULL,
     cognome varchar(30) NOT NULL,
-    email varchar(150) PRIMARY KEY,
+    email Email PRIMARY KEY,
     password varchar(16) NOT NULL
 );
 
@@ -20,7 +30,7 @@ CREATE TABLE Partecipante
 (
     nome varchar(30) NOT NULL,
     cognome varchar(30) NOT NULL,
-    email varchar(150) PRIMARY KEY,
+    email Email PRIMARY KEY,
     password varchar(16) NOT NULL
 );
 
@@ -28,7 +38,7 @@ CREATE TABLE Giudice
 (
     nome varchar(30) NOT NULL,
     cognome varchar(30) NOT NULL,
-    email varchar(150) PRIMARY KEY,
+    email Email PRIMARY KEY,
     password varchar(16) NOT NULL
 );
 
@@ -36,7 +46,7 @@ CREATE TABLE Team
 (
     ID SERIAL PRIMARY KEY,
     nome varchar(30) NOT NULL,
-    voto smallint,
+    voto Voto,
 
 );
 
@@ -103,6 +113,207 @@ CREATE TABLE TEAM_HACKATHON
     CONSTRAINT unique_TEAM_HACKATHON UNIQUE(team, hackathon)
 );
 
+--- TRIGGERS ---
+
+-- 1. Non posso esistere nello stesso Hackathon piu' team con lo stesso nome ##########
+CREATE OR REPLACE FUNCTION unicoNomeTeamHackathonF()
+RETURNS TRIGGER AS $$
+DECLARE
+    nomeHackathon varchar(50);
+    nomeTeam varchar(30);
+BEGIN
+
+SELECT nome INTO nomeTeam FROM Team WHERE Team.id = NEW.team;
+
+IF (NOT EXISTS(
+            SELECT * FROM TEAM_HACKATHON JOIN TEAM ON TEAM_HACKATHON.team = team.id WHERE nomeTeam = team.nome
+                            AND TEAM_HACKATHON.hackathon = NEW.hackathon))
+THEN
+    RETURN NEW;
+ELSE
+    SELECT titolo INTO nomeHackathon FROM Hackathon WHERE Hackathon.id = NEW.hackathon;
+    RAISE EXCEPTION E'Esiste gia\' un team con questo nome nell\'hackathon \' % \'!', nomeHackathon;
+END IF;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER unicoNomeTeamHackathon
+BEFORE INSERT ON TEAM_HACKATHON
+FOR EACH ROW
+EXECUTE FUNCTION unicoNomeTeamHackathonF()
+
+
+-- 2. L’organizzatore non può aprire le registrazione dopo la fine dell’hackathon ##########
+CREATE OR REPLACE FUNCTION organizzatoreRegistrazioniF()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.registrazioniAperte = 1 AND OLD.dataFine < CURRENT_DATE THEN
+        RAISE EXCEPTION E'Non e\' possibile aprire le registrazioni dopo la fine dell\'hackathon';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER organizzatoreRegistrazioni
+BEFORE INSERT OR UPDATE ON Hackathon
+FOR EACH ROW
+EXECUTE FUNCTION organizzatoreRegistrazioniF()
+
+-- 3. Partecipante si può iscrivere solo con registrazioni aperte dall’organizzatore ##########
+CREATE OR REPLACE FUNCTION iscrizionePartecipanteF()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    IF( EXISTS(
+                SELECT titolo FROM Hackathon
+                JOIN HACKATHON_PARTECIPANTE
+                ON HACKATHON_PARTECIPANTE.hackathon = hackathon.id
+                WHERE Hackathon.registrazioniAperte = 1 AND Hackathon.id = NEW.hackathon)) THEN
+
+                RETURN NEW;
+    END IF;
+
+    RAISE EXCEPTION E'Le registrazioni per l\'hackathon sono chiuse!';
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER iscrizionePartecipante
+BEFORE INSERT OR UPDATE ON HACKATHON_PARTECIPANTE
+FOR EACH ROW
+EXECUTE FUNCTION iscrizionePartecipanteF()
+
+-- 4. Non possono esserci più iscritti del maxIscritti ##########
+CREATE OR REPLACE FUNCTION maxPartecipanteF()
+RETURNS TRIGGER AS $$
+DECLARE
+    c INT := 0;
+    maxI INT := 0;
+BEGIN
+
+    SELECT COUNT(NEW.hackathon) INTO c FROM HACKATHON_PARTECIPANTE WHERE HACKATHON_PARTECIPANTE.hackathon = NEW.hackathon;
+    SELECT maxIscritti INTO maxI FROM Hackathon WHERE Hackathon.id = NEW.hackathon;
+
+    IF( c >= maxI ) THEN
+        RAISE EXCEPTION E'Numero di iscritti massimo raggiunto per l\'hackathon!';
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER maxPartecipante
+BEFORE INSERT ON HACKATHON_PARTECIPANTE
+FOR EACH ROW
+EXECUTE FUNCTION maxPartecipanteF()
+
+-- 5. Non possono esserci più partecipanti allo stesso team che supera dimensioneTeam
+CREATE OR REPLACE FUNCTION maxPartecipanteTeamF()
+RETURNS TRIGGER AS $$
+DECLARE
+    c INT := 0;
+    dimensioneTeamMax INT := 0;
+BEGIN
+
+    SELECT COUNT(NEW.team) INTO c FROM TEAM_PARTECIPANTE WHERE TEAM_PARTECIPANTE.team = NEW.team;
+    SELECT dimensioneTeam INTO dimensioneTeamMax FROM Hackathon
+    JOIN TEAM_HACKATHON ON TEAM_HACKATHON.team = NEW.team
+    WHERE Hackathon.id = TEAM_HACKATHON.hackathon;
+
+    IF( c >= dimensioneTeamMax) THEN
+        RAISE EXCEPTION E'Numero di iscritti massimo raggiunto per il team!';
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER maxPartecipanteTeam
+BEFORE INSERT ON TEAM_PARTECIPANTE
+FOR EACH ROW
+EXECUTE FUNCTION maxPartecipanteTeamF()
+
+-- 6. Un utente non può avere piu ruoli. (Controllare che la mail sia unica nelle tabelle: Giudice, Partecipante, Organizzatore)
+-- Partecipante -> Giudice, Organizzatore
+CREATE OR REPLACE FUNCTION ruoloPartecipanteF()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    IF( EXISTS(
+        SELECT email FROM Giudice WHERE Giudice.email = NEW.email
+        UNION
+        SELECT email FROM Organizzatore WHERE Organizzatore.email = NEW.email
+    )) THEN
+        RAISE EXCEPTION E'Esiste gia\' un utente con questa mail';
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ruoloPartecipante
+BEFORE INSERT OR UPDATE ON Partecipante
+FOR EACH ROW
+EXECUTE FUNCTION ruoloPartecipanteF()
+
+-- Giudice -> Organizzatore, Partecipante
+CREATE OR REPLACE FUNCTION ruoloGiudiceF()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    IF( EXISTS(
+        SELECT email FROM Partecipante WHERE Partecipante.email = NEW.email
+        UNION
+        SELECT email FROM Organizzatore WHERE Organizzatore.email = NEW.email
+    )) THEN
+        RAISE EXCEPTION E'Esiste gia\' un utente con questa mail';
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ruoloGiudice
+BEFORE INSERT OR UPDATE ON Giudice
+FOR EACH ROW
+EXECUTE FUNCTION ruoloGiudiceF();
+
+-- Organizzatore -> Giudice, Partecipante
+CREATE OR REPLACE FUNCTION ruoloOrganizzatoreF()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    IF( EXISTS(
+        SELECT email FROM Giudice WHERE Giudice.email = NEW.email
+        UNION
+        SELECT email FROM Partecipante WHERE Partecipante.email = NEW.email
+    )) THEN
+        RAISE EXCEPTION E'Esiste gia\' un utente con questa mail';
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ruoloOrganizzatore
+BEFORE INSERT OR UPDATE ON Organizzatore
+FOR EACH ROW
+EXECUTE FUNCTION ruoloOrganizzatoreF();
+
+INSERT INTO Organizzatore (nome, cognome, email, password) VALUES
+    ('Antonio', 'Poco', 'antonio.pocomento@example.com', 'ioHoFortun4!');
+
+INSERT INTO Organizzatore (nome, cognome, email, password) VALUES
+    ('Antonio', 'Poco', 'alice.rossi@example.com', 'ioHoFortun4!');
+
 -----
 -- Partecipanti
 INSERT INTO Partecipante (nome, cognome, email, password) VALUES
@@ -159,5 +370,4 @@ INSERT INTO Documento (team, commento, contenuto) VALUES
     (1, 'Insufficiente', 'Documento');
 
 INSERT INTO Documento (team, contenuto) VALUES
-    (1, 'Documento 2');
-
+    (1, 'Documentackathon
