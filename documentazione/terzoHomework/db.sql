@@ -147,7 +147,7 @@ EXECUTE FUNCTION unicoNomeTeamHackathonF();
 CREATE OR REPLACE FUNCTION organizzatoreRegistrazioniF()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.registrazioniAperte = 1 AND OLD.dataFine < CURRENT_DATE THEN
+    IF NEW.registrazioniAperte = 1 AND NEW.dataFine < CURRENT_DATE THEN
         RAISE EXCEPTION E'Non e\' possibile aprire le registrazioni dopo la fine dell\'hackathon';
     END IF;
 
@@ -167,8 +167,6 @@ BEGIN
 
     IF( EXISTS(
                 SELECT titolo FROM Hackathon
-                JOIN HACKATHON_PARTECIPANTE
-                ON HACKATHON_PARTECIPANTE.hackathon = hackathon.id
                 WHERE Hackathon.registrazioniAperte = 1 AND Hackathon.id = NEW.hackathon)) THEN
 
                 RETURN NEW;
@@ -349,28 +347,101 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-/*
-CREATE OR REPLACE FUNCTION invite_partecipante_to_team(email_in VARCHAR, team_in VARCHAR, hackathon_in VARCHAR)
-RETURNS BOOLEAN AS $$
-DECLARE
-    idPartecipante INT;
-    idTeam INT;
+-- HackathonDAO
+CREATE OR REPLACE FUNCTION calculate_classifica(hackathon_in INT)
+RETURNS TABLE("Nome Team" VARCHAR, "Voto" Voto) AS $$
 BEGIN
 
-    SELECT ID INTO idPartecipante FROM Partecipante WHERE email=email_in;
-    IF idPartecipante IS NULL THEN
-        RAISE EXCEPTION 'Partecipante non trovato!';
+    IF (EXISTS(SELECT * FROM Hackathon WHERE Hackathon.ID = hackathon_in AND Hackathon.registrazioniAperte = 0 AND Hackathon.dataFine < CURRENT_DATE)) THEN
+
+    RETURN QUERY SELECT team.nome as TN, team.voto as TV FROM hackathon JOIN team_hackathon ON hackathon.id = team_hackathon.hackathon
+    JOIN team on team_hackathon.team = team.id
+    WHERE hackathon.id = hackathon_in
+    ORDER BY team.voto DESC;
+
+    ELSE
+
+    RAISE EXCEPTION 'Hackathon non valido!';
+
     END IF;
 
-    SELECT team.ID INTO idTeam FROM team
-    JOIN TEAM_HACKATHON ON TEAM_HACKATHON.team = team.id
-    JOIN Hackathon ON Hackathon.id = TEAM_HACKATHON.hackathon
-    WHERE nome=team_in AND titolo=hackathon_in;
-    IF idTeam IS NULL THEN
-        RAISE EXCEPTION 'Team non trovato!';
-    END IF;
-
-    INSERT INTO TEAM_PARTECIPANTE(team, partecipante) VALUES (idTeam, idPartecipante);
-    RETURN TRUE;
 END;
-$$ LANGUAGE plpgsql;*/
+$$ LANGUAGE plpgsql;
+
+--- INSERT ---
+
+INSERT INTO PARTECIPANTE (nome, cognome, email, password)
+VALUES
+('Alice', 'Rossi', 'alice.rossi@example.com', '1234'),
+('Marco', 'Bianchi', 'marco.bianchi@example.com', 'Sicura123!'),
+('Luca', 'Verdi', 'luca.verdi@example.com', 'P@ssword2024'),
+('Giulia', 'Neri', 'giulia.neri@example.com', 'Login!2025'),
+('john', 'orange', 'orange@example.com', 'lacopiabella'),
+('Marco', 'Rossi', 'marcorossi@example.com', 'marcorossi1234');
+
+
+INSERT INTO GIUDICE (nome, cognome, email, password)
+VALUES
+('Antonio','Poco ','antonio.pocomento@example.com', 'ioHoFortun4!'),
+('john','lemon ','johnlemon@example.com', 'illimone69');
+
+
+INSERT INTO ORGANIZZATORE (nome, cognome, email, password)
+VALUES
+('Giulio','Dardano ','giulio.dardano@example.com', '1somorfismo!');
+
+
+INSERT INTO Sede (ID, citta, via, codicePostale)
+VALUES (1, 'Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
+
+INSERT INTO Hackathon (sede, dataInizio, maxIscritti, registrazioniAperte, dataFine, dimensioneTeam, titolo, descrizioneProblema, organizzatore) VALUES
+(1, CURRENT_DATE-5, 100, 1, CURRENT_DATE+10, 4, 'HackTheFuture 2025', 'web spy', 'giulio.dardano@example.com'),
+(1, CURRENT_DATE-2, 100, 1, CURRENT_DATE, 4, 'Unina', 'code break', 'giulio.dardano@example.com');
+
+
+INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante)
+VALUES
+(1, 'alice.rossi@example.com'),
+(1, 'marco.bianchi@example.com'),
+(1, 'luca.verdi@example.com'),
+(1, 'giulia.neri@example.com'),
+(2, 'luca.verdi@example.com'),
+(2, 'giulia.neri@example.com');
+
+INSERT INTO HACKATHON_GIUDICE (hackathon, giudice)
+VALUES
+(1, 'antonio.pocomento@example.com'),
+(1, 'johnlemon@example.com'),
+(2, 'antonio.pocomento@example.com'),
+(2, 'johnlemon@example.com');
+
+INSERT INTO Team (ID, nome, voto)
+VALUES
+(1, 'Unina', 7),
+(2, 'Eureka', 5),
+(3, 'Pocomentus', 6),
+(4, 'Tantomentus', 8);
+
+INSERT INTO TEAM_PARTECIPANTE (team, partecipante)
+VALUES
+(1, 'alice.rossi@example.com'),
+(1, 'marco.bianchi@example.com'),
+(1, 'orange@example.com'),
+(2, 'luca.verdi@example.com'),
+(2, 'giulia.neri@example.com');
+
+INSERT INTO TEAM_HACKATHON (team, hackathon)
+VALUES
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 2);
+
+INSERT INTO Documento (ID, team, commento, contenuto) VALUES
+(1, 1, 'Insufficiente', 'Documento'),
+(2, 1, 'ciao', 'Documento 2'),
+(3, 2, 'discreto', 'Documento 3'),
+(4, 3, 'buono', 'documebto 4');
+
+UPDATE Hackathon set registrazioniAperte=0 where ID = 2;
+UPDATE Hackathon set dataFine=CURRENT_DATE-1 where ID = 2;
