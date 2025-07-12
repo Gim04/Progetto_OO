@@ -8,8 +8,6 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class HackathonList extends JPanel
@@ -21,8 +19,7 @@ public class HackathonList extends JPanel
     private JPanel btnPanel;
 
     // Pulsanti partecipante
-    private JButton creaTeam;
-    private JButton invitaPartecipanteAlTeam;
+    private JButton teamButton;
     private JButton viewClassifica;
     //
 
@@ -366,13 +363,34 @@ public class HackathonList extends JPanel
         int i = 0;
         for(Hackathon h : hackathons)
         {
-            JPanel row = createRow(h.getTitolo(), (i % 2 == 0) ? new Color(245, 245, 245) : new Color(230, 230, 230), h.getDataInizio().toString() + " - " + h.getDataFine());
-            rowsViewport.add(row);
+            ArrayList<JButton> btns = new ArrayList<>();
+            ArrayList<Team> t = controller.getLocalCurrentUserTeam();
+            // TODO: Controller se il partecipante si e' iscritto!
+            if (controller.getCurrentUser() instanceof Partecipante)
+            {
+                if(t != null) {
+
+                    Team x = controller.isLocalTeamInHackathon(h.getTitolo(), t);
+                    if (x != null)
+                    {
+                        JButton teamBtn = new RoundedFlatButton(Color.RED, Color.PINK);
+                        teamBtn.addActionListener(e -> {
+
+                            FrameManager.Instance.switchFrame(new TeamUI(controller, frame, x.getNome(), h.getTitolo()));
+                        });
+
+                        btns.add(teamBtn);
+                    }
+                }
+
+                JPanel row = createRow(h.getTitolo(), (i % 2 == 0) ? new Color(245, 245, 245) : new Color(230, 230, 230), h.getDataInizio().toString() + " - " + h.getDataFine(), btns);
+                rowsViewport.add(row);
+            }
             i++;
         }
     }
 
-    private JPanel createRow(String title, Color background, String date)
+    private JPanel createRow(String title, Color background, String date, ArrayList<JButton> buttons)
     {
 
         JPanel row = new JPanel(new BorderLayout());
@@ -402,21 +420,13 @@ public class HackathonList extends JPanel
         // JPANEL bottoni
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setOpaque(false);
-        // BOTTONI DI TEST -- TODO REMOVE
-        JButton b = new RoundedFlatButton(Color.RED, Color.PINK);
-        b.addActionListener(e -> {
-            Team t = controller.getLocalCurrentUserTeam();
-            if(t == null)
-            {
-                JOptionPane.showMessageDialog(frame, "Non stai in nessun team!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            FrameManager.Instance.switchFrame(new TeamUI(controller, frame, t.getNome(), title));
-        });
-        buttonPanel.add(b);
+
+        for(JButton button : buttons)
+        {
+            buttonPanel.add(button);
+        }
         // ---
         row.add(buttonPanel, BorderLayout.EAST);
-
         return row;
     }
 

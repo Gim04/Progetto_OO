@@ -10,6 +10,7 @@ import java.util.Objects;
 import gui.custom.RoundedFlatButton;
 import gui.util.FrameManager;
 import model.Partecipante;
+import model.Team;
 
 
 public class TeamUI extends JPanel {
@@ -25,9 +26,12 @@ public class TeamUI extends JPanel {
 
     private JLabel nomeTeam;
 
+    private Team currentTeam;
+
     public TeamUI(Controller c, JFrame f, String nomeTeam, String hackathon)
     {
         this.controller = c;
+        this.currentTeam = controller.isLocalTeamInHackathon(hackathon, controller.getLocalCurrentUserTeam());
         this.frame = f;
         this.nomeTeam = new JLabel(nomeTeam);
         this.nomeTeam.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -62,7 +66,7 @@ public class TeamUI extends JPanel {
                     return;
                 }
 
-                if (controller.invitePartecipanteToTeam(input, controller.getLocalCurrentUserTeam())) {
+                if (controller.invitePartecipanteToTeam(input, currentTeam)) {
                     JOptionPane.showMessageDialog(frame, "Partecipante aggiunto al team '" + nomeTeam + "'");
                     refreshUILocalTable();
                 }else
@@ -87,9 +91,9 @@ public class TeamUI extends JPanel {
 
     public void refreshUILocalTable()
     {
-        String[] s = new String[controller.getLocalCurrentUserTeam().getPartecipanti().size()];
+        String[] s = new String[currentTeam.getPartecipanti().size()];
         int i = 0;
-        for(Partecipante p : controller.getLocalCurrentUserTeam().getPartecipanti())
+        for(Partecipante p : currentTeam.getPartecipanti())
         {
             s[i] = p.getEmail();
             i++;

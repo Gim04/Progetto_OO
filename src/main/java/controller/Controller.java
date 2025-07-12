@@ -156,19 +156,25 @@ public class Controller
         partecipanti.add(partecipante);
     }
 
-    public boolean isLocalTeamInHackathon(String hackathon, String team)
+    public Team isLocalTeamInHackathon(String hackathon, ArrayList<Team> team)
     {
         for(Hackathon h : hackathons)
         {
-            if(h.getTitolo().equals(hackathon)) {
-                for (Team t : h.getTeams()) {
-                    if (t.getNome().equals(team))
-                        return true;
+            if (h.getTitolo().equals(hackathon)) {
+                for (Team t : h.getTeams())
+                {
+                    for(Team m : team)
+                    {
+                        if(t.getNome().equals(m.getNome()))
+                        {
+                            return m;
+                        }
+                    }
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     public boolean isLocalUserInTeam()
@@ -205,8 +211,9 @@ public class Controller
         return false;
     }
 
-    public Team getLocalCurrentUserTeam()
+    public ArrayList<Team> getLocalCurrentUserTeam()
     {
+        ArrayList<Team> teams = new ArrayList<>();
         for(Hackathon hackathon : hackathons)
         {
             for(Team m : hackathon.getTeams())
@@ -214,10 +221,13 @@ public class Controller
                 for(Partecipante p: m.getPartecipanti())
                 {
                     if(p.getEmail().equals(( getCurrentUser()).getEmail()))
-                        return m;
+                        teams.add(m);
                 }
             }
         }
+
+        if(!teams.isEmpty())
+            return teams;
 
         return null;
     }

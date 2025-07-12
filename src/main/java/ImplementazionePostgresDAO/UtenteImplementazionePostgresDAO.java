@@ -96,15 +96,13 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         // PASSA IL NOME DELL'HACKATHON COGLIOOOOOOONEEEEEEEEEEEEE
         boolean result = false;
         ResultSet rs = null;
-        int partecipanteID = -1;
         int teamID = -1;
         try
         {
-            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM partecipante WHERE email='" + email + "'");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM partecipante WHERE email='" + email + "'");
             rs = stmt.executeQuery();
 
             if(!rs.next()) throw new SQLException("Partecipante non trovato!");
-            partecipanteID = rs.getInt("ID");
 
             stmt = connection.prepareStatement("SELECT ID FROM team WHERE nome='" + team + "'");
             rs = stmt.executeQuery();
@@ -112,7 +110,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
             if(!rs.next()) throw new SQLException("Team non trovato!");
             teamID = rs.getInt("ID");
 
-            stmt = connection.prepareStatement("INSERT INTO TEAM_PARTECIPANTE VALUES (" + "'" + teamID + "', '" + partecipanteID + "')");
+            stmt = connection.prepareStatement("INSERT INTO TEAM_PARTECIPANTE VALUES (" + "'" + teamID + "', '" + email + "')");
             stmt.execute();
 
             result = true;
@@ -138,13 +136,11 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
 
             int id = set.getInt("ID");
 
-            stmt = connection.prepareStatement("SELECT ID FROM partecipante WHERE email = '"+ email + "'");
+            stmt = connection.prepareStatement("SELECT * FROM partecipante WHERE email = '"+ email + "'");
             set = stmt.executeQuery();
 
             if(!set.next())
                 return false;
-
-            int idP = set.getInt("ID");
 
             stmt = connection.prepareStatement("INSERT INTO team(nome) VALUES('"+nome+ "')" ) ;
             stmt.execute();
@@ -156,7 +152,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
                 return false;
 
             int idTeam = set.getInt("ID");
-            stmt = connection.prepareStatement("INSERT INTO TEAM_PARTECIPANTE VALUES('" +idTeam+ "','" + idP +"')");
+            stmt = connection.prepareStatement("INSERT INTO TEAM_PARTECIPANTE VALUES('" +idTeam+ "','" + email +"')");
             stmt.execute();
 
             stmt = connection.prepareStatement("INSERT INTO TEAM_HACKATHON VALUES('" +idTeam+ "','" + id +"')");
@@ -367,15 +363,13 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
     {
         boolean result = false;
         ResultSet rs = null;
-        int giudiceID = -1;
         int hackathonID = -1;
         try
         {
-            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM giudice WHERE email='" + email + "'");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM giudice WHERE email='" + email + "'");
             rs = stmt.executeQuery();
 
             if(!rs.next()) throw new SQLException("Giudice non trovato!");
-            giudiceID = rs.getInt("ID");
 
             stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo='" + hackathon + "'");
             rs = stmt.executeQuery();
@@ -383,7 +377,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
             if(!rs.next()) throw new SQLException("Hackathon non trovato!");
             hackathonID = rs.getInt("ID");
 
-            stmt = connection.prepareStatement("INSERT INTO HACKATHON_GIUDICE VALUES (" + "'" + hackathonID + "', '" + giudiceID + "')");
+            stmt = connection.prepareStatement("INSERT INTO HACKATHON_GIUDICE VALUES (" + "'" + hackathonID + "', '" + email + "')");
             stmt.execute();
 
             result = true;

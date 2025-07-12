@@ -74,7 +74,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id " +
                                                                      "JOIN HACKATHON_GIUDICE ON hackathon.id = HACKATHON_GIUDICE.hackathon "+
-                                                                     "JOIN giudice ON HACKATHON_GIUDICE.giudice = giudice.id " +
+                                                                     "JOIN giudice ON HACKATHON_GIUDICE.giudice = giudice.email " +
                                                                      "WHERE giudice.email = '"+ emailGiudice + "'");
             ResultSet rs = stmt.executeQuery();
 
@@ -120,7 +120,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         ArrayList<Hackathon> r = new ArrayList<>();
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.ID " +
-                    "JOIN organizzatore ON hackathon.organizzatore = organizzatore.id " +
+                    "JOIN organizzatore ON hackathon.organizzatore = organizzatore.email " +
                     "WHERE organizzatore.email = '"+ email + "'");
             ResultSet rs = stmt.executeQuery();
 
@@ -170,18 +170,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         try
         {
             ResultSet set = null;
-            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM organizzatore WHERE email = '"+ email + "'");
-            set = stmt.executeQuery();
-
-            if(!set.next())
-                return false;
-
-            int id = set.getInt("ID");
+            PreparedStatement stmt;
 
             int val = 0;
             if(registrazioni) val = 1;
             stmt = connection.prepareStatement("INSERT INTO hackathon(titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
-                    "VALUES (" + "'" + nome + "', '" + dimensioneTeam + "', '" + dataI + "', '" + dataF + "', " + val + ",'" + maxIscritti + "', "+ id +")");
+                    "VALUES (" + "'" + nome + "', '" + dimensioneTeam + "', '" + dataI + "', '" + dataF + "', " + val + ",'" + maxIscritti + "', "+ email +")");
             stmt.execute();
 
             result = true;
@@ -353,7 +347,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT nome, email, password, cognome FROM partecipante " +
-                    "JOIN TEAM_PARTECIPANTE ON TEAM_PARTECIPANTE.partecipante = partecipante.id " +
+                    "JOIN TEAM_PARTECIPANTE ON TEAM_PARTECIPANTE.partecipante = partecipante.email " +
                     "WHERE TEAM_PARTECIPANTE.team = " + team);
             ResultSet rs = stmt.executeQuery();
 
