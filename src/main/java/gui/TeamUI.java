@@ -66,7 +66,7 @@ public class TeamUI extends JPanel {
                     return;
                 }
 
-                if (controller.invitePartecipanteToTeam(input, currentTeam)) {
+                if (controller.invitePartecipanteToTeam(input, currentTeam, hackathon)) {
                     JOptionPane.showMessageDialog(frame, "Partecipante aggiunto al team '" + nomeTeam + "'");
                     refreshUILocalTable();
                 }else

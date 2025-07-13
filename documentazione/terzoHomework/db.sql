@@ -391,8 +391,8 @@ VALUES
 ('Giulio','Dardano ','giulio.dardano@example.com', '1somorfismo!');
 
 
-INSERT INTO Sede (ID, citta, via, codicePostale)
-VALUES (1, 'Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
+INSERT INTO Sede (citta, via, codicePostale)
+VALUES ('Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
 
 INSERT INTO Hackathon (sede, dataInizio, maxIscritti, registrazioniAperte, dataFine, dimensioneTeam, titolo, descrizioneProblema, organizzatore) VALUES
 (1, CURRENT_DATE-5, 100, 1, CURRENT_DATE+10, 4, 'HackTheFuture 2025', 'web spy', 'giulio.dardano@example.com'),
@@ -401,7 +401,7 @@ INSERT INTO Hackathon (sede, dataInizio, maxIscritti, registrazioniAperte, dataF
 
 INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante)
 VALUES
-(1, 'alice.rossi@example.com'),
+--(1, 'alice.rossi@example.com'),
 (1, 'marco.bianchi@example.com'),
 (1, 'luca.verdi@example.com'),
 (1, 'giulia.neri@example.com'),
@@ -415,16 +415,16 @@ VALUES
 (2, 'antonio.pocomento@example.com'),
 (2, 'johnlemon@example.com');
 
-INSERT INTO Team (ID, nome, voto)
+INSERT INTO Team (nome, voto)
 VALUES
-(1, 'Unina', 7),
-(2, 'Eureka', 5),
-(3, 'Pocomentus', 6),
-(4, 'Tantomentus', 8);
+('Unina', 7),
+('Eureka', 5),
+('Pocomentus', 6),
+('Tantomentus', 8);
 
 INSERT INTO TEAM_PARTECIPANTE (team, partecipante)
 VALUES
-(1, 'alice.rossi@example.com'),
+--(1, 'alice.rossi@example.com'),
 (1, 'marco.bianchi@example.com'),
 (1, 'orange@example.com'),
 
@@ -441,11 +441,11 @@ VALUES
 (3, 2),
 (4, 2);
 
-INSERT INTO Documento (ID, team, commento, contenuto) VALUES
-(1, 1, 'Insufficiente', 'Documento'),
-(2, 1, 'ciao', 'Documento 2'),
-(3, 2, 'discreto', 'Documento 3'),
-(4, 3, 'buono', 'documebto 4');
+INSERT INTO Documento (team, commento, contenuto) VALUES
+(1, 'Insufficiente', 'Documento'),
+(1, 'ciao', 'Documento 2'),
+(2, 'discreto', 'Documento 3'),
+(3, 'buono', 'documebto 4');
 
 UPDATE Hackathon set registrazioniAperte=0 where ID = 2;
 UPDATE Hackathon set dataFine=CURRENT_DATE-1 where ID = 2;

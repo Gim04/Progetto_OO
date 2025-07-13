@@ -10,6 +10,9 @@ import util.ERuolo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -494,9 +497,9 @@ public class Controller
         return null;
     }
 
-    public boolean invitePartecipanteToTeam(String email, Team team)
+    public boolean invitePartecipanteToTeam(String email, Team team, String hackathon)
     {
-        boolean r = utenteImplementazioneDAO.invitePartecipanteToTeam(email, team.getNome());
+        boolean r = utenteImplementazioneDAO.invitePartecipanteToTeam(email, team.getNome(), hackathon);
         if(r)
         {
             Partecipante p = getLocalPartecipanteFromEmail(email);
@@ -536,5 +539,27 @@ public class Controller
     public void updateLocalPartecipanti()
     {
         partecipanti = utenteImplementazioneDAO.getAllPartecipanti();
+    }
+
+    public boolean isLocalPartecipanteIscrittoAdHackathon(String email, String hackathon)
+    {
+        for(Hackathon h : hackathons)
+        {
+            if(h.getTitolo().equals(hackathon))
+            {
+                for(Partecipante p : h.getPartecipanti())
+                {
+                    if(p.getEmail().equals(email))
+                        return true;
+                }
+            }
+       }
+
+        return false;
+    }
+
+    public boolean iscriviPartecipanteAdHackathon(Hackathon hackathon, String email)
+    {
+       return utenteImplementazioneDAO.iscriviPartecipanteAdHackathon(hackathon, email);
     }
 }

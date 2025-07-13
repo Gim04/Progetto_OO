@@ -358,29 +358,69 @@ public class HackathonList extends JPanel
 
     public void refreshLocalUIHackathonList(ArrayList<Hackathon> hackathons)
     {
-        this.removeAll();
+        rowsViewport.removeAll();
+        rowsViewport.revalidate();
+        rowsViewport.repaint();
 
         int i = 0;
         for(Hackathon h : hackathons)
         {
             ArrayList<JButton> btns = new ArrayList<>();
             ArrayList<Team> t = controller.getLocalCurrentUserTeam();
-            // TODO: Controller se il partecipante si e' iscritto!
+
             if (controller.getCurrentUser() instanceof Partecipante)
             {
-                if(t != null) {
-
-                    Team x = controller.isLocalTeamInHackathon(h.getTitolo(), t);
-                    if (x != null)
+                if(controller.isLocalPartecipanteIscrittoAdHackathon(controller.getCurrentUser().getEmail(), h.getTitolo()))
+                {
+                    if(t != null)
                     {
-                        JButton teamBtn = new RoundedFlatButton(Color.RED, Color.PINK);
-                        teamBtn.addActionListener(e -> {
+                        Team x = controller.isLocalTeamInHackathon(h.getTitolo(), t);
+                        if (x != null) {
+                            JButton teamBtn = new RoundedFlatButton(Color.RED, Color.PINK);
+                            teamBtn.addActionListener(e -> {
 
-                            FrameManager.Instance.switchFrame(new TeamUI(controller, frame, x.getNome(), h.getTitolo()));
+                                FrameManager.Instance.switchFrame(new TeamUI(controller, frame, x.getNome(), h.getTitolo()));
+                            });
+
+                            btns.add(teamBtn);
+                        }
+                    }else{
+                        JButton creaTeam = new RoundedFlatButton(Color.GREEN, Color.DARK_GRAY);
+                        creaTeam.addActionListener(e -> {
+                                if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
+                                    JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    return;
+                                }
+                                final String input = JOptionPane.showInputDialog("Nome team:");
+                                if (input != null) {
+                                    if (controller.createTeam(input, h.getTitolo(), controller.getCurrentUser().getEmail())) {
+                                        JOptionPane.showMessageDialog(null, "Team creato!");
+                                        
+                                        controller.refreshHackathonList();
+                                        refreshLocalUIHackathonList(controller.getLocalAllHackathons());
+                                    }
+                                    else
+                                        JOptionPane.showMessageDialog(frame, "Non e' stato possibile creare il team!", "Error", JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                                }
                         });
 
-                        btns.add(teamBtn);
+                        btns.add(creaTeam);
                     }
+                }else
+                {
+                    JButton iscrivitiAdHackathon = new RoundedFlatButton(Color.BLUE, Color.CYAN);
+                    iscrivitiAdHackathon.addActionListener(e -> {
+                        if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di volerti iscrivere ad '" + h.getTitolo() + "\'?") == 0)
+                        {
+                            controller.iscriviPartecipanteAdHackathon(h, controller.getCurrentUser().getEmail());
+                            controller.refreshHackathonList();
+                            refreshLocalUIHackathonList(controller.getLocalAllHackathons());
+                        }
+                    });
+
+                    btns.add(iscrivitiAdHackathon);
                 }
 
                 JPanel row = createRow(h.getTitolo(), (i % 2 == 0) ? new Color(245, 245, 245) : new Color(230, 230, 230), h.getDataInizio().toString() + " - " + h.getDataFine(), btns);

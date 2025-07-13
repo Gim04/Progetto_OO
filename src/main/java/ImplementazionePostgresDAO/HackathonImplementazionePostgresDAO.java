@@ -58,6 +58,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
                 ArrayList<Team> hteams = getTeamForHackathon(h);
                 if(hteams == null) hteams = new ArrayList<>();
                 h.setTeams(hteams);
+                setPartecipantiOfHackathon(h);
                 r.add(h);
             }
         } catch (SQLException e) {
@@ -66,6 +67,21 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         }
 
         return r;
+    }
+
+    private void setPartecipantiOfHackathon(Hackathon h)
+    {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM HACKATHON_PARTECIPANTE JOIN HACKATHON ON hackathon.id = HACKATHON_PARTECIPANTE.hackathon JOIN Partecipante ON Partecipante.email = HACKATHON_PARTECIPANTE.partecipante WHERE hackathon.titolo = \'"+h.getTitolo()+"\'");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next())
+            {
+               h.addPartecipanteToList(new Partecipante(rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<Hackathon> getHackathonListForJudge(String emailGiudice)

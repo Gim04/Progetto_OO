@@ -2,10 +2,7 @@ package ImplementazionePostgresDAO;
 
 import DAO.UtenteDAO;
 import Database.ConnessioneDatabase;
-import model.Partecipante;
-import model.Giudice;
-import model.Organizzatore;
-import model.Utente;
+import model.*;
 import util.ERuolo;
 
 import java.sql.Connection;
@@ -91,15 +88,41 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         |P|a|r|t|e|c|i|p|a|n|t|e|
         +-+-+-+-+-+-+-+-+-+-+-+-+
     */
-    public boolean invitePartecipanteToTeam(String email, String team)
+    public boolean iscriviPartecipanteAdHackathon(Hackathon hackathon, String email)
     {
-        // PASSA IL NOME DELL'HACKATHON COGLIOOOOOOONEEEEEEEEEEEEE
+        boolean result = false;
+        ResultSet rs = null;
+        int hackathonID = -1;
+        try
+        {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Hackathon WHERE titolo='" + hackathon.getTitolo() + "'");
+            rs = stmt.executeQuery();
+
+            if(!rs.next()) throw new SQLException("Hackathon non trovato!");
+
+            hackathonID = rs.getInt("id");
+
+            stmt = connection.prepareStatement("INSERT INTO HACKATHON_PARTECIPANTE VALUES (" + "'" + hackathonID + "', '" +  email + "')");
+            stmt.execute();
+
+            result = true;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public boolean invitePartecipanteToTeam(String email, String team, String hackathon)
+    {
         boolean result = false;
         ResultSet rs = null;
         int teamID = -1;
         try
         {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM partecipante WHERE email='" + email + "'");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM partecipante JOIN HACKATHON_PARTECIPANTE ON Partecipante.email =  HACKATHON_PARTECIPANTE.partecipante JOIN HACKATHON ON HACKATHON.id = HACKATHON_PARTECIPANTE.hackathon WHERE email='" + email + "'");
             rs = stmt.executeQuery();
 
             if(!rs.next()) throw new SQLException("Partecipante non trovato!");

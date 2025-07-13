@@ -1,9 +1,13 @@
 package DAO;
 
+import model.Hackathon;
 import model.Partecipante;
 import model.Utente;
 import util.ERuolo;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface UtenteDAO
@@ -24,7 +28,9 @@ public interface UtenteDAO
         |P|a|r|t|e|c|i|p|a|n|t|e|
         +-+-+-+-+-+-+-+-+-+-+-+-+
     */
-    boolean invitePartecipanteToTeam(String email, String team);
+    boolean iscriviPartecipanteAdHackathon(Hackathon hackathon, String email);
+
+    boolean invitePartecipanteToTeam(String email, String team, String hackathon);
 
     boolean creaTeam(String nome, String hackathon, String email);
 
