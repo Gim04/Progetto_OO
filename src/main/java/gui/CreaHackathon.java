@@ -1,67 +1,211 @@
 package gui;
 
 import controller.Controller;
+import gui.custom.FlatButton;
+import gui.custom.FlatCheckBox;
+import gui.custom.FlatTextField;
+import gui.util.FrameManager;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class CreaHackathon {
-    private JTextField nome;
-    private JTextField dimensione;
-    private JTextField maxIscritti;
-    private JTextField dataInizio;
-    private JTextField dataFine;
-    private JCheckBox registrazioni;
-    private JButton aggiungiHackathonButton;
-    private JPanel root;
+public class CreaHackathon extends JPanel
+{
+    private FlatTextField nome;
+    private FlatTextField dimensione;
+    private FlatTextField maxIscritti;
+    private FlatTextField dataInizio;
+    private FlatTextField dataFine;
+    private FlatCheckBox registrazioni;
+
+    private JLabel nomeLabel;
+    private JLabel dimensioneLabel;
+    private JLabel maxIscrittiLabel;
+    private JLabel dataInizioLabel;
+    private JLabel dataFineLabel;
+    private JLabel registrazioniLabel;
+
+    private JLabel formLabel;
+
+    private FlatButton aggiungiHackathonButton;
+
+    private JPanel form;
 
     private JFrame frame;
     private Controller controller;
 
-    public CreaHackathon(JFrame frame, Controller controller, HackathonList list) {
-        this.frame = frame;
+    public CreaHackathon(JFrame frame, Controller controller) {
         this.controller = controller;
+        this.frame = frame;
 
-        aggiungiHackathonButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        frame.setTitle("Login");
 
-                LocalDate dateI = isValidData(dataInizio.getText());
-                LocalDate dateF = isValidData(dataFine.getText());
+        setLayout(new GridBagLayout());
+        setBackground(new Color(230, 230, 230));
+        setBorder(new CompoundBorder(
+                new LineBorder(new Color(200,200,200), 1, true),
+                new EmptyBorder(20,20,20,20)
+        ));
 
-                if (dateI == null || dateF == null) {
-                    JOptionPane.showMessageDialog(null, "Formato data non valido!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+        form = new JPanel();
+        form.setLayout(new GridBagLayout());
+        form.setBackground(Color.WHITE);
 
-                int maxIscrittiValue = -1;
-                try {
-                    maxIscrittiValue = Integer.parseInt(maxIscritti.getText());
-                } catch (NumberFormatException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Formato numero iscritti non valido!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+        nome        = new FlatTextField();
+        dimensione  = new FlatTextField();
+        maxIscritti = new FlatTextField();
+        dataInizio  = new FlatTextField();
+        dataFine    = new FlatTextField();
+        registrazioni = new FlatCheckBox();
 
-                int dimensioneValue = -1;
-                try {
-                    dimensioneValue = Integer.parseInt(dimensione.getText());
-                } catch (NumberFormatException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Formato dimensione teams non valido!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+        nomeLabel = new JLabel("Nome hackathon:");
+        nomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
-                controller.aggiungiHackathon(nome.getText(), dimensioneValue, maxIscrittiValue, dateI, dateF, registrazioni.isSelected(), controller.getCurrentUser().getEmail());
-                controller.refreshHackathonListForOrganizzatore();
-                list.refreshLocalUIHackathonList(null);
+        dimensioneLabel = new JLabel("Dimensione team:");
+        dimensioneLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+
+        maxIscrittiLabel = new JLabel("Numero massimo di iscritti:");
+        maxIscrittiLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+
+        dataInizioLabel = new JLabel("Data inizio:");
+        dataInizioLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+
+        dataFineLabel = new JLabel("Data fine:");
+        dataFineLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+
+        registrazioniLabel = new JLabel("Registrazioni Aperte:");
+        registrazioniLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+
+        formLabel = new JLabel("Crea Hackathon");
+        formLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+
+        aggiungiHackathonButton = new FlatButton();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 25, 15, 25);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 0.3;
+
+        // FORM TITLE
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formLabel.setFont(new Font("SandSerif", Font.BOLD, 24));
+        formLabel.setForeground(Color.DARK_GRAY);
+        form.add(formLabel, gbc);
+
+        // Riga 0 - Nome
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        form.add(nomeLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(nome, gbc);
+
+        // Riga 1 - Dimensione
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.3;
+        form.add(dimensioneLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(dimensione, gbc);
+
+        // Riga 2 - Max iscritti
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 0.3;
+        form.add(maxIscrittiLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(maxIscritti, gbc);
+
+        // Riga 3 - Data inizio
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 0.3;
+        form.add(dataInizioLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(dataInizio, gbc);
+
+        // Riga 4 - Data fine
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.weightx = 0.3;
+        form.add(dataFineLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(dataFine, gbc);
+
+        // Riga 5 - Registrazioni
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.weightx = 0.3;
+        form.add(registrazioniLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(registrazioni, gbc);
+
+        // Riga 6 - Pulsante Crea Hackathon
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        form.add(aggiungiHackathonButton, gbc);
+
+        aggiungiHackathonButton.addActionListener(e -> {
+
+            LocalDate dateI = isValidData(dataInizio.getText());
+            LocalDate dateF = isValidData(dataFine.getText());
+
+            if (dateI == null || dateF == null) {
+                JOptionPane.showMessageDialog(null, "Formato data non valido!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            int maxIscrittiValue = -1;
+            try {
+                maxIscrittiValue = Integer.parseInt(maxIscritti.getText());
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Formato numero iscritti non valido!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int dimensioneValue = -1;
+            try {
+                dimensioneValue = Integer.parseInt(dimensione.getText());
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Formato dimensione teams non valido!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if(!controller.aggiungiHackathon(nome.getText(), dimensioneValue, maxIscrittiValue, dateI, dateF, registrazioni.isSelected(), controller.getCurrentUser().getEmail()))
+            {
+                JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            controller.refreshHackathonListForOrganizzatore();
+
+            FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
         });
+
+        aggiungiHackathonButton.setText("Crea Hackathon");
+
+        add(form);
     }
 
     private LocalDate isValidData(String data) {
@@ -76,70 +220,6 @@ public class CreaHackathon {
         }
 
         return null;
-    }
-
-    {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-        $$$setupUI$$$();
-    }
-
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
-        root = new JPanel();
-        root.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(8, 2, new Insets(0, 0, 0, 0), -1, -1));
-        final JLabel label1 = new JLabel();
-        label1.setText("Nome Hackathon");
-        root.add(label1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        nome = new JTextField();
-        root.add(nome, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Dimensione team");
-        root.add(label2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        dimensione = new JTextField();
-        root.add(dimensione, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Massimo iscritti");
-        root.add(label3, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        maxIscritti = new JTextField();
-        root.add(maxIscritti, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setText("Data Inizio");
-        root.add(label4, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label5 = new JLabel();
-        label5.setText("Creazione Hackathon");
-        root.add(label5, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label6 = new JLabel();
-        label6.setText("Data Fine");
-        root.add(label6, new com.intellij.uiDesigner.core.GridConstraints(5, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        dataInizio = new JTextField();
-        root.add(dataInizio, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        dataFine = new JTextField();
-        root.add(dataFine, new com.intellij.uiDesigner.core.GridConstraints(5, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label7 = new JLabel();
-        label7.setText("Registrazioni aperte");
-        root.add(label7, new com.intellij.uiDesigner.core.GridConstraints(6, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        registrazioni = new JCheckBox();
-        registrazioni.setSelected(true);
-        registrazioni.setText("SI");
-        root.add(registrazioni, new com.intellij.uiDesigner.core.GridConstraints(6, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        aggiungiHackathonButton = new JButton();
-        aggiungiHackathonButton.setText("Aggiungi Hackathon");
-        root.add(aggiungiHackathonButton, new com.intellij.uiDesigner.core.GridConstraints(7, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return root;
     }
 
 }
