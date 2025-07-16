@@ -8,7 +8,10 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HackathonList extends JPanel
 {
@@ -28,13 +31,6 @@ public class HackathonList extends JPanel
     private JButton pubblicaProblema;
     //
 
-    // Pulsanti organizzatore
-    private JButton invitaGiudice;
-    private JButton creaHackathon;
-    private JButton chiudiRegistrazioni;
-    private JButton documenti;
-    //
-
     private JPanel rowsViewport;
     private JScrollPane scrollPane;
 
@@ -48,6 +44,7 @@ public class HackathonList extends JPanel
         rowsViewport.setLayout(new BoxLayout(rowsViewport, BoxLayout.Y_AXIS));
         rowsViewport.setBackground(Color.WHITE);
 
+        btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         refreshLocalUIHackathonList(hackathons);
 
         scrollPane = new JScrollPane(rowsViewport);
@@ -425,8 +422,70 @@ public class HackathonList extends JPanel
 
                 JPanel row = createRow(h.getTitolo(), (i % 2 == 0) ? new Color(245, 245, 245) : new Color(230, 230, 230), h.getDataInizio().toString() + " - " + h.getDataFine(), btns);
                 rowsViewport.add(row);
+            }else if(controller.getCurrentUser() instanceof Organizzatore)
+            {
+                JButton invitaGiudice = new RoundedFlatButton(Color.BLUE, Color.CYAN);
+
+                JButton apriRegistrazioni = new RoundedFlatButton(Color.GREEN, Color.GRAY);
+                if (controller.getLocalRegistrazioniAperteOfHackathon(h.getTitolo()) == true) {
+                    apriRegistrazioni.setEnabled(false);
+                } else {
+                    apriRegistrazioni.setEnabled(true);
+                }
+
+                invitaGiudice.addActionListener(e -> {
+                    if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
+                        JOptionPane.showMessageDialog(frame, "Registrazioni chiuse per questo hackathon!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    final String input = JOptionPane.showInputDialog("Email:");
+                    if (input != null) {
+
+                        if (!input.contains("@") || !input.contains(".")) {
+                            JOptionPane.showMessageDialog(frame, "Mail non valida!");
+                            return;
+                        }
+
+                        if (controller.inviteJudgeToHackathon(input, h.getTitolo()))
+                            JOptionPane.showMessageDialog(frame, "Giudice invitato!");
+                        else
+                            JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!");
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                    }
+                });
+
+                apriRegistrazioni.addActionListener(e -> {
+                    if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di voler aprire le registrazioni per '" + h.getTitolo() + "'?") == 0) {
+                        controller.updateRegistrazioniHackathon(true, h.getTitolo());
+                        controller.setLocalRegistrazioniAperteOfHackathon(h.getTitolo(), true);
+                        apriRegistrazioni.setEnabled(false);
+                        JOptionPane.showMessageDialog(frame, "Registrazioni aperte per '" + h.getTitolo()  + "'");
+                    }
+                });
+
+                btns.add(apriRegistrazioni);
+                btns.add(invitaGiudice);
+
+
+                JPanel row = createRow(h.getTitolo(), (i % 2 == 0) ? new Color(245, 245, 245) : new Color(230, 230, 230), h.getDataInizio().toString() + " - " + h.getDataFine(), btns);
+                rowsViewport.add(row);
             }
             i++;
+        }
+
+        if(controller.getCurrentUser() instanceof Organizzatore)
+        {
+            // Pulsanti statici dell'organizzatore
+            JButton creaHackathon = new RoundedFlatButton(Color.RED, Color.GRAY, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
+            creaHackathon.addActionListener(e -> {
+                FrameManager.Instance.switchFrame(new CreaHackathon(frame, controller, this).$$$getRootComponent$$$());
+                frame.setVisible(true);
+            });
+
+            btnPanel.add(creaHackathon);
+            add(btnPanel, BorderLayout.NORTH);
         }
     }
 

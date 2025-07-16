@@ -396,7 +396,8 @@ VALUES ('Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
 
 INSERT INTO Hackathon (sede, dataInizio, maxIscritti, registrazioniAperte, dataFine, dimensioneTeam, titolo, descrizioneProblema, organizzatore) VALUES
 (1, CURRENT_DATE-5, 100, 1, CURRENT_DATE+10, 4, 'HackTheFuture 2025', 'web spy', 'giulio.dardano@example.com'),
-(1, CURRENT_DATE-2, 100, 1, CURRENT_DATE, 4, 'InnovAction', 'code break', 'giulio.dardano@example.com');
+(1, CURRENT_DATE-2, 100, 1, CURRENT_DATE, 4, 'InnovAction', 'code break', 'giulio.dardano@example.com'),
+(1, CURRENT_DATE-2, 100, 0, CURRENT_DATE, 4, 'Milky Way', 'SQL Injection', 'giulio.dardano@example.com');
 
 
 INSERT INTO HACKATHON_PARTECIPANTE (hackathon, partecipante)
