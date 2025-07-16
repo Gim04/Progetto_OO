@@ -11,7 +11,7 @@ import gui.custom.RoundedFlatButton;
 import gui.util.FrameManager;
 import model.Partecipante;
 import model.Team;
-
+import util.Theme;
 
 public class TeamUI extends JPanel {
 
@@ -61,8 +61,8 @@ public class TeamUI extends JPanel {
 
         setLayout(new BorderLayout());
 
-        invitePartecipante = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/person_add.png"))));
-        addDocument = new RoundedFlatButton(new Color(0,255,255), new Color(128,211,255), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/docs.png"))));
+        invitePartecipante = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/person_add.png"))));
+        addDocument = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/docs.png"))));
 
         invitePartecipante.addActionListener(e -> {
             if (controller.checkRegistrazioniChiuse(hackathon))
