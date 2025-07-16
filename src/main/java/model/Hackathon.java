@@ -138,6 +138,8 @@ public class Hackathon
     public Date getDataInizio(){return dataInizio;}
     public Date getDataFine(){return dataFine;}
 
+    public String getDescrizioneProblema(){return descrizioneProblema;}
+
     public void iscriviGiudice(Giudice g)
     {
         giudici.add(g);

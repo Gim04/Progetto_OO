@@ -562,4 +562,17 @@ public class Controller
     {
        return utenteImplementazioneDAO.iscriviPartecipanteAdHackathon(hackathon, email);
     }
+
+    public String getLocalDescrizioneProblema(String hackathon)
+    {
+        for(Hackathon h : hackathons)
+        {
+            if(h.getTitolo().equals(hackathon))
+            {
+                return h.getDescrizioneProblema();
+            }
+        }
+
+        return "???";
+    }
 }

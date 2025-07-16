@@ -34,6 +34,6 @@ public class TableForm extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        add(btnPanel, BorderLayout.SOUTH);
+        add(btnPanel, BorderLayout.NORTH);
     }
 }

@@ -4,6 +4,8 @@ import DAO.HackathonDAO;
 import Database.ConnessioneDatabase;
 import controller.Controller;
 import model.*;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,6 +56,8 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
                         rs.getDate("dataFine"),
                         rs.getBoolean("registrazioniAperte")
                 );
+
+                h.setDescrizioneProblema(rs.getString("descrizioneProblema"));
 
                 ArrayList<Team> hteams = getTeamForHackathon(h);
                 if(hteams == null) hteams = new ArrayList<>();
@@ -190,8 +194,8 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
             int val = 0;
             if(registrazioni) val = 1;
-            stmt = connection.prepareStatement("INSERT INTO hackathon(titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
-                    "VALUES (" + "'" + nome + "', '" + dimensioneTeam + "', '" + dataI + "', '" + dataF + "', " + val + ",'" + maxIscritti + "', "+ email +")");
+            stmt = connection.prepareStatement("INSERT INTO hackathon(sede, titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
+                    "VALUES (1," + "'" + nome + "', '" + dimensioneTeam + "', '" + dataI + "', '" + dataF + "', " + val + ",'" + maxIscritti + "', \'"+ email +"\')");    //TODO cambiare sede
             stmt.execute();
 
             result = true;

@@ -2,21 +2,24 @@ package gui;
 
 import controller.Controller;
 import gui.base.TableForm;
+import gui.custom.RoundedFlatButton;
 import model.Documento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import model.Giudice;
 import model.Partecipante;
 
 public class DocumentUI extends TableForm
 {
-    JButton btnAddComment;
-    JButton btnAddDocument;
+    RoundedFlatButton btnAddComment;
+    RoundedFlatButton btnAddDocument;
 
     public DocumentUI(Controller ctrl, JFrame jframe, String team, String hackathon)
     {
@@ -26,7 +29,7 @@ public class DocumentUI extends TableForm
 
         if(controller.getCurrentUser() instanceof Giudice) {
 
-            btnAddComment = new JButton("Add Comment");
+            btnAddComment = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
             btnAddComment.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -51,7 +54,7 @@ public class DocumentUI extends TableForm
         }
         else if(controller.getCurrentUser() instanceof Partecipante)
         {
-            btnAddDocument = new JButton("Add Document");
+            btnAddDocument = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
             btnAddDocument.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
