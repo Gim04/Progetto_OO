@@ -368,6 +368,17 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE PROCEDURE controllo_date_registrazioni()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE Hackathon
+    SET registrazioniAperte = 0
+    WHERE CURRENT_DATE >= dataInizio - 2
+      AND registrazioniAperte = 1;
+END;
+$$;
+
 --- INSERT ---
 
 INSERT INTO PARTECIPANTE (nome, cognome, email, password)

@@ -2,8 +2,8 @@ package controller;
 
 import dao.UtenteDAO;
 import dao.HackathonDAO;
-import ImplementazionePostgresDAO.HackathonImplementazionePostgresDAO;
-import ImplementazionePostgresDAO.UtenteImplementazionePostgresDAO;
+import implementazionepostgresdao.HackathonImplementazionePostgresDAO;
+import implementazionepostgresdao.UtenteImplementazionePostgresDAO;
 import model.*;
 import util.EDatabaseType;
 import util.ERuolo;
@@ -16,14 +16,12 @@ import java.util.List;
 
 public class Controller
 {
-    // DEBUG ONLY
-    ArrayList<Partecipante> partecipanti;
-    ArrayList<Giudice> giudici;
-    ArrayList<Organizzatore> organizzatori;
-    ArrayList<Hackathon> hackathons;
+    List<Partecipante> partecipanti;
+    List<Giudice> giudici;
+    List<Organizzatore> organizzatori;
+    List<Hackathon> hackathons;
 
     Utente utente;
-    // --
 
     UtenteDAO utenteImplementazioneDAO;
     HackathonDAO hackathonutenteImplementazioneDAO;
@@ -43,14 +41,10 @@ public class Controller
                 break;
         }
 
-        hackathons = new ArrayList<>();
-
         partecipanti = new ArrayList<>();
         giudici = new ArrayList<>();
         organizzatori = new ArrayList<>();
         hackathons = new ArrayList<>();
-
-
     }
 
     public List<Partecipante> getAllPartecipantUsers()
@@ -96,6 +90,7 @@ public class Controller
 
     public Team isLocalTeamInHackathon(String hackathon, List<Team> team)
     {
+        if(team == null) return null;
         for(Hackathon h : hackathons)
         {
             if (h.getTitolo().equals(hackathon)) {
@@ -151,7 +146,7 @@ public class Controller
 
     public List<Team> getLocalCurrentUserTeam()
     {
-        ArrayList<Team> teams = new ArrayList<>();
+        List<Team> teams = new ArrayList<>();
         for(Hackathon hackathon : hackathons)
         {
             for(Team m : hackathon.getTeams())

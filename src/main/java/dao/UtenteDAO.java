@@ -5,7 +5,7 @@ import model.Partecipante;
 import model.Utente;
 import util.ERuolo;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface UtenteDAO
 {
@@ -33,7 +33,7 @@ public interface UtenteDAO
 
     boolean addDocument(String team, String hackathon, String contenuto);
 
-    ArrayList<Partecipante> getAllPartecipanti();
+    List<Partecipante> getAllPartecipanti();
 
     /*
         +-+-+-+-+-+-+-+

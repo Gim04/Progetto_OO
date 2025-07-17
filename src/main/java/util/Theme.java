@@ -25,10 +25,10 @@ public class Theme
     public static final ImageIcon ICON_ADD = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/add.png")));
     public static final ImageIcon ICON_COMMENT = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/comment.png")));
     public static final ImageIcon ICON_DOCS = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/docs.png")));
-    public static final ImageIcon ICON_EYE = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/eye.png")));
     public static final ImageIcon ICON_GROUP = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/group.png")));
     public static final ImageIcon ICON_PERSON_ADD = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/person_add.png")));
     public static final ImageIcon ICON_SUB = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/sub.png")));
     public static final ImageIcon ICON_UNLOCK = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/unlock.png")));
     public static final ImageIcon ICON_VOTE = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/vote.png")));
+    public static final ImageIcon ICON_LEADERBOARD = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/leaderboard.png")));
 }

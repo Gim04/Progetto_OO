@@ -1,16 +1,14 @@
-package ImplementazionePostgresDAO;
+package implementazionepostgresdao;
 
 import dao.HackathonDAO;
 import database.ConnessioneDatabase;
 import model.*;
 
 import javax.swing.table.DefaultTableModel;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HackathonImplementazionePostgresDAO implements HackathonDAO
 {
@@ -29,11 +27,10 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         |H|a|c|k|a|t|h|o|n|
         +-+-+-+-+-+-+-+-+-+
      */
-    public ArrayList<Hackathon> getHackathonList()
+    public List<Hackathon> getHackathonList()
     {
-        ArrayList<Hackathon> r = new ArrayList<>();
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id");
+        List<Hackathon> r = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id")){
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.isBeforeFirst()) {
@@ -57,7 +54,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
                 h.setDescrizioneProblema(rs.getString("descrizioneProblema"));
 
-                ArrayList<Team> hteams = getTeamForHackathon(h);
+                List<Team> hteams = getTeamForHackathon(h);
                 if(hteams == null) hteams = new ArrayList<>();
                 h.setTeams(hteams);
                 setPartecipantiOfHackathon(h);
@@ -73,8 +70,9 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
     private void setPartecipantiOfHackathon(Hackathon h)
     {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM HACKATHON_PARTECIPANTE JOIN HACKATHON ON hackathon.id = HACKATHON_PARTECIPANTE.hackathon JOIN Partecipante ON Partecipante.email = HACKATHON_PARTECIPANTE.partecipante WHERE hackathon.titolo = \'"+h.getTitolo()+"\'");
+
+        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM HACKATHON_PARTECIPANTE JOIN HACKATHON ON hackathon.id = HACKATHON_PARTECIPANTE.hackathon JOIN Partecipante ON Partecipante.email = HACKATHON_PARTECIPANTE.partecipante WHERE hackathon.titolo = ?")){
+            stmt.setString(1, h.getTitolo());
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next())
@@ -86,14 +84,15 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         }
     }
 
-    public ArrayList<Hackathon> getHackathonListForJudge(String emailGiudice)
+    public List<Hackathon> getHackathonListForJudge(String emailGiudice)
     {
-        ArrayList<Hackathon> r = new ArrayList<>();
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id " +
-                                                                     "JOIN HACKATHON_GIUDICE ON hackathon.id = HACKATHON_GIUDICE.hackathon "+
-                                                                     "JOIN giudice ON HACKATHON_GIUDICE.giudice = giudice.email " +
-                                                                     "WHERE giudice.email = '"+ emailGiudice + "'");
+        List<Hackathon> r = new ArrayList<>();
+        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.id " +
+                "JOIN HACKATHON_GIUDICE ON hackathon.id = HACKATHON_GIUDICE.hackathon "+
+                "JOIN giudice ON HACKATHON_GIUDICE.giudice = giudice.email " +
+                "WHERE giudice.email = ?")) {
+
+            stmt.setString(1, emailGiudice);
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.isBeforeFirst()) {
@@ -116,7 +115,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
                         rs.getBoolean("registrazioniAperte")
                 );
 
-                ArrayList<Team> teams = getTeamForHackathon(h);
+                List<Team> teams = getTeamForHackathon(h);
                 for(Team t : teams) {
                     h.addTeam(t);
                 }
@@ -133,13 +132,14 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return r;
     }
 
-    public ArrayList<Hackathon> getHackathonListForOrganizzatore(String email)
+    public List<Hackathon> getHackathonListForOrganizzatore(String email)
     {
-        ArrayList<Hackathon> r = new ArrayList<>();
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.ID " +
-                    "JOIN organizzatore ON hackathon.organizzatore = organizzatore.email " +
-                    "WHERE organizzatore.email = '"+ email + "'");
+        List<Hackathon> r = new ArrayList<>();
+        try( PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hackathon JOIN sede ON hackathon.sede = sede.ID " +
+                "JOIN organizzatore ON hackathon.organizzatore = organizzatore.email " +
+                "WHERE organizzatore.email = ?")) {
+
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.isBeforeFirst()) {
@@ -162,7 +162,7 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
                         rs.getBoolean("registrazioniAperte")
                 );
 
-                ArrayList<Team> teams = getTeamForHackathon(h);
+                List<Team> teams = getTeamForHackathon(h);
                 for(Team t : teams) {
                     h.addTeam(t);
                 }
@@ -184,16 +184,22 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
     {
 
         boolean result = false;
+        int val = 0;
+        if(registrazioni) val = 1;
 
-        try
+        //TODO cambiare sede
+        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO hackathon(sede, titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
+                "VALUES (1,?,?,?,?,?,?,?)"))
         {
-            ResultSet set = null;
-            PreparedStatement stmt;
 
-            int val = 0;
-            if(registrazioni) val = 1;
-            stmt = connection.prepareStatement("INSERT INTO hackathon(sede, titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
-                    "VALUES (1," + "'" + nome + "', '" + dimensioneTeam + "', '" + dataI + "', '" + dataF + "', " + val + ",'" + maxIscritti + "', \'"+ email +"\')");    //TODO cambiare sede
+            stmt.setString(1, nome);
+            stmt.setInt(2, dimensioneTeam);
+            stmt.setDate(3, Date.valueOf(dataI));
+            stmt.setDate(4, Date.valueOf(dataF));
+            stmt.setInt(5, val);
+            stmt.setInt(6, maxIscritti);
+            stmt.setString(7, email);
+
             stmt.execute();
 
             result = true;
@@ -206,14 +212,17 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return result;
     }
 
-    public ArrayList<Documento> getDocumenti(String nome, String hackathon)
+    public List<Documento> getDocumenti(String nome, String hackathon)
     {
-        ArrayList<Documento> r = new ArrayList<>();
+        List<Documento> r = new ArrayList<>();
 
+        PreparedStatement stmt = null;
         try
         {
-            ResultSet set = null;
-            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM team WHERE nome = '"+ nome + "'");
+            stmt = connection.prepareStatement("SELECT ID FROM team WHERE nome = ?");
+            stmt.setString(1, nome);
+
+            ResultSet set;
             set = stmt.executeQuery();
 
             if(!set.next())
@@ -221,7 +230,11 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
             int id = set.getInt("ID");
 
-            stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = '"+ hackathon + "'");
+            stmt.close();
+
+            stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = ?");
+            stmt.setString(1, hackathon);
+
             set = stmt.executeQuery();
 
             if(!set.next())
@@ -229,9 +242,13 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
             int idH = set.getInt("ID");
 
+            stmt.close();
+
             stmt = connection.prepareStatement(
-                    "SELECT * FROM team JOIN documento ON team.id = documento.team " + "JOIN TEAM_HACKATHON ON TEAM_HACKATHON.team = team.id WHERE team.id = " + id + " AND TEAM_HACKATHON.hackathon = " + idH
+                    "SELECT * FROM team JOIN documento ON team.id = documento.team " + "JOIN TEAM_HACKATHON ON TEAM_HACKATHON.team = team.id WHERE team.id = ? AND TEAM_HACKATHON.hackathon = ?"
             );
+            stmt.setInt(1, id);
+            stmt.setInt(2, idH);
             set = stmt.executeQuery();
 
             if(!set.next())
@@ -249,6 +266,8 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         }catch (Exception e)
         {
             e.printStackTrace();
+        }finally {
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
 
         return new ArrayList<>();
@@ -256,11 +275,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
     public boolean checkRegistrazioniChiuse(String hackathon)
     {
-        try
+        try(PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = ? AND registrazioniAperte=1"))
         {
             ResultSet set = null;
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = '"+ hackathon + "' AND registrazioniAperte=1");
+            stmt.setString(1, hackathon);
+
             set = stmt.executeQuery();
 
             if(!set.next())
@@ -281,20 +301,22 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         DefaultTableModel model = null;
         String[] columns = {"Team", "Voto"};
 
-        try
+        try(PreparedStatement stmt = connection.prepareStatement("SELECT team.nome as TN, team.voto as TV FROM hackathon JOIN team_hackathon ON hackathon.id = team_hackathon.hackathon " +
+                "JOIN team on team_hackathon.team = team.id " +
+                "WHERE titolo = ? " +
+                "ORDER BY team.voto DESC"))
         {
             ResultSet set = null;
-            PreparedStatement stmt = connection.prepareStatement("SELECT team.nome as TN, team.voto as TV FROM hackathon JOIN team_hackathon ON hackathon.id = team_hackathon.hackathon " +
-                    "JOIN team on team_hackathon.team = team.id " +
-                    "WHERE titolo = '"+ hackathon + "'" +
-                    "ORDER BY team.voto DESC");
+
+            stmt.setString(1, hackathon);
+
             set = stmt.executeQuery();
 
             if(!set.next())
                 return new DefaultTableModel(null, columns);
 
-            ArrayList<String> c0 = new ArrayList<>();
-            ArrayList<String> c1 = new ArrayList<>();
+            List<String> c0 = new ArrayList<>();
+            List<String> c1 = new ArrayList<>();
 
             do
             {
@@ -330,14 +352,16 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         |U|t|i|l|i|t|y|
         +-+-+-+-+-+-+-+
      */
-    public ArrayList<Team> getTeamForHackathon(Hackathon hackathon)
+    public List<Team> getTeamForHackathon(Hackathon hackathon)
     {
-        ArrayList<Team> r = new ArrayList<>();
+        List<Team> r = new ArrayList<>();
 
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT team.id, nome, voto FROM TEAM_HACKATHON " +
-                    "JOIN hackathon ON hackathon.id = TEAM_HACKATHON.hackathon " +
-                    "JOIN team ON team.id = TEAM_HACKATHON.team WHERE hackathon.titolo = '" + hackathon.getTitolo() + "'");
+        try( PreparedStatement stmt = connection.prepareStatement("SELECT team.id, nome, voto FROM TEAM_HACKATHON " +
+                "JOIN hackathon ON hackathon.id = TEAM_HACKATHON.hackathon " +
+                "JOIN team ON team.id = TEAM_HACKATHON.team WHERE hackathon.titolo = ?")) {
+
+            stmt.setString(1, hackathon.getTitolo());
+
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.isBeforeFirst()) {
@@ -359,14 +383,16 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return r;
     }
 
-    public ArrayList<Partecipante> getPartecipantiOfTeam(int team)
+    public List<Partecipante> getPartecipantiOfTeam(int team)
     {
-        ArrayList<Partecipante> r = new ArrayList<>();
+        List<Partecipante> r = new ArrayList<>();
 
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT nome, email, password, cognome FROM partecipante " +
-                    "JOIN TEAM_PARTECIPANTE ON TEAM_PARTECIPANTE.partecipante = partecipante.email " +
-                    "WHERE TEAM_PARTECIPANTE.team = " + team);
+        try(PreparedStatement stmt = connection.prepareStatement("SELECT nome, email, password, cognome FROM partecipante " +
+                "JOIN TEAM_PARTECIPANTE ON TEAM_PARTECIPANTE.partecipante = partecipante.email " +
+                "WHERE TEAM_PARTECIPANTE.team = ?")) {
+
+            stmt.setInt(1, team);
+
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.isBeforeFirst()) {
