@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 import gui.base.TableForm;
 import gui.custom.RoundedFlatButton;
+import gui.util.FrameManager;
 import model.Documento;
 
 import javax.swing.*;
@@ -13,11 +14,13 @@ import java.awt.Color;
 
 import model.Giudice;
 import model.Partecipante;
+import util.Theme;
 
 public class DocumentUI extends TableForm
 {
     RoundedFlatButton btnAddComment;
     RoundedFlatButton btnAddDocument;
+    RoundedFlatButton backButton;
 
     public DocumentUI(Controller ctrl, JFrame jframe, String team, String hackathon)
     {
@@ -25,9 +28,15 @@ public class DocumentUI extends TableForm
 
         refreshUILocalTable(team, hackathon);
 
+        backButton = new RoundedFlatButton(Theme.backColor, Theme.backColor2, Theme.ICON_UNDO);
+
         if(controller.getCurrentUser() instanceof Giudice) {
 
-            btnAddComment = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
+            backButton.addActionListener(e -> {
+                FrameManager.Instance.switchFrame(new GiudiceTeamGui(frame, controller, hackathon));
+            });
+
+            btnAddComment = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), Theme.ICON_ADD);
             btnAddComment.addActionListener( e-> {
                 if (table.getSelectedRow() < 0) {
                     JOptionPane.showMessageDialog(frame, "Devi selezionare un documento", "Error", JOptionPane.ERROR_MESSAGE);
@@ -47,10 +56,15 @@ public class DocumentUI extends TableForm
             });
 
             btnPanel.add(btnAddComment);
+            btnPanel.add(backButton);
         }
         else if(controller.getCurrentUser() instanceof Partecipante)
         {
-            btnAddDocument = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
+            backButton.addActionListener(e -> {
+                FrameManager.Instance.switchFrame(new TeamUI(controller, frame, team, hackathon));
+            });
+
+            btnAddDocument = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, Theme.ICON_ADD);
             btnAddDocument.addActionListener(e-> {
                 final String input = JOptionPane.showInputDialog("Contenuto documento:");
                 if (input != null) {
@@ -65,6 +79,8 @@ public class DocumentUI extends TableForm
 
             btnPanel.add(btnAddDocument);
         }
+
+        btnPanel.add(backButton);
     }
 
     public void refreshUILocalTable(String team, String hackathon)

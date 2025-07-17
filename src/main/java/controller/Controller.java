@@ -342,9 +342,9 @@ public class Controller
         return utenteImplementazioneDAO.inviteJudgeToHackathon(email, titolo);
     }
 
-    public boolean aggiungiHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email)
+    public boolean aggiungiHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email, Sede sede)
     {
-        return hackathonutenteImplementazioneDAO.inserisciHackathon(nome, dimensioneTeam, maxIscritti, dataI, dataF, registrazioni, email);
+        return hackathonutenteImplementazioneDAO.inserisciHackathon(nome, dimensioneTeam, maxIscritti, dataI, dataF, registrazioni, email, sede);
     }
 
     public boolean votaTeam(String team, int voto)
@@ -479,5 +479,10 @@ public class Controller
         }
 
         return "???";
+    }
+
+    public List<String> getSedi()
+    {
+        return hackathonutenteImplementazioneDAO.getSedi();
     }
 }

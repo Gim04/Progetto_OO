@@ -14,6 +14,9 @@ public class Theme
     public static final Color secondaryColor = new Color(9, 28, 186);
     public static final Color secondaryColor2 = new Color(9, 34, 237);
 
+    public static final Color backColor = new Color(200, 0, 0);
+    public static final Color backColor2 = new Color(255, 77, 77);
+
     public static final Color gray = new Color(245, 245, 245);
     public static final Color gray2 = new Color(230, 230, 230);
 
@@ -31,4 +34,6 @@ public class Theme
     public static final ImageIcon ICON_UNLOCK = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/unlock.png")));
     public static final ImageIcon ICON_VOTE = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/vote.png")));
     public static final ImageIcon ICON_LEADERBOARD = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/leaderboard.png")));
+    public static final ImageIcon ICON_UNDO = new ImageIcon(Objects.requireNonNull(Theme.class.getResource("/icons/undo.png")));
+    
 }

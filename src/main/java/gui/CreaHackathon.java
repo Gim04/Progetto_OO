@@ -5,6 +5,7 @@ import gui.custom.FlatButton;
 import gui.custom.FlatCheckBox;
 import gui.custom.FlatTextField;
 import gui.util.FrameManager;
+import model.Sede;
 import util.Theme;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class CreaHackathon extends JPanel
 {
@@ -24,6 +26,7 @@ public class CreaHackathon extends JPanel
     private FlatTextField dataInizio;
     private FlatTextField dataFine;
     private FlatCheckBox registrazioni;
+    private JComboBox<String> sedeComboBox;
 
     private JLabel nomeLabel;
     private JLabel dimensioneLabel;
@@ -31,6 +34,7 @@ public class CreaHackathon extends JPanel
     private JLabel dataInizioLabel;
     private JLabel dataFineLabel;
     private JLabel registrazioniLabel;
+    private JLabel sedeLabel;
 
     private JLabel formLabel;
 
@@ -63,6 +67,12 @@ public class CreaHackathon extends JPanel
         dataFine    = new FlatTextField();
         registrazioni = new FlatCheckBox();
 
+        List<String> sedi = controller.getSedi();
+        String[] sediArr = new String[sedi.size()];
+        for(int i = 0; i < sedi.size(); i++)
+            sediArr[i] = sedi.get(i);
+        sedeComboBox = createFlatJComboxBox(sediArr);
+
         nomeLabel = new JLabel("Nome hackathon:");
         nomeLabel.setFont(Theme.paragraph);
 
@@ -80,6 +90,9 @@ public class CreaHackathon extends JPanel
 
         registrazioniLabel = new JLabel("Registrazioni Aperte:");
         registrazioniLabel.setFont(Theme.paragraph);
+
+        sedeLabel = new JLabel("Sede:");
+        sedeLabel.setFont(Theme.paragraph);
 
         formLabel = new JLabel("Crea Hackathon");
         formLabel.setFont(Theme.header);
@@ -155,9 +168,18 @@ public class CreaHackathon extends JPanel
         gbc.weightx = 0.7;
         form.add(registrazioni, gbc);
 
-        // Riga 6 - Pulsante Crea Hackathon
+        // Riga 6 - Combobox
         gbc.gridx = 0;
         gbc.gridy = 7;
+        gbc.weightx = 0.3;
+        form.add(sedeLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        form.add(sedeComboBox, gbc);
+
+        // Riga 7 - Pulsante Crea Hackathon
+        gbc.gridx = 0;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
@@ -192,7 +214,9 @@ public class CreaHackathon extends JPanel
                 return;
             }
 
-            if(!controller.aggiungiHackathon(nome.getText(), dimensioneValue, maxIscrittiValue, dateI, dateF, registrazioni.isSelected(), controller.getCurrentUser().getEmail()))
+            String[] decomposed = ((String)sedeComboBox.getSelectedItem()).split(",");
+            Sede decomposedSede = new Sede(decomposed[1], decomposed[0], Integer.parseInt(decomposed[2]));
+            if(!controller.aggiungiHackathon(nome.getText(), dimensioneValue, maxIscrittiValue, dateI, dateF, registrazioni.isSelected(), controller.getCurrentUser().getEmail(), decomposedSede))
             {
                 JOptionPane.showMessageDialog(frame, "Si e' verificato un errore!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -218,6 +242,18 @@ public class CreaHackathon extends JPanel
         }
 
         return null;
+    }
+
+    private JComboBox<String> createFlatJComboxBox(String[] items)
+    {
+        JComboBox<String> comboBox = new JComboBox<>(items);
+        comboBox.setFont(Theme.paragraph);
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setForeground(Color.DARK_GRAY);
+        comboBox.setFocusable(false);
+
+        return comboBox;
+
     }
 
 }

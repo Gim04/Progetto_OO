@@ -16,6 +16,7 @@ public class GiudiceTeamGui extends JPanel
     private JPanel btnPanel;
     private RoundedFlatButton votaTeamButton;
     private RoundedFlatButton commentaDocumentoButton;
+    private RoundedFlatButton backButton;
     private JTable table1;
 
     JFrame frame;
@@ -34,6 +35,12 @@ public class GiudiceTeamGui extends JPanel
         btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         refreshUILocalTable(hackathon);
+
+        backButton = new RoundedFlatButton(Theme.backColor, Theme.backColor2, Theme.ICON_UNDO);
+
+        backButton.addActionListener(e -> {
+            FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
+        });
 
         votaTeamButton = new RoundedFlatButton(new Color(9, 28, 186, 255), new Color(9, 34, 237, 255), Theme.ICON_VOTE);
 
@@ -75,6 +82,7 @@ public class GiudiceTeamGui extends JPanel
 
         btnPanel.add(votaTeamButton);
         btnPanel.add(commentaDocumentoButton);
+        btnPanel.add(backButton);
 
         add(scrollPane1, BorderLayout.CENTER);
         add(btnPanel, BorderLayout.SOUTH);

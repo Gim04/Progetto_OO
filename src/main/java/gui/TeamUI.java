@@ -19,6 +19,8 @@ public class TeamUI extends JPanel {
     private JPanel btnPanel;
     private RoundedFlatButton invitePartecipante;
     private RoundedFlatButton addDocument;
+    private RoundedFlatButton backButton;
+
     private JList<String> partecipanti;
 
     private Controller controller;
@@ -63,6 +65,11 @@ public class TeamUI extends JPanel {
 
         invitePartecipante = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, Theme.ICON_PERSON_ADD);
         addDocument = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_DOCS);
+        backButton = new RoundedFlatButton(Theme.backColor, Theme.backColor2, Theme.ICON_UNDO);
+
+        backButton.addActionListener(e -> {
+            FrameManager.Instance.switchFrame(new HackathonList(controller.getLocalAllHackathons(), controller, frame));
+        });
 
         invitePartecipante.addActionListener(e -> {
             if (controller.checkRegistrazioniChiuse(hackathon))
@@ -114,6 +121,19 @@ public class TeamUI extends JPanel {
         addDocument.setMinimumSize(new Dimension(32, 32));
         addDocument.setMaximumSize(new Dimension(32, 32));
         topPanel.add(addDocument, gbc);
+
+
+        // Colonna 2: Bottone backButton (in alto a destra)
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        addDocument.setPreferredSize(new Dimension(32, 32));
+        addDocument.setMinimumSize(new Dimension(32, 32));
+        addDocument.setMaximumSize(new Dimension(32, 32));
+        topPanel.add(backButton, gbc);
 
         btnPanel.add(invitePartecipante);
 

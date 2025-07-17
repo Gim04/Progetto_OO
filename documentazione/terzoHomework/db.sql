@@ -402,8 +402,18 @@ VALUES
 ('Giulio','Dardano ','giulio.dardano@example.com', '1somorfismo!');
 
 
-INSERT INTO Sede (citta, via, codicePostale)
-VALUES ('Politecnico di Milano', 'Piazza Leonardo da Vinci, 32', 80001);
+INSERT INTO Sede (citta, via, codicePostale) VALUES
+('Politecnico di Milano', 'Piazza Leonardo da Vinci 32', 80001),
+('Napoli', 'Villa Doria D’Angri (Università Parthenope)', 80132),
+('NYC', '5th Ave', 10022),
+('New Delhi', 'Distretto di New Delhi', 110001),
+('Bangkok', 'Queen Sirikit National Convention Center', 10100),
+('Londra', '8 Northumberland Avenue', 45462),
+('Waterloo', 'Lazaridis Business School', 687432),
+('Tokyo', 'Shinanomachi', 160-0016),
+('Buenos Aires', 'Recoleta', 1050),
+('Sofia', 'Centro città', 2074),
+('Monaco', 'Monte-Carlo', 98000);
 
 INSERT INTO Hackathon (sede, dataInizio, maxIscritti, registrazioniAperte, dataFine, dimensioneTeam, titolo, descrizioneProblema, organizzatore) VALUES
 (1, CURRENT_DATE-5, 100, 1, CURRENT_DATE+10, 4, 'HackTheFuture 2025', 'web spy', 'giulio.dardano@example.com'),

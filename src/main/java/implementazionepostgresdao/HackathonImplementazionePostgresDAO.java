@@ -180,27 +180,41 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
     }
 
 
-    public boolean inserisciHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email)
+    public boolean inserisciHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email, Sede sede)
     {
 
         boolean result = false;
         int val = 0;
         if(registrazioni) val = 1;
 
-        //TODO cambiare sede
-        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO hackathon(sede, titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
-                "VALUES (1,?,?,?,?,?,?,?)"))
+        try
         {
+            PreparedStatement stmt = connection.prepareStatement("SELECT id FROM Sede WHERE citta=? AND via=? AND codicePostale=?");
+            stmt.setString(1, sede.getCitta());
+            stmt.setString(2, sede.getVia());
+            stmt.setInt(3, sede.getCodicePostale());
+            ResultSet set = stmt.executeQuery();
 
-            stmt.setString(1, nome);
-            stmt.setInt(2, dimensioneTeam);
-            stmt.setDate(3, Date.valueOf(dataI));
-            stmt.setDate(4, Date.valueOf(dataF));
-            stmt.setInt(5, val);
-            stmt.setInt(6, maxIscritti);
-            stmt.setString(7, email);
+            if(!set.next())
+                return false;
+
+            int id = set.getInt("id");
+
+            stmt.close();
+            stmt = connection.prepareStatement("INSERT INTO hackathon(sede, titolo, dimensioneTeam, dataInizio, dataFine, registrazioniAperte, maxIscritti, organizzatore)" +
+                    "VALUES (?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, id);
+            stmt.setString(2, nome);
+            stmt.setInt(3, dimensioneTeam);
+            stmt.setDate(4, Date.valueOf(dataI));
+            stmt.setDate(5, Date.valueOf(dataF));
+            stmt.setInt(6, val);
+            stmt.setInt(7, maxIscritti);
+            stmt.setString(8, email);
 
             stmt.execute();
+
+            stmt.close();
 
             result = true;
 
@@ -401,6 +415,31 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
 
             while (rs.next()) {
                 r.add(new Partecipante(rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("password")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return r;
+    }
+
+    public List<String> getSedi()
+    {
+        List<String> r = new ArrayList<>();
+
+        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Sede"))
+        {
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                return r;
+            }
+
+            while (rs.next()) {
+                r.add(rs.getString("citta") + "," + rs.getString("via") + "," + rs.getString("codicePostale"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
