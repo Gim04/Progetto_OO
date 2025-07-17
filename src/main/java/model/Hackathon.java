@@ -1,5 +1,6 @@
 package model;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,9 +15,9 @@ public class Hackathon
     private String descrizioneProblema;
     private boolean registrazioniAperte = false;
 
-    private ArrayList<Team> teams;
-    private ArrayList<Partecipante> partecipanti;
-    private ArrayList<Giudice> giudici;
+    private List<Team> teams;
+    private List<Partecipante> partecipanti;
+    private List<Giudice> giudici;
 
     public Hackathon(String titolo, Sede sede, int dimensioneTeam, int maxIscritti, Date dataInizio, Date dataFine, boolean registrazioniAperte)
     {
@@ -33,11 +34,11 @@ public class Hackathon
         giudici = new ArrayList<>();
     }
 
-    public ArrayList<Team> getTeams()
+    public List<Team> getTeams()
     {
         return teams;
     }
-    public ArrayList<Partecipante> getPartecipanti()
+    public List<Partecipante> getPartecipanti()
     {
         return partecipanti;
     }
@@ -65,7 +66,7 @@ public class Hackathon
         if(isSubscribed(partecipante))
             team.addPartecipante(partecipante);
         else
-            System.out.println("Impossibile aggiungere '" + partecipante.getNome() + "', non iscritto all'hackathon '"+titolo+"'!");
+            System.out.println("Impossibile aggiungere  '" + partecipante.getNome() + "', non iscritto all'hackathon '"+titolo+"'!");
     }
 
     public void iscriviPartecipante(Partecipante partecipante)
@@ -87,7 +88,7 @@ public class Hackathon
         partecipanti.add(partecipante);
     }
 
-    public void setTeams(ArrayList<Team> teams)
+    public void setTeams(List<Team> teams)
     {
         this.teams = teams;
     }
@@ -105,11 +106,6 @@ public class Hackathon
     public void setRegistrazioniAperte(boolean registrazioniAperte)
     {
         this.registrazioniAperte = registrazioniAperte;
-
-        if(registrazioniAperte == false)
-        {
-            //classifica.updateClassifica(teams);
-        }
     }
 
     public boolean getRegistrazioniAperte()

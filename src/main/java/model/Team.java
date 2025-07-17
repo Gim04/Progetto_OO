@@ -1,13 +1,14 @@
 package model;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class Team
 {
     private String nome;
     private int voto;
-    private ArrayList<Partecipante> partecipanti;
-    private ArrayList<Documento> documenti;
+    private List<Partecipante> partecipanti;
+    private List<Documento> documenti;
 
     public Team(String nome)
     {
@@ -15,11 +16,6 @@ public class Team
 
         partecipanti = new ArrayList<>();
         documenti = new ArrayList<>();
-    }
-
-    public void caricaDocumento(Documento documento)
-    {
-        this.documenti.add(documento);
     }
 
     public void addPartecipante(Partecipante partecipante)
@@ -41,7 +37,7 @@ public class Team
         return nome;
     }
 
-    public ArrayList<Documento> getDocumenti()
+    public List<Documento> getDocumenti()
     {
         return documenti;
     }
@@ -51,12 +47,12 @@ public class Team
         return partecipanti.size();
     }
 
-    public ArrayList<Partecipante> getPartecipanti()
+    public List<Partecipante> getPartecipanti()
     {
         return partecipanti;
     }
 
-    public void setPartecipanti(ArrayList<Partecipante> partecipantiOfTeam) {
+    public void setPartecipanti(List<Partecipante> partecipantiOfTeam) {
         this.partecipanti = partecipantiOfTeam;
     }
 

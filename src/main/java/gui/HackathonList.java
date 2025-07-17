@@ -9,9 +9,8 @@ import util.Theme;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class HackathonList extends JPanel
@@ -24,7 +23,7 @@ public class HackathonList extends JPanel
     private JPanel rowsViewport;
     private JScrollPane scrollPane;
 
-    public HackathonList(ArrayList<Hackathon> hackathons, Controller c, JFrame f) {
+    public HackathonList(List<Hackathon> hackathons, Controller c, JFrame f) {
         controller = c;
         frame = f;
 
@@ -46,7 +45,7 @@ public class HackathonList extends JPanel
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void refreshLocalUIHackathonList(ArrayList<Hackathon> hackathons)
+    public void refreshLocalUIHackathonList(List<Hackathon> hackathons)
     {
         rowsViewport.removeAll();
         rowsViewport.revalidate();
@@ -55,8 +54,8 @@ public class HackathonList extends JPanel
         int i = 0;
         for(Hackathon h : hackathons)
         {
-            ArrayList<JButton> btns = new ArrayList<>();
-            ArrayList<Team> t = controller.getLocalCurrentUserTeam();
+            List<JButton> btns = new ArrayList<>();
+            List<Team> t = controller.getLocalCurrentUserTeam();
 
             if (controller.getCurrentUser() instanceof Partecipante)
             {
@@ -66,7 +65,7 @@ public class HackathonList extends JPanel
                     {
                         Team x = controller.isLocalTeamInHackathon(h.getTitolo(), t);
                         if (x != null) {
-                            JButton teamBtn = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/group.png"))));
+                            JButton teamBtn = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_GROUP);
                             teamBtn.addActionListener(e -> {
 
                                 FrameManager.Instance.switchFrame(new TeamUI(controller, frame, x.getNome(), h.getTitolo()));
@@ -75,10 +74,10 @@ public class HackathonList extends JPanel
                             btns.add(teamBtn);
                         }
                     }else{
-                        JButton creaTeam = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
+                        JButton creaTeam = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, Theme.ICON_ADD);
                         creaTeam.addActionListener(e -> {
                                 if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
-                                    JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon! ", "Error ", JOptionPane.ERROR_MESSAGE);
                                     return;
                                 }
                                 final String input = JOptionPane.showInputDialog("Nome team:");
@@ -90,9 +89,9 @@ public class HackathonList extends JPanel
                                         refreshLocalUIHackathonList(controller.getLocalAllHackathons());
                                     }
                                     else
-                                        JOptionPane.showMessageDialog(frame, "Non e' stato possibile creare il team!", "Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(frame, "Non e' stato possibile creare il team!", "Error ", JOptionPane.ERROR_MESSAGE);
                                 } else {
-                                    JOptionPane.showMessageDialog(null, "Operazione annullata.");
+                                    JOptionPane.showMessageDialog(null, "Operazione annullata. ");
                                 }
                         });
 
@@ -100,7 +99,7 @@ public class HackathonList extends JPanel
                     }
                 }else
                 {
-                    JButton iscrivitiAdHackathon = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/sub.png"))));
+                    JButton iscrivitiAdHackathon = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_SUB);
                     iscrivitiAdHackathon.addActionListener(e -> {
                         if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di volerti iscrivere ad '" + h.getTitolo() + "\'?") == 0)
                         {
@@ -118,13 +117,13 @@ public class HackathonList extends JPanel
             }
             else if(controller.getCurrentUser() instanceof Giudice)
             {
-                JButton visualizzaTeam = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/group.png"))));
-                JButton pubblicaProblema = new RoundedFlatButton(Theme.actionColor, Theme.actionColor, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
+                JButton visualizzaTeam = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_GROUP);
+                JButton pubblicaProblema = new RoundedFlatButton(Theme.actionColor, Theme.actionColor, Theme.ICON_ADD);
 
                 visualizzaTeam.addActionListener(e ->
                 {
                         if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
-                            JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", " Error", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                         FrameManager.Instance.switchFrame(new GiudiceTeamGui(frame, controller, h.getTitolo()));
@@ -132,7 +131,7 @@ public class HackathonList extends JPanel
 
                 pubblicaProblema.addActionListener(e -> {
                     if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
-                        JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", " Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     final String input = JOptionPane.showInputDialog("Problema:");
@@ -154,10 +153,10 @@ public class HackathonList extends JPanel
             }
             else if(controller.getCurrentUser() instanceof Organizzatore)
             {
-                JButton invitaGiudice = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/person_add.png"))));
+                JButton invitaGiudice = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_ADD);
 
-                JButton apriRegistrazioni = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/unlock.png"))));
-                if (controller.getLocalRegistrazioniAperteOfHackathon(h.getTitolo()) == true) {
+                JButton apriRegistrazioni = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, Theme.ICON_UNLOCK);
+                if (controller.getLocalRegistrazioniAperteOfHackathon(h.getTitolo())) {
                     apriRegistrazioni.setEnabled(false);
                 } else {
                     apriRegistrazioni.setEnabled(true);
@@ -208,7 +207,7 @@ public class HackathonList extends JPanel
         if(controller.getCurrentUser() instanceof Organizzatore)
         {
             // Pulsanti statici dell'organizzatore
-            JButton creaHackathon = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/add.png"))));
+            JButton creaHackathon = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, Theme.ICON_ADD);
             creaHackathon.addActionListener(e -> {
                 FrameManager.Instance.switchFrame(new CreaHackathon(frame, controller));
                 frame.setVisible(true);
@@ -219,7 +218,7 @@ public class HackathonList extends JPanel
         }
     }
 
-    private JPanel createRow(String title, Color background, String date, ArrayList<JButton> buttons)
+    private JPanel createRow(String title, Color background, String date, List<JButton> buttons)
     {
 
         JPanel row = new JPanel(new BorderLayout());
@@ -234,10 +233,10 @@ public class HackathonList extends JPanel
         textPanel.setOpaque(false);
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        titleLabel.setFont(Theme.hackathon_list_title);
 
         JLabel subtitleLabel = new JLabel(date);
-        subtitleLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        subtitleLabel.setFont(Theme.hackathon_list_p);
         subtitleLabel.setForeground(Color.GRAY);
 
         textPanel.add(titleLabel);

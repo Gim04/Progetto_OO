@@ -1,7 +1,7 @@
 package ImplementazionePostgresDAO;
 
-import DAO.UtenteDAO;
-import Database.ConnessioneDatabase;
+import dao.UtenteDAO;
+import database.ConnessioneDatabase;
 import model.*;
 import util.ERuolo;
 

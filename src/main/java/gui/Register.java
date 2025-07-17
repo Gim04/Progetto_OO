@@ -1,22 +1,22 @@
 package gui;
 
 import controller.Controller;
+import gui.custom.FlatButton;
+import gui.custom.FlatTextField;
 import gui.util.FrameManager;
+import util.Theme;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Register extends JPanel
 {
     private Controller controller;
-    private JFrame frame;
 
     private JLabel formLabel;
     private JPanel form;
@@ -40,9 +40,8 @@ public class Register extends JPanel
 
     public Register(Controller c, JFrame frame) {
         controller = c;
-        this.frame = frame;
 
-        frame.setTitle("Register");
+        frame.setTitle("Register ");
 
         setLayout(new GridBagLayout());
         setBackground(new Color(230, 230, 230));
@@ -70,7 +69,7 @@ public class Register extends JPanel
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        formLabel.setFont(new Font("SandSerif", Font.BOLD, 24));
+        formLabel.setFont(Theme.header);
         formLabel.setForeground(Color.DARK_GRAY);
         form.add(formLabel, gbc);
 
@@ -79,62 +78,62 @@ public class Register extends JPanel
         gbc.gridy++;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
-        nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        nameLabel.setFont(Theme.paragraph);
         form.add(nameLabel, gbc);
 
         // NAME FIELD
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        nameField = createFlatTextField();
+        nameField = new FlatTextField();
         form.add(nameField, gbc);
 
         // SURNAME LABEL
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.LINE_END;
-        surnameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        surnameLabel.setFont(Theme.paragraph);
         form.add(surnameLabel, gbc);
 
         // SURNAME FIELD
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        surnameField = createFlatTextField();
-        surnameField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        surnameField = new FlatTextField();
+        surnameField.setFont(Theme.paragraph);
         form.add(surnameField, gbc);
 
         // EMAIL LABEL
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.LINE_END;
-        emailLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        emailLabel.setFont(Theme.paragraph);
         form.add(emailLabel, gbc);
 
         // EMAIL FIELD
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        emailField = createFlatTextField();
-        emailField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        emailField = new FlatTextField();
+        emailField.setFont(Theme.paragraph);
         form.add(emailField, gbc);
 
         // PASSWORD LABEL
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.LINE_END;
-        passwordLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        passwordLabel.setFont(Theme.paragraph);
         form.add(passwordLabel, gbc);
 
         // PASSWORD FIELD
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         passwordField = createFlatPasswordField();
-        passwordField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        passwordField.setFont(Theme.paragraph);
         form.add(passwordField, gbc);
 
         // COMBOBOX LABEL
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.LINE_END;
-        ruoloLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        ruoloLabel.setFont(Theme.paragraph);
         form.add(ruoloLabel, gbc);
 
         // COMBOBOX FIELD
@@ -148,7 +147,7 @@ public class Register extends JPanel
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        registerButton = createFlatButton("Register");
+        registerButton = new FlatButton("Register");
         form.add(registerButton, gbc);
 
         // REGISTER LINK
@@ -159,7 +158,7 @@ public class Register extends JPanel
 
         JLabel loginLabel = new JLabel("<html>Hai un account? <a href='#'>Accedi Ora!</a></html>");
         loginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        loginLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        loginLabel.setFont(Theme.hackathon_list_p);
         loginLabel.setForeground(Color.GRAY);
 
         loginLabel.addMouseListener(new MouseAdapter() {
@@ -173,31 +172,29 @@ public class Register extends JPanel
         linkPanel.setBackground(Color.WHITE);
         linkPanel.add(loginLabel);
 
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (nameField.getText().isEmpty() || surnameField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getPassword().length == 0 || ruoloComboBox.getSelectedIndex() == -1) {
-                    JOptionPane.showMessageDialog(frame, "Tutti i campi sono obbligatori", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                if (passwordField.getPassword().length < 8) {
-                    JOptionPane.showMessageDialog(frame, "La password deve essere almeno di 8 caratteri", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
-                    JOptionPane.showMessageDialog(frame, "La mail deve essere in un formato: example@domain.com", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                String result = controller.registerUser(nameField.getText(), surnameField.getText(), emailField.getText(), passwordField.getText(), ruoloComboBox.getItemAt(ruoloComboBox.getSelectedIndex()).toString());
-                if (result != null) {
-                    JOptionPane.showMessageDialog(frame, result, "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Registrazione effettuata!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                }
+        registerButton.addActionListener(e-> {
+            if (nameField.getText().isEmpty() || surnameField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getPassword().length == 0 || ruoloComboBox.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(frame, "Tutti i campi sono obbligatori", "Error ", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            if (passwordField.getPassword().length < 8) {
+                JOptionPane.showMessageDialog(frame, "La password deve essere almeno di 8 caratteri", "Error ", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!emailField.getText().contains("@") || !emailField.getText().contains(".")) {
+                JOptionPane.showMessageDialog(frame, "La mail deve essere in un formato: example@domain.com", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String result = controller.registerUser(nameField.getText(), surnameField.getText(), emailField.getText(), passwordField.getText(), ruoloComboBox.getItemAt(ruoloComboBox.getSelectedIndex()).toString());
+            if (result != null) {
+                JOptionPane.showMessageDialog(frame, result, "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Registrazione effettuata!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         });
 
         form.add(linkPanel, gbc);
@@ -206,24 +203,10 @@ public class Register extends JPanel
         add(form, gbc);
     }
 
-    private JTextField createFlatTextField()
-    {
-        JTextField field = new JTextField(25);
-        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200,200,200),1),
-                BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-        field.setBackground(Color.WHITE);
-        field.setForeground(Color.DARK_GRAY);
-        field.setCaretColor(Color.DARK_GRAY);
-        return field;
-    }
-
     private JPasswordField createFlatPasswordField()
     {
         JPasswordField field = new JPasswordField(25);
-        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        field.setFont(Theme.paragraph);
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200,200,200),1),
                 BorderFactory.createEmptyBorder(8, 10, 8, 10)
@@ -232,23 +215,12 @@ public class Register extends JPanel
         field.setForeground(Color.DARK_GRAY);
         field.setCaretColor(Color.DARK_GRAY);
         return field;
-    }
-
-    private JButton createFlatButton(String text)
-    {
-        JButton button = new JButton(text);
-        button.setFocusPainted(false);
-        button.setBackground(new Color(70,130,180));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("SansSerif", Font.BOLD, 14));
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        return button;
     }
 
     private JComboBox<String> createFlatJComboxBox(String[] items)
     {
         JComboBox<String> comboBox = new JComboBox<>(items);
-        comboBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        comboBox.setFont(Theme.paragraph);
         comboBox.setBackground(Color.WHITE);
         comboBox.setForeground(Color.DARK_GRAY);
         comboBox.setFocusable(false);

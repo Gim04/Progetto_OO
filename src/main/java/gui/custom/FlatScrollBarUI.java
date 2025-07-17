@@ -25,7 +25,7 @@ public class FlatScrollBarUI extends BasicScrollBarUI
     public Dimension getPreferredSize(JComponent c)
     {
         // Verticale: larghezza sottile : altezza sottile
-        return (scrollbar.getOrientation() == JScrollBar.VERTICAL)
+        return (scrollbar.getOrientation() == VERTICAL)
                 ? new Dimension(THUMB_THICKNESS, 0)
                 : new Dimension(0, THUMB_THICKNESS);
     }

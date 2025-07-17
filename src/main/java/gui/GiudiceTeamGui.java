@@ -4,14 +4,12 @@ import controller.Controller;
 import gui.custom.RoundedFlatButton;
 import gui.util.FrameManager;
 import model.Team;
+import util.Theme;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 
 public class GiudiceTeamGui extends JPanel
 {
@@ -37,7 +35,7 @@ public class GiudiceTeamGui extends JPanel
 
         refreshUILocalTable(hackathon);
 
-        votaTeamButton = new RoundedFlatButton(new Color(9, 28, 186, 255), new Color(9, 34, 237, 255), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/vote.png"))));
+        votaTeamButton = new RoundedFlatButton(new Color(9, 28, 186, 255), new Color(9, 34, 237, 255), Theme.ICON_VOTE);
 
         votaTeamButton.addActionListener(e -> {
             if (table1.getSelectedRow() < 0) {
@@ -54,7 +52,7 @@ public class GiudiceTeamGui extends JPanel
                     controller.votaTeam(table1.getValueAt(table1.getSelectedRow(), 0).toString(), voto);
                 } catch (NumberFormatException e1) {
                     e1.printStackTrace();
-                    JOptionPane.showMessageDialog(frame, "Formato del voto non valido!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Formato del voto non valido!", "Error ", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Hai assegnato al team " + table1.getValueAt(table1.getSelectedRow(), 0).toString() + " il voto " + voto);
@@ -64,17 +62,15 @@ public class GiudiceTeamGui extends JPanel
             }
         });
 
-        commentaDocumentoButton = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/comment.png"))));
-        commentaDocumentoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        commentaDocumentoButton = new RoundedFlatButton(new Color(48, 198, 30), new Color(66, 209, 49), Theme.ICON_COMMENT);
+        commentaDocumentoButton.addActionListener( e-> {
                 if (table1.getSelectedRow() < 0) {
                     JOptionPane.showMessageDialog(frame, "Devi selezionare un team", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 FrameManager.Instance.switchFrame(new DocumentUI(controller, frame, table1.getValueAt(table1.getSelectedRow(), 0).toString(), hackathon));
-            }
+
         });
 
         btnPanel.add(votaTeamButton);
@@ -86,7 +82,7 @@ public class GiudiceTeamGui extends JPanel
 
     public void refreshUILocalTable(String hackathon) {
         controller.refreshHackathonListForGiudice();
-        final ArrayList<Team> teams = controller.getLocalTeamsInHackathon(hackathon);
+        final List<Team> teams = controller.getLocalTeamsInHackathon(hackathon);
 
         String[] columns = {"Team", "Voto"};
         String[][] data = new String[teams.size()][columns.length];

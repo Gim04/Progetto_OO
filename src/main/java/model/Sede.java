@@ -13,16 +13,4 @@ public class Sede
         this.codicePostale = codicePostale;
     }
 
-    public String getVia() {
-        return via;
-    }
-
-    public String getCitta() {
-        return citta;
-    }
-
-    public int getCodicePostale() {
-        return codicePostale;
-    }
-
 }

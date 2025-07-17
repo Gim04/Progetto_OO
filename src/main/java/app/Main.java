@@ -1,3 +1,5 @@
+package app;
+
 import gui.util.FrameManager;
 
 import javax.swing.*;

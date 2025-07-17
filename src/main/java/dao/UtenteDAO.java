@@ -1,13 +1,10 @@
-package DAO;
+package dao;
 
 import model.Hackathon;
 import model.Partecipante;
 import model.Utente;
 import util.ERuolo;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface UtenteDAO

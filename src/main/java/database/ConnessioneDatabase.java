@@ -1,10 +1,10 @@
-package Database;
+package database;
 
 import java.sql.*;
 
 public class ConnessioneDatabase
 {
-    public static ConnessioneDatabase Instance;
+    public static ConnessioneDatabase Instance; //pattern singleton
 
     Connection con;
     static final String DB_NAME = "hackathon";
@@ -24,14 +24,11 @@ public class ConnessioneDatabase
         {
             Class.forName(DRIVER);
             con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (ClassNotFoundException e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
+
 
     }
 

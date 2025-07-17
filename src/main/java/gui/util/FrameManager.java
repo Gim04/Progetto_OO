@@ -1,6 +1,6 @@
 package gui.util;
 
-import Database.ConnessioneDatabase;
+import database.ConnessioneDatabase;
 import controller.Controller;
 import util.EDatabaseType;
 
@@ -41,7 +41,6 @@ public class FrameManager
         frame.revalidate();
         frame.repaint();
 
-        System.gc();
     }
 
     public JFrame getWindow()

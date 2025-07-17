@@ -13,35 +13,7 @@ public class Partecipante extends Utente
         if(team.getDimensioneTeam() <= hackathon.getDimensioneTeam() && hackathon.getRegistrazioniAperte())
         {
             hackathon.addPartecipante(this, team);
-            System.out.println("Partecipante '" + this.getNome() + "' aggiunto al team '" + team.getNome() + "'!");
         }
-    }
-
-    public void iscrizioneHackathon(Hackathon h)
-    {
-        if(h != null)
-            h.iscriviPartecipante(this);
-    }
-
-    public Team creaTeam(String nome, Hackathon h)
-    {
-        if(h == null)
-        {
-            return null;
-        }
-
-        for(Team t : h.getTeams())
-        {
-            if(t.getNome().equals(nome))
-            {
-                return null;
-            }
-        }
-
-        Team t = new Team(nome);
-        h.addTeam(t);
-
-        return t;
     }
 
 }

@@ -1,11 +1,9 @@
 package ImplementazionePostgresDAO;
 
-import DAO.HackathonDAO;
-import Database.ConnessioneDatabase;
-import controller.Controller;
+import dao.HackathonDAO;
+import database.ConnessioneDatabase;
 import model.*;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

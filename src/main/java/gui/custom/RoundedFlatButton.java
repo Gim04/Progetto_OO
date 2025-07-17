@@ -1,5 +1,7 @@
 package gui.custom;
 
+import util.Theme;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -40,7 +42,7 @@ public class RoundedFlatButton extends JButton
     public void initButton()
     {
         this.setPreferredSize(new Dimension(32, 32));
-        this.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        this.setFont(Theme.paragraph);
         this.setForeground(Color.BLACK);
         this.setContentAreaFilled(false);
         this.setFocusPainted(false);

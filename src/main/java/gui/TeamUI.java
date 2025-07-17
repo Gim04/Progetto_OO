@@ -37,10 +37,10 @@ public class TeamUI extends JPanel {
         this.currentTeam = controller.isLocalTeamInHackathon(hackathon, controller.getLocalCurrentUserTeam());
         this.frame = f;
         this.nomeTeam = new JLabel(nomeTeam);
-        this.nomeTeam.setFont(new Font("SansSerif", Font.BOLD, 24));
+        this.nomeTeam.setFont(Theme.header);
 
         this.descrizioneProblema = new JLabel(hackathon + " - " + controller.getLocalDescrizioneProblema(hackathon));
-        this.descrizioneProblema.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        this.descrizioneProblema.setFont(Theme.paragraph);
         this.descrizioneProblema.setForeground(Color.DARK_GRAY);
 
         JPanel teamInfoPanel = new JPanel();
@@ -49,7 +49,7 @@ public class TeamUI extends JPanel {
         teamInfoPanel.add(this.descrizioneProblema);
 
         partecipanti = new JList<>();
-        partecipanti.setFont(new Font("SansSerif", Font.BOLD, 16));
+        partecipanti.setFont(Theme.hackathon_list_title);
 
         refreshUILocalTable();
 
@@ -61,8 +61,8 @@ public class TeamUI extends JPanel {
 
         setLayout(new BorderLayout());
 
-        invitePartecipante = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/person_add.png"))));
-        addDocument = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/docs.png"))));
+        invitePartecipante = new RoundedFlatButton(Theme.actionColor, Theme.actionColor2, Theme.ICON_PERSON_ADD);
+        addDocument = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_DOCS);
 
         invitePartecipante.addActionListener(e -> {
             if (controller.checkRegistrazioniChiuse(hackathon))

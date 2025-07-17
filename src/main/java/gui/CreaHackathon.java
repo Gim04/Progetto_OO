@@ -5,6 +5,7 @@ import gui.custom.FlatButton;
 import gui.custom.FlatCheckBox;
 import gui.custom.FlatTextField;
 import gui.util.FrameManager;
+import util.Theme;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -37,12 +38,10 @@ public class CreaHackathon extends JPanel
 
     private JPanel form;
 
-    private JFrame frame;
     private Controller controller;
 
     public CreaHackathon(JFrame frame, Controller controller) {
         this.controller = controller;
-        this.frame = frame;
 
         frame.setTitle("Login");
 
@@ -65,25 +64,25 @@ public class CreaHackathon extends JPanel
         registrazioni = new FlatCheckBox();
 
         nomeLabel = new JLabel("Nome hackathon:");
-        nomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        nomeLabel.setFont(Theme.paragraph);
 
         dimensioneLabel = new JLabel("Dimensione team:");
-        dimensioneLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        dimensioneLabel.setFont(Theme.paragraph);
 
         maxIscrittiLabel = new JLabel("Numero massimo di iscritti:");
-        maxIscrittiLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        maxIscrittiLabel.setFont(Theme.paragraph);
 
         dataInizioLabel = new JLabel("Data inizio:");
-        dataInizioLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        dataInizioLabel.setFont(Theme.paragraph);
 
         dataFineLabel = new JLabel("Data fine:");
-        dataFineLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        dataFineLabel.setFont(Theme.paragraph);
 
         registrazioniLabel = new JLabel("Registrazioni Aperte:");
-        registrazioniLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        registrazioniLabel.setFont(Theme.paragraph);
 
         formLabel = new JLabel("Crea Hackathon");
-        formLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        formLabel.setFont(Theme.header);
 
         aggiungiHackathonButton = new FlatButton();
 
@@ -98,7 +97,7 @@ public class CreaHackathon extends JPanel
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        formLabel.setFont(new Font("SandSerif", Font.BOLD, 24));
+        formLabel.setFont(Theme.header);
         formLabel.setForeground(Color.DARK_GRAY);
         form.add(formLabel, gbc);
 
@@ -171,7 +170,7 @@ public class CreaHackathon extends JPanel
             LocalDate dateF = isValidData(dataFine.getText());
 
             if (dateI == null || dateF == null) {
-                JOptionPane.showMessageDialog(null, "Formato data non valido!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Formato data non valido!", "Error ", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -180,7 +179,7 @@ public class CreaHackathon extends JPanel
                 maxIscrittiValue = Integer.parseInt(maxIscritti.getText());
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Formato numero iscritti non valido!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Formato numero iscritti non valido!", "Error ", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -211,9 +210,8 @@ public class CreaHackathon extends JPanel
     private LocalDate isValidData(String data) {
         if (data.matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$")) {
             try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate date = LocalDate.parse(data, formatter);
-                return date;
+                final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                return LocalDate.parse(data, formatter);
             } catch (DateTimeParseException e) {
                 e.printStackTrace();
             }

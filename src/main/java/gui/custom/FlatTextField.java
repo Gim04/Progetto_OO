@@ -1,5 +1,7 @@
 package gui.custom;
 
+import util.Theme;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +11,7 @@ public class FlatTextField extends JTextField
     {
         super();
 
-        setFont(new Font("SansSerif", Font.PLAIN, 14));
+        setFont(Theme.paragraph);
         setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200,200,200),1),
                 BorderFactory.createEmptyBorder(8, 10, 8, 10)
