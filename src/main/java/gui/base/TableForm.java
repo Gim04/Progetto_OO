@@ -66,6 +66,7 @@ public class TableForm extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        btnPanel.setBackground(Color.WHITE);
         add(btnPanel, BorderLayout.NORTH);
     }
 }
