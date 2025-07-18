@@ -14,6 +14,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe che rappresenta la lista degli hackathon.
+ * Viene mostrata all'utente in base al suo ruolo (Partecipante, Giudice, Organizzatore),
+ * e permette azioni contestuali come iscrizione, creazione team, pubblicazione problemi, ecc.
+ */
 public class HackathonList extends JPanel
 {
     private Controller controller;
@@ -24,6 +29,13 @@ public class HackathonList extends JPanel
     private JPanel rowsViewport;
     private JScrollPane scrollPane;
 
+    /**
+     * Costruttore della classe HackathonList.
+     *
+     * @param hackathons Lista di hackathon da mostrare.
+     * @param c          Controller principale dell'applicazione.
+     * @param f          Finestra principale JFrame.
+     */
     public HackathonList(List<Hackathon> hackathons, Controller c, JFrame f) {
         controller = c;
         frame = f;
@@ -46,6 +58,12 @@ public class HackathonList extends JPanel
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Aggiorna l'interfaccia della lista degli hackathon, ricreando i componenti
+     * in base al ruolo dell'utente e allo stato dell'hackathon (attivo/concluso).
+     *
+     * @param hackathons Lista aggiornata di hackathon da mostrare.
+     */
     public void refreshLocalUIHackathonList(List<Hackathon> hackathons)
     {
         rowsViewport.removeAll();
@@ -262,6 +280,15 @@ public class HackathonList extends JPanel
         }
     }
 
+    /**
+     * Crea un pannello che rappresenta una riga della lista hackathon con titolo, data e bottoni di azione.
+     *
+     * @param title      Titolo dell'hackathon.
+     * @param background Colore di sfondo della riga.
+     * @param date       Intervallo di date (inizio-fine).
+     * @param buttons    Lista di bottoni da associare alla riga.
+     * @return JPanel costruito.
+     */
     private JPanel createRow(String title, Color background, String date, List<JButton> buttons)
     {
 

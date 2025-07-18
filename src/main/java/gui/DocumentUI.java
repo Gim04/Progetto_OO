@@ -9,19 +9,44 @@ import model.Documento;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
-import java.util.Objects;
 import java.awt.Color;
 
 import model.Giudice;
 import model.Partecipante;
 import util.Theme;
 
+/**
+ * Interfaccia grafica per la gestione dei documenti associati a un team in un hackathon.
+ * Consente ai giudici di commentare i documenti e ai partecipanti di aggiungerne di nuovi.
+ * Estende {@link TableForm}, che fornisce la struttura base con tabella e pannello pulsanti.
+ */
 public class DocumentUI extends TableForm
 {
+    /**
+     * Pulsante per aggiungere un commento (solo per giudici)
+     */
     RoundedFlatButton btnAddComment;
+
+    /**
+     * Pulsante per aggiungere un documento (solo per partecipanti)
+     */
     RoundedFlatButton btnAddDocument;
+
+    /**
+     * Pulsante per tornare indietro
+     */
     RoundedFlatButton backButton;
 
+    /**
+     * Costruttore di DocumentUI.
+     * Inizializza la tabella con i documenti, configura i pulsanti in base al ruolo dell'utente
+     * (giudice o partecipante), e gestisce la logica per aggiunta/commento dei documenti.
+     *
+     * @param ctrl      Controller principale dell'applicazione.
+     * @param jframe    Frame principale dell'applicazione.
+     * @param team      Nome del team a cui sono associati i documenti.
+     * @param hackathon Nome dell'hackathon in corso.
+     */
     public DocumentUI(Controller ctrl, JFrame jframe, String team, String hackathon)
     {
         super(ctrl, jframe);
@@ -83,6 +108,14 @@ public class DocumentUI extends TableForm
         btnPanel.add(backButton);
     }
 
+
+    /**
+     * Aggiorna la tabella UI con i documenti associati al team per uno specifico hackathon.
+     * Ogni riga rappresenta un documento con contenuto e commento.
+     *
+     * @param team      Nome del team.
+     * @param hackathon Nome dell'hackathon.
+     */
     public void refreshUILocalTable(String team, String hackathon)
     {
         final List<Documento> documenti = controller.getDocumensOfTeam(team, hackathon);

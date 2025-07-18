@@ -8,11 +8,21 @@ import util.ERuolo;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Implementazione dell'interfaccia UtenteDAO per l'accesso ai dati tramite PostgreSQL.
+ * Gestisce operazioni di autenticazione, registrazione e gestione utenti di tipo Partecipante, Giudice e Organizzatore.
+ */
 public class UtenteImplementazionePostgresDAO implements UtenteDAO
 {
 
+    /**
+     * The Connection.
+     */
     Connection connection;
 
+    /**
+     * Costruttore che inizializza la connessione al database tramite la classe ConnessioneDatabase.
+     */
     public UtenteImplementazionePostgresDAO()
     {
         try
@@ -29,6 +39,14 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         |U|t|e|n|t|e|
         +-+-+-+-+-+-+
     */
+
+    /**
+     * Autentica un utente cercandolo nelle tabelle "partecipante", "giudice" e "organizzatore".
+     *
+     * @param email L'email dell'utente.
+     * @param password La password dell'utente.
+     * @return Un oggetto Utente (Partecipante, Giudice o Organizzatore) se l'autenticazione ha successo, null altrimenti.
+     */
     public Utente authenticateUser(String email, String password)
     {
         ResultSet rs = null;
@@ -65,6 +83,16 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return null;
     }
 
+    /**
+     * Registra un nuovo utente nel database nella tabella corrispondente al ruolo specificato.
+     *
+     * @param nome Nome dell'utente.
+     * @param cognome Cognome dell'utente.
+     * @param email Email dell'utente.
+     * @param password Password dell'utente.
+     * @param ruolo Ruolo dell'utente (Partecipante, Giudice, Organizzatore).
+     * @return Null se la registrazione ha successo, altrimenti una stringa con il messaggio di errore.
+     */
     public String registerUser(String nome, String cognome, String email, String password, ERuolo ruolo)
     {
         try( PreparedStatement stmt = connection.prepareStatement("INSERT INTO ? (nome, cognome, email, password) VALUES (?, ?, ?, ?)"))
@@ -91,6 +119,14 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         |P|a|r|t|e|c|i|p|a|n|t|e|
         +-+-+-+-+-+-+-+-+-+-+-+-+
     */
+
+    /**
+     * Iscrive un partecipante ad un hackathon specificato.
+     *
+     * @param hackathon Hackathon a cui iscrivere il partecipante.
+     * @param email Email del partecipante.
+     * @return True se l'iscrizione ha successo, false altrimenti.
+     */
     public boolean iscriviPartecipanteAdHackathon(Hackathon hackathon, String email)
     {
         boolean result = false;
@@ -129,6 +165,14 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return result;
     }
 
+    /**
+     * Invita un partecipante ad unirsi ad un team in un hackathon.
+     *
+     * @param email Email del partecipante da invitare.
+     * @param team Nome del team.
+     * @param hackathon Titolo dell'hackathon.
+     * @return True se l'invito ha successo, false altrimenti.
+     */
     public boolean invitePartecipanteToTeam(String email, String team, String hackathon)
     {
         boolean result = false;
@@ -180,6 +224,14 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return result;
     }
 
+    /**
+     * Crea un nuovo team associato ad un hackathon e aggiunge il partecipante come membro.
+     *
+     * @param nome Nome del team.
+     * @param hackathon Titolo dell'hackathon.
+     * @param email Email del partecipante che crea il team.
+     * @return True se il team viene creato con successo, false altrimenti.
+     */
     public boolean creaTeam(String nome, String hackathon, String email)
     {
         PreparedStatement stmt = null;
@@ -254,6 +306,14 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return false;
     }
 
+    /**
+     * Aggiunge un documento associato ad un team e hackathon specifici.
+     *
+     * @param team Nome del team.
+     * @param hackathon Titolo dell'hackathon.
+     * @param contenuto Contenuto del documento.
+     * @return True se il documento è stato aggiunto con successo, false altrimenti.
+     */
     public boolean addDocument(String team, String hackathon, String contenuto)
     {
         PreparedStatement stmt = null;
@@ -302,6 +362,11 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return false;
     }
 
+    /**
+     * Restituisce la lista di tutti i partecipanti presenti nel database.
+     *
+     * @return ArrayList di oggetti Partecipante.
+     */
     public ArrayList<Partecipante> getAllPartecipanti()
     {
         ArrayList<Partecipante> r = new ArrayList<>();
@@ -340,6 +405,15 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         |G|i|u|d|i|c|e|
         +-+-+-+-+-+-+-+
     */
+
+
+    /**
+     * Inserisce o aggiorna la descrizione del problema associato ad un hackathon.
+     *
+     * @param problema Descrizione del problema.
+     * @param hackathon Titolo dell'hackathon.
+     * @return True se l'operazione ha successo, false altrimenti.
+     */
     public boolean insertProblema(String problema, String hackathon)
     {
         PreparedStatement stmt = null;
@@ -376,6 +450,15 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return false;
     }
 
+    /**
+     * Aggiorna il commento di un documento associato a un team e hackathon specifici.
+     *
+     * @param team Nome del team.
+     * @param hackathon Titolo dell'hackathon.
+     * @param commento Commento da aggiungere o aggiornare.
+     * @param contenuto Contenuto del documento di riferimento.
+     * @return True se l'aggiornamento ha successo, false altrimenti.
+     */
     public boolean updateCommentOfDocument(String team, String hackathon, String commento, String contenuto)
     {
         PreparedStatement stmt = null;
@@ -425,6 +508,13 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return false;
     }
 
+    /**
+     * Inserisce o aggiorna il voto associato ad un team.
+     *
+     * @param nome Nome del team.
+     * @param voto Voto da assegnare.
+     * @return True se l'operazione ha successo, false altrimenti.
+     */
     public boolean insertVoto(String nome, int voto)
     {
         PreparedStatement stmt = null;
@@ -466,6 +556,15 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         |O|r|g|a|n|i|z|z|a|t|o|r|e|
         +-+-+-+-+-+-+-+-+-+-+-+-+-+
     */
+
+
+    /**
+     * Aggiorna lo stato di apertura delle registrazioni di un hackathon.
+     *
+     * @param registrazione True per aprire le registrazioni, false per chiuderle.
+     * @param hackathon Titolo dell'hackathon.
+     * @return True se l'operazione ha successo, false altrimenti.
+     */
     public boolean updateRegistrazioni(boolean registrazione, String hackathon)
     {
         PreparedStatement stmt = null;
@@ -505,6 +604,13 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         return false;
     }
 
+    /**
+     * Invita un giudice a partecipare a uno specifico hackathon.
+     *
+     * @param email Email del giudice da invitare.
+     * @param hackathon Titolo dell'hackathon a cui invitare il giudice.
+     * @return True se l'invito è stato aggiunto con successo, false altrimenti.
+     */
     public boolean inviteJudgeToHackathon(String email, String hackathon)
     {
         boolean result = false;
@@ -553,6 +659,16 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
         +-+-+-+-+-+-+-+
         |U|t|i|l|i|t|y|
         +-+-+-+-+-+-+-+
+     */
+
+    /**
+     * Metodo di supporto per autenticare un utente in una tabella specifica.
+     *
+     * @param table    Nome della tabella (partecipante, giudice, organizzatore).
+     * @param email    Email dell'utente.
+     * @param password Password dell'utente.
+     * @return ResultSet con i dati dell'utente se trovato, null altrimenti.
+     * @throws SQLException In caso di errori SQL.
      */
     ResultSet authenticateUserUtil(String table, String email, String password)
     {

@@ -17,6 +17,10 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Pannello di login che consente all'utente di inserire email e password per autenticarsi.
+ * Gestisce la validazione dei campi e la navigazione verso il pannello di registrazione o della lista hackathon.
+ */
 public class Login extends JPanel
 {
     private JFrame frame;
@@ -33,6 +37,12 @@ public class Login extends JPanel
     private JPasswordField passwordField;
     private JButton loginButton;
 
+    /**
+     * Costruttore del pannello di login.
+     *
+     * @param c     Controller dell'applicazione che gestisce la logica.
+     * @param frame JFrame padre in cui il pannello è inserito.
+     */
     public Login(Controller c, JFrame frame) {
         controller = c;
         this.frame = frame;
@@ -168,6 +178,11 @@ public class Login extends JPanel
         add(form);
     }
 
+    /**
+     * Crea un campo password personalizzato con stile flat.
+     *
+     * @return un JPasswordField configurato con font, colori e bordi personalizzati.
+     */
     private JPasswordField createFlatPasswordField()
     {
         JPasswordField field = new JPasswordField(15);

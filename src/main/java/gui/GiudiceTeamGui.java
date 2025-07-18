@@ -11,17 +11,47 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Interfaccia grafica che consente al giudice di:
+ * - visualizzare i team partecipanti a un hackathon,
+ * - assegnare voti ai team selezionati,
+ * - accedere all'interfaccia di commento dei documenti.
+ */
 public class GiudiceTeamGui extends JPanel
 {
+    /** Pannello che contiene i pulsanti di azione */
     private JPanel btnPanel;
+
+    /** Pulsante per assegnare un voto a un team */
     private RoundedFlatButton votaTeamButton;
+
+    /** Pulsante per accedere alla schermata di commento dei documenti del team */
     private RoundedFlatButton commentaDocumentoButton;
+
+    /** Pulsante per tornare alla schermata precedente */
     private RoundedFlatButton backButton;
+
+    /** Tabella contenente i team e i relativi voti */
     private JTable table1;
 
+    /**
+     * Finestra principale dell'applicazione
+     */
     JFrame frame;
+
+    /**
+     * Controller dell'applicazione per gestire i dati
+     */
     Controller controller;
 
+    /**
+     * Costruttore di GiudiceTeamGui.
+     * Imposta la visualizzazione dei team di un hackathon, consente di votarli e accedere ai documenti.
+     *
+     * @param frame      JFrame principale dell'applicazione.
+     * @param controller Controller utilizzato per gestire logica e dati.
+     * @param hackathon  Titolo dell'hackathon attivo.
+     */
     public GiudiceTeamGui(JFrame frame, Controller controller, String hackathon) {
         this.frame = frame;
         this.controller = controller;
@@ -88,6 +118,12 @@ public class GiudiceTeamGui extends JPanel
         add(btnPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Aggiorna i dati visualizzati nella tabella con i team dell'hackathon corrente.
+     * Mostra nome del team e voto assegnato.
+     *
+     * @param hackathon Titolo dell'hackathon di riferimento.
+     */
     public void refreshUILocalTable(String hackathon) {
         controller.refreshHackathonListForGiudice();
         final List<Team> teams = controller.getLocalTeamsInHackathon(hackathon);

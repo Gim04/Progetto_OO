@@ -10,10 +10,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione dell'interfaccia HackathonDAO per l'accesso ai dati tramite PostgreSQL.
+ * Gestisce operazioni di lettura, inserimento e gestione degli hackathon,
+ * inclusi team, partecipanti, giudici, organizzatori, documenti e classifiche.
+ */
 public class HackathonImplementazionePostgresDAO implements HackathonDAO
 {
+    /**
+     * The Connection.
+     */
     Connection connection;
 
+    /**
+     * Costruttore che inizializza la connessione al database.
+     */
     public HackathonImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.Instance.getConnection();
@@ -26,6 +37,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         +-+-+-+-+-+-+-+-+-+
         |H|a|c|k|a|t|h|o|n|
         +-+-+-+-+-+-+-+-+-+
+     */
+    /**
+     * Restituisce la lista completa di hackathon presenti nel database.
+     * Per ogni hackathon carica anche la sede, i team e i partecipanti.
+     *
+     * @return lista di oggetti Hackathon, lista vuota se non ci sono hackathon o in caso di errore.
      */
     public List<Hackathon> getHackathonList()
     {
@@ -68,6 +85,11 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return r;
     }
 
+    /**
+     * Imposta la lista dei partecipanti di un determinato hackathon.
+     *
+     * @param h hackathon per cui si vogliono caricare i partecipanti.
+     */
     private void setPartecipantiOfHackathon(Hackathon h)
     {
 
@@ -84,6 +106,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         }
     }
 
+    /**
+     * Restituisce la lista degli hackathon associati a un giudice, identificato tramite email.
+     *
+     * @param emailGiudice email del giudice.
+     * @return lista di hackathon a cui il giudice partecipa, lista vuota se non presenti o in caso di errore.
+     */
     public List<Hackathon> getHackathonListForJudge(String emailGiudice)
     {
         List<Hackathon> r = new ArrayList<>();
@@ -132,6 +160,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return r;
     }
 
+    /**
+     * Restituisce la lista degli hackathon organizzati da un organizzatore specifico, identificato tramite email.
+     *
+     * @param email email dell'organizzatore.
+     * @return lista di hackathon organizzati, lista vuota se non presenti o in caso di errore.
+     */
     public List<Hackathon> getHackathonListForOrganizzatore(String email)
     {
         List<Hackathon> r = new ArrayList<>();
@@ -180,6 +214,19 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
     }
 
 
+    /**
+     * Inserisce un nuovo hackathon nel database con i dati forniti.
+     *
+     * @param nome nome dell'hackathon.
+     * @param dimensioneTeam dimensione massima del team.
+     * @param maxIscritti numero massimo di iscritti.
+     * @param dataI data di inizio.
+     * @param dataF data di fine.
+     * @param registrazioni booleano che indica se le registrazioni sono aperte.
+     * @param email email dell'organizzatore.
+     * @param sede oggetto sede dell'hackathon.
+     * @return true se l'inserimento è andato a buon fine, false altrimenti.
+     */
     public boolean inserisciHackathon(String nome, int dimensioneTeam, int maxIscritti, LocalDate dataI, LocalDate dataF, boolean registrazioni, String email, Sede sede)
     {
 
@@ -226,6 +273,13 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return result;
     }
 
+    /**
+     * Restituisce la lista di documenti associati a un team e a un hackathon specifici.
+     *
+     * @param nome nome del team.
+     * @param hackathon titolo dell'hackathon.
+     * @return lista di documenti associati, lista vuota se non presenti o in caso di errore.
+     */
     public List<Documento> getDocumenti(String nome, String hackathon)
     {
         List<Documento> r = new ArrayList<>();
@@ -287,6 +341,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return new ArrayList<>();
     }
 
+    /**
+     * Controlla se le registrazioni per un dato hackathon sono chiuse.
+     *
+     * @param hackathon titolo dell'hackathon.
+     * @return true se le registrazioni sono chiuse o l'hackathon non esiste, false se sono aperte.
+     */
     public boolean checkRegistrazioniChiuse(String hackathon)
     {
         try(PreparedStatement stmt = connection.prepareStatement("SELECT ID FROM hackathon WHERE titolo = ? AND registrazioniAperte=1"))
@@ -310,6 +370,13 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return true;
     }
 
+    /**
+     * Calcola e restituisce la classifica dei team di un hackathon sotto forma di DefaultTableModel.
+     * La classifica è ordinata per voto decrescente.
+     *
+     * @param hackathon titolo dell'hackathon.
+     * @return DefaultTableModel contenente colonne "Team" e "Voto", o null in caso di errore.
+     */
     public DefaultTableModel calculateClassifica(String hackathon)
     {
         DefaultTableModel model = null;
@@ -366,6 +433,13 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         |U|t|i|l|i|t|y|
         +-+-+-+-+-+-+-+
      */
+
+    /**
+     * Restituisce la lista dei team iscritti a un determinato hackathon.
+     *
+     * @param hackathon oggetto Hackathon di cui si vogliono ottenere i team.
+     * @return lista di team, lista vuota se non presenti o in caso di errore.
+     */
     public List<Team> getTeamForHackathon(Hackathon hackathon)
     {
         List<Team> r = new ArrayList<>();
@@ -397,6 +471,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return r;
     }
 
+    /**
+     * Restituisce la lista dei partecipanti di un team identificato dall'id.
+     *
+     * @param team id del team.
+     * @return lista di partecipanti del team, lista vuota se non presenti o in caso di errore.
+     */
     public List<Partecipante> getPartecipantiOfTeam(int team)
     {
         List<Partecipante> r = new ArrayList<>();
@@ -424,6 +504,12 @@ public class HackathonImplementazionePostgresDAO implements HackathonDAO
         return r;
     }
 
+    /**
+     * Restituisce la lista delle sedi presenti nel database.
+     * Ogni sede è rappresentata come stringa nel formato "citta,via,codicePostale".
+     *
+     * @return lista di sedi, lista vuota se non presenti o in caso di errore.
+     */
     public List<String> getSedi()
     {
         List<String> r = new ArrayList<>();

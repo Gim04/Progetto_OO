@@ -5,8 +5,15 @@ import util.Theme;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * {@code FlatTextField} è un campo di testo personalizzato con uno stile flat.
+ */
 public class FlatTextField extends JTextField
 {
+    /**
+     * Costruttore predefinito del campo di testo flat.
+     * Applica uno stile personalizzato con font, bordo, padding, colori e larghezza fissa.
+     */
     public FlatTextField()
     {
         super();

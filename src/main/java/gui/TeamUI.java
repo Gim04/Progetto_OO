@@ -5,7 +5,6 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 import gui.custom.RoundedFlatButton;
 import gui.util.FrameManager;
@@ -13,6 +12,10 @@ import model.Partecipante;
 import model.Team;
 import util.Theme;
 
+/**
+ * Interfaccia utente che mostra i dettagli di un team, i partecipanti associati e permette
+ * operazioni come l'invito di nuovi membri e la gestione dei documenti.
+ */
 public class TeamUI extends JPanel {
 
     private JPanel topPanel;
@@ -32,7 +35,14 @@ public class TeamUI extends JPanel {
 
     private JLabel descrizioneProblema;
 
-
+    /**
+     * Costruttore principale per l'interfaccia del team.
+     *
+     * @param c         Controller dell'applicazione.
+     * @param f         Finestra principale JFrame.
+     * @param nomeTeam  Nome del team selezionato.
+     * @param hackathon Titolo dell'hackathon a cui è associato il team.
+     */
     public TeamUI(Controller c, JFrame f, String nomeTeam, String hackathon)
     {
         this.controller = c;
@@ -143,6 +153,10 @@ public class TeamUI extends JPanel {
         
     }
 
+    /**
+     * Metodo per aggiornare dinamicamente la lista dei partecipanti nel team.
+     * Ricarica i dati dal team corrente.
+     */
     public void refreshUILocalTable()
     {
         String[] s = new String[currentTeam.getPartecipanti().size()];

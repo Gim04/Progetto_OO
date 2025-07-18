@@ -14,6 +14,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Pannello di registrazione che permette all'utente di creare un nuovo account inserendo nome, cognome,
+ * email, password e ruolo.
+ * Include validazioni base per i campi e consente di tornare al pannello di login.
+ */
 public class Register extends JPanel
 {
     private Controller controller;
@@ -38,6 +43,12 @@ public class Register extends JPanel
 
     private JButton registerButton;
 
+    /**
+     * Costruttore del pannello di registrazione.
+     *
+     * @param c     Controller dell'applicazione che gestisce la logica.
+     * @param frame JFrame padre in cui il pannello viene inserito.
+     */
     public Register(Controller c, JFrame frame) {
         controller = c;
 
@@ -203,6 +214,11 @@ public class Register extends JPanel
         add(form, gbc);
     }
 
+    /**
+     * Crea un campo password con stile flat coerente con il tema dell'applicazione.
+     *
+     * @return JPasswordField configurato.
+     */
     private JPasswordField createFlatPasswordField()
     {
         JPasswordField field = new JPasswordField(25);
@@ -217,6 +233,12 @@ public class Register extends JPanel
         return field;
     }
 
+    /**
+     * Crea una JComboBox con stile flat coerente con il tema dell'applicazione.
+     *
+     * @param items Array di stringhe da inserire nella combo box.
+     * @return JComboBox configurata.
+     */
     private JComboBox<String> createFlatJComboxBox(String[] items)
     {
         JComboBox<String> comboBox = new JComboBox<>(items);
