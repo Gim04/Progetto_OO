@@ -132,6 +132,10 @@ public class HackathonList extends JPanel
                     {
                         JButton iscrivitiAdHackathon = new RoundedFlatButton(Theme.secondaryColor, Theme.secondaryColor2, Theme.ICON_SUB);
                         iscrivitiAdHackathon.addActionListener(e -> {
+                            if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
+                                JOptionPane.showMessageDialog(frame, "Registrazioni chiuse per questo hackathon! ", "Error ", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
                             if (JOptionPane.showConfirmDialog(frame, "Sei sicuro di volerti iscrivere ad '" + h.getTitolo() + "\'?") == 0)
                             {
                                 controller.iscriviPartecipanteAdHackathon(h, controller.getCurrentUser().getEmail());
@@ -169,18 +173,10 @@ public class HackathonList extends JPanel
 
                     visualizzaTeam.addActionListener(e ->
                     {
-                        if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
-                            JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", " Error", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
                         FrameManager.Instance.switchFrame(new GiudiceTeamGui(frame, controller, h.getTitolo()));
                     });
 
                     pubblicaProblema.addActionListener(e -> {
-                        if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
-                            JOptionPane.showMessageDialog(frame, "Registrazioni chiude per questo hackathon!", " Error", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
                         final String input = JOptionPane.showInputDialog("Problema:");
                         if (input != null) {
                             if (controller.setDescrizioneProblema(h.getTitolo(), input))
@@ -225,10 +221,6 @@ public class HackathonList extends JPanel
                     }
 
                     invitaGiudice.addActionListener(e -> {
-                        if (controller.checkRegistrazioniChiuse(h.getTitolo())) {
-                            JOptionPane.showMessageDialog(frame, "Registrazioni chiuse per questo hackathon!", "Error", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
                         final String input = JOptionPane.showInputDialog("Email:");
                         if (input != null) {
 

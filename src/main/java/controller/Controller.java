@@ -388,8 +388,8 @@ public class Controller
      */
     public boolean createTeam(String nome, String hackathon, String email)
     {
-        boolean r = utenteImplementazioneDAO.creaTeam(nome, hackathon, email);
-        if(r)
+        boolean result = utenteImplementazioneDAO.creaTeam(nome, hackathon, email);
+        if(result)
         {
             Team t = new Team(nome);
             for(Hackathon h : hackathons)
@@ -402,7 +402,7 @@ public class Controller
                 }
             }
         }
-        return r;
+        return result;
     }
 
     /**
