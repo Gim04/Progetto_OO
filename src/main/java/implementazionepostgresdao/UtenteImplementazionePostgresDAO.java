@@ -95,13 +95,12 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO
      */
     public String registerUser(String nome, String cognome, String email, String password, ERuolo ruolo)
     {
-        try( PreparedStatement stmt = connection.prepareStatement("INSERT INTO ? (nome, cognome, email, password) VALUES (?, ?, ?, ?)"))
+        try( PreparedStatement stmt = connection.prepareStatement("INSERT INTO "+ruolo.toString()+" (nome, cognome, email, password) VALUES (?, ?, ?, ?)"))
         {
-            stmt.setString(1, ruolo.toString());
-            stmt.setString(2, nome);
-            stmt.setString(3, cognome);
-            stmt.setString(4, email);
-            stmt.setString(5, password);
+            stmt.setString(1, nome);
+            stmt.setString(2, cognome);
+            stmt.setString(3, email);
+            stmt.setString(4, password);
 
             stmt.execute();
 
