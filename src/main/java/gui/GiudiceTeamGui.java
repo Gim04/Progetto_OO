@@ -64,7 +64,7 @@ public class GiudiceTeamGui extends JPanel
         scrollPane1.setViewportView(table1);
         scrollPane1.setBorder(null);
 
-        btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnPanel.setBackground(Color.WHITE);
 
         refreshUILocalTable(hackathon);
@@ -118,7 +118,7 @@ public class GiudiceTeamGui extends JPanel
         btnPanel.add(backButton);
 
         add(scrollPane1, BorderLayout.CENTER);
-        add(btnPanel, BorderLayout.SOUTH);
+        add(btnPanel, BorderLayout.NORTH);
     }
 
     /**
