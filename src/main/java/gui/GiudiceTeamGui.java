@@ -60,9 +60,12 @@ public class GiudiceTeamGui extends JPanel
 
         final JScrollPane scrollPane1 = new JScrollPane();
         table1 = new JTable();
+        table1.setBorder(null);
         scrollPane1.setViewportView(table1);
+        scrollPane1.setBorder(null);
 
         btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        btnPanel.setBackground(Color.WHITE);
 
         refreshUILocalTable(hackathon);
 
