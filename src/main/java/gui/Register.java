@@ -63,6 +63,7 @@ public class Register extends JPanel
 
         form = new JPanel();
         form.setLayout(new GridBagLayout());
+        form.setBackground(Color.WHITE);
 
         formLabel = new JLabel("Register");
         nameLabel = new JLabel("Nome:");
